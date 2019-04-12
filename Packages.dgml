@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="MP3Tag" Label="MP3Tag" Category="Progetto" />
+    <Node Id="DEG.Google 1.0" Label="DEG.Google 1.0" Category="Pacchetto" />
+    <Node Id="DEG.ServiceCore 1.2.1" Label="DEG.ServiceCore 1.2.1" Category="Pacchetto" />
+    <Node Id="Microsoft.Bcl 1.1.10" Label="Microsoft.Bcl 1.1.10" Category="Pacchetto" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="Pacchetto" />
+    <Node Id="Microsoft.Net.Http 2.2.29" Label="Microsoft.Net.Http 2.2.29" Category="Pacchetto" />
+    <Node Id="taglib 2.1.0.0" Label="taglib 2.1.0.0" Category="Pacchetto" />
+    <Node Id="YandexTranslate.dll 1.0.0" Label="YandexTranslate.dll 1.0.0" Category="Pacchetto" />
+  </Nodes>
+  <Links>
+    <Link Source="DEG.Google 1.0" Target="DEG.ServiceCore 1.2.1" Category="Dipendenza pacchetto" />
+    <Link Source="Microsoft.Bcl 1.1.10" Target="Microsoft.Bcl.Build 1.0.14" Category="Dipendenza pacchetto" />
+    <Link Source="Microsoft.Net.Http 2.2.29" Target="Microsoft.Bcl 1.1.10" Category="Dipendenza pacchetto" />
+    <Link Source="Microsoft.Net.Http 2.2.29" Target="Microsoft.Bcl.Build 1.0.14" Category="Dipendenza pacchetto" />
+    <Link Source="MP3Tag" Target="DEG.Google 1.0" Category="Pacchetto installato" />
+    <Link Source="MP3Tag" Target="Microsoft.Net.Http 2.2.29" Category="Pacchetto installato" />
+    <Link Source="MP3Tag" Target="taglib 2.1.0.0" Category="Pacchetto installato" />
+    <Link Source="MP3Tag" Target="YandexTranslate.dll 1.0.0" Category="Pacchetto installato" />
+  </Links>
+  <Categories>
+    <Category Id="Progetto" />
+    <Category Id="Pacchetto" />
+  </Categories>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Progetto" ValueLabel="True">
+      <Condition Expression="HasCategory('Progetto')" />
+      <Setter Property="Background" Value="Blue" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Dipendenza pacchetto" ValueLabel="True">
+      <Condition Expression="HasCategory('Dipendenza pacchetto')" />
+      <Setter Property="Background" Value="Yellow" />
+    </Style>
+  </Styles>
+</DirectedGraph>
