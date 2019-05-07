@@ -394,15 +394,15 @@ Public Class frmPlayer
                 chkSuperiori.Enabled = True
             End If
             chkBellezza.Checked = True
-            cmbBellezza.Enabled = True
+            'cmbBellezza.Enabled = True
             cmbBellezza.Text = IIf(ValoreBellezza = 0, "Mai Votate", ValoreBellezza)
             cmdEstrai.Enabled = True
             chkPath.Enabled = True
             chkSuperiori.Enabled = True
         Else
-            chkBellezza.Checked = False
-            cmbBellezza.Enabled = False
-            cmbBellezza.Text = "3"
+            'chkBellezza.Checked = False
+            'cmbBellezza.Enabled = False
+            'cmbBellezza.Text = "3"
             cmdEstrai.Enabled = False
             chkPath.Enabled = False
             chkSuperiori.Checked = False
@@ -3406,8 +3406,8 @@ Public Class frmPlayer
         chkFiltroTesto.Enabled = False
         cmdFiltro.Enabled = False
         txtFiltroTesto.Enabled = False
-        chkBellezza.Enabled = False
-        cmbBellezza.Enabled = False
+        'chkBellezza.Enabled = False
+        'cmbBellezza.Enabled = False
 
         ImpostaSchermata()
         'StaSuonando = AppoStaSuonando
