@@ -622,68 +622,92 @@ Public Class frmMain
     'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        'Dim DB As New SQLSERVERCE
-        'Dim conn As Object = CreateObject("ADODB.Connection")
-        'Dim rec As Object = CreateObject("ADODB.Recordset")
-        'Dim rec2 As Object = CreateObject("ADODB.Recordset")
-        'Dim Sql As String
-        'Dim Canzone As String = ""
-        'Dim Bellezza As String = ""
-        'DB.ImpostaNomeDB(PathDB)
-        'DB.LeggeImpostazioniDiBase()
-        'conn = DB.ApreDB()
+		Dim DB As New SQLSERVERCE
+		Dim conn As Object = CreateObject("ADODB.Connection")
+		Dim rec As Object = CreateObject("ADODB.Recordset")
+		'Dim rec2 As Object = CreateObject("ADODB.Recordset")
+		Dim Sql As String
+		Dim gf As New GestioneFilesDirectory
+		'Dim Canzone As String = ""
+		'Dim Bellezza As String = ""
+		DB.ImpostaNomeDB(PathDB)
+		DB.LeggeImpostazioniDiBase()
+		conn = DB.ApreDB()
 
-        'Sql = "Select * From ListaCanzone2 Where Testo is null"
-        'rec = DB.LeggeQuery(conn, Sql)
-        'Do Until rec.Eof
-        '    Canzone = Replace(rec("Artista").Value, "'", "''") & "\" & Replace(rec("Album").Value, "'", "''") & "\" & Replace(rec("Canzone").Value, "'", "''")
-        '    Sql = "Select * From Testi Where Canzone='" & Canzone & "'"
-        '    rec2 = DB.LeggeQuery(conn, Sql)
-        '    If Not rec2.Eof Then
-        '        Bellezza = rec2("Testo").Value
+		Sql = "Delete From ImmaginiEliminate"
+		DB.EsegueSql(conn, Sql)
 
-        '        Sql = "Update ListaCanzone2 Set Testo='" & Bellezza.Replace("'", "''") & "' Where idCanzone=" & rec("idCanzone").Value
-        '        DB.EsegueSql(conn, Sql)
-        '    End If
-        '    rec2.Close()
+		gf.ScansionaDirectorySingola(lblPathDestinazione.Text)
+		Dim filetti() As String = gf.RitornaFilesRilevati
+		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
 
-        '    Sql = "Select * From Traduzioni Where Canzone='" & Canzone & "'"
-        '    rec2 = DB.LeggeQuery(conn, Sql)
-        '    If Not rec2.Eof Then
-        '        Bellezza = rec2("Testo").Value
+		For i As Integer = 1 To qf
+			Dim filetto As String = filetti(i)
+			filetto = filetto.Replace(lblPathDestinazione.Text & "\", "")
+			If filetto.ToUpper.EndsWith(".DEL") Then
+				Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
+				filetto = filetto.Replace(este, "")
+				este = gf.TornaEstensioneFileDaPath(filetto)
+				filetto = filetto.Replace(este, "")
 
-        '        Sql = "Update ListaCanzone2 Set TestoTradotto='" & Bellezza.Replace("'", "''") & "' Where idCanzone=" & rec("idCanzone").Value
-        '        DB.EsegueSql(conn, Sql)
-        '    End If
-        '    rec2.Close()
+				Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+				DB.EsegueSql(conn, Sql)
 
-        '    rec.MoveNext()
-        'Loop
-        'rec.Close()
+				File.Delete(filetti(i))
+			End If
+		Next
 
-        'conn.Close()
-        'DB = Nothing
+		'Sql = "Select * From ListaCanzone2 Where Testo is null"
+		'rec = DB.LeggeQuery(conn, Sql)
+		'Do Until rec.Eof
+		'    Canzone = Replace(rec("Artista").Value, "'", "''") & "\" & Replace(rec("Album").Value, "'", "''") & "\" & Replace(rec("Canzone").Value, "'", "''")
+		'    Sql = "Select * From Testi Where Canzone='" & Canzone & "'"
+		'    rec2 = DB.LeggeQuery(conn, Sql)
+		'    If Not rec2.Eof Then
+		'        Bellezza = rec2("Testo").Value
 
-        'Panel1.Visible = True
-        'Dim v As New Video(Application.StartupPath & "\VideoYouTube\322dPZSs6No.mp4")
-        'v.Owner = Panel1
-        'v.Play()
+		'        Sql = "Update ListaCanzone2 Set Testo='" & Bellezza.Replace("'", "''") & "' Where idCanzone=" & rec("idCanzone").Value
+		'        DB.EsegueSql(conn, Sql)
+		'    End If
+		'    rec2.Close()
 
-        'AxMediaPlayer1.FileName = "C:\movie1.avi"
-        'AxMediaPlayer1.Play()
-        'AxMediaPlayer1.ShowControls = False
-        'AxMediaPlayer1.AllowChangeDisplaySize = False
-        'AxMediaPlayer1.EnableContextMenu = False
-        'AxMediaPlayer1.ClickToPlay = False
-        'AxMediaPlayer1.SendKeyboardEvents = False
+		'    Sql = "Select * From Traduzioni Where Canzone='" & Canzone & "'"
+		'    rec2 = DB.LeggeQuery(conn, Sql)
+		'    If Not rec2.Eof Then
+		'        Bellezza = rec2("Testo").Value
 
-        'Dim filename As String = Application.StartupPath & "\VideoYouTube\322dPZSs6No.avi"
-        'Dim retVal As Integer
+		'        Sql = "Update ListaCanzone2 Set TestoTradotto='" & Bellezza.Replace("'", "''") & "' Where idCanzone=" & rec("idCanzone").Value
+		'        DB.EsegueSql(conn, Sql)
+		'    End If
+		'    rec2.Close()
 
-        'filename = Chr(34) & filename & Chr(34)
+		'    rec.MoveNext()
+		'Loop
+		'rec.Close()
 
-        'retVal = mciSendString("open mpegvideo!" & filename & " alias myMovie parent " & Me.Handle.ToInt32 & " style child", vbNullString, 128, IntPtr.Zero)
-        'retVal = mciSendString("put movie window at 0 0 50 50", 0, 128, 0)
-        'retVal = mciSendString("play myMovie", vbNullString, 128, IntPtr.Zero)
-    End Sub
+		conn.Close()
+		DB = Nothing
+
+		'Panel1.Visible = True
+		'Dim v As New Video(Application.StartupPath & "\VideoYouTube\322dPZSs6No.mp4")
+		'v.Owner = Panel1
+		'v.Play()
+
+		'AxMediaPlayer1.FileName = "C:\movie1.avi"
+		'AxMediaPlayer1.Play()
+		'AxMediaPlayer1.ShowControls = False
+		'AxMediaPlayer1.AllowChangeDisplaySize = False
+		'AxMediaPlayer1.EnableContextMenu = False
+		'AxMediaPlayer1.ClickToPlay = False
+		'AxMediaPlayer1.SendKeyboardEvents = False
+
+		'Dim filename As String = Application.StartupPath & "\VideoYouTube\322dPZSs6No.avi"
+		'Dim retVal As Integer
+
+		'filename = Chr(34) & filename & Chr(34)
+
+		'retVal = mciSendString("open mpegvideo!" & filename & " alias myMovie parent " & Me.Handle.ToInt32 & " style child", vbNullString, 128, IntPtr.Zero)
+		'retVal = mciSendString("put movie window at 0 0 50 50", 0, 128, 0)
+		'retVal = mciSendString("play myMovie", vbNullString, 128, IntPtr.Zero)
+	End Sub
 End Class

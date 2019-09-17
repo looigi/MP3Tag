@@ -2245,14 +2245,29 @@ Public Class frmPlayer
 
     Private Sub cmdEliminaImmagineArtista_Click(sender As Object, e As EventArgs) Handles cmdEliminaImmagineArtista.Click
         If MsgBox("Si vuole eliminare l'immagine corrente?", vbYesNo + vbDefaultButton1 + vbInformation) = vbYes Then
-            Try
-                Kill(lblNomeImmArtista.Text & ".DEL")
-            Catch ex As Exception
+			'Try
+			'    Kill(lblNomeImmArtista.Text & ".DEL")
+			'Catch ex As Exception
 
-            End Try
+			'End Try
+			Dim filetto As String = lblNomeImmArtista.Text
+			filetto = filetto.Replace(StrutturaDati.PathMP3 & "\", "")
+			Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
+			filetto = filetto.Replace(este, "")
+			Dim DB As New SQLSERVERCE
+			Dim conn As Object = CreateObject("ADODB.Connection")
+			Dim rec As Object = CreateObject("ADODB.Recordset")
+			Dim Sql As String = ""
+			DB.ImpostaNomeDB(PathDB)
+			DB.LeggeImpostazioniDiBase()
+			conn = DB.ApreDB()
+			Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+			DB.EsegueSql(conn, Sql)
+			conn.Close()
+			DB = Nothing
 
-            gf.CreaAggiornaFile(lblNomeImmArtista.Text & ".DEL", "IMMAGINE ELIMINATA")
-            gf.EliminaFileFisico(lblNomeImmArtista.Text)
+			'gf.CreaAggiornaFile(lblNomeImmArtista.Text & ".DEL", "IMMAGINE ELIMINATA")
+			gf.EliminaFileFisico(lblNomeImmArtista.Text)
 
             gi.PuliscePictureBox(picImmagineArtista)
 

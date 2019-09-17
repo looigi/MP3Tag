@@ -1685,15 +1685,35 @@ Public Class frmConTAG
 
             End Try
 
-            Dim gf As New GestioneFilesDirectory
-            gf.CreaAggiornaFile(lblNomeImmNascosto.Text & ".DEL", "*")
-            gf = Nothing
+			Dim gf As New GestioneFilesDirectory
+			Dim filetto As String = lblNomeImmNascosto.Text
+			Dim pathMP3 As String = GetSetting("MP3Tag", "Impostazioni", "PercorsoDestinazione", "")
+			filetto = filetto.Replace(pathMP3 & "\", "")
+			Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
+			filetto = filetto.Replace(este, "")
+			Dim DB As New SQLSERVERCE
+			Dim conn As Object = CreateObject("ADODB.Connection")
+			Dim rec As Object = CreateObject("ADODB.Recordset")
+			Dim Sql As String = ""
+			DB.ImpostaNomeDB(PathDB)
+			DB.LeggeImpostazioniDiBase()
+			conn = DB.ApreDB()
+			Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+			DB.EsegueSql(conn, Sql)
+			conn.Close()
+			DB = Nothing
 
-            pnlImmagine.Visible = False
-            picsArtista(idPic).Image.Dispose()
-            picsArtista(idPic).Enabled = False
-            'CaricaImmaginiArtistaInPannello()
-        End If
+
+			'Dim gf As New GestioneFilesDirectory
+			'gf.CreaAggiornaFile(lblNomeImmNascosto.Text & ".DEL", "*")
+			'         gf = Nothing
+
+			pnlImmagine.Visible = False
+			picsArtista(idPic).Visible = False
+			picsArtista(idPic).Image.Dispose()
+			'picsArtista(idPic).Enabled = False
+			'CaricaImmaginiArtistaInPannello()
+		End If
         ' NonUscire = False
     End Sub
 
