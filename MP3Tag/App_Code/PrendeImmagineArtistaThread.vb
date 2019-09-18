@@ -71,9 +71,9 @@ Public Class PrendeImmagineArtistaThread
 
     Private Sub LeggeImmagini(lstArtista As String)
         gf.CreaDirectoryDaPercorso(StrutturaDati.PathMP3 & "\" & lstArtista & "\ZZZ-ImmaginiArtista\")
-        gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & lstArtista & "\ZZZ-ImmaginiArtista\", "*.dat")
+		gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & lstArtista & "\ZZZ-ImmaginiArtista\", "*.jpg")
 
-        GiaPresenti = gf.RitornaFilesRilevati
+		GiaPresenti = gf.RitornaFilesRilevati
         qGiaPresenti = gf.RitornaQuantiFilesRilevati
 
         Dim g() As String = {}
@@ -315,28 +315,33 @@ Public Class PrendeImmagineArtistaThread
 							conn.Close()
 							DB = Nothing
 
-							NomeImm = StrutturaDati.PathMP3 & "\" & NomeImm & ".dat"
+							Dim este As String = gf.TornaEstensioneFileDaPath(NomeImm)
+							If este <> "" Then
+								NomeImm = NomeImm.Replace(este, "")
+							End If
 
-							'gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & NomeDirectory)
-							'                     Dim Esistenti() As String = gf.RitornaFilesRilevati
-							'                     Dim qEsistenti As Integer = gf.RitornaQuantiFilesRilevati
-							'                     Dim Ok2 As Boolean = True
+							NomeImm = StrutturaDati.PathMP3 & "\" & NomeImm & ".jpg"
 
-							'                     For i As Integer = 1 To qEsistenti
-							'                         If Esistenti(i).ToUpper.IndexOf(nomeImmSolo.ToUpper.Trim) > -1 Then
-							'                             Ok2 = False
-							'                             Exit For
-							'                         End If
-							'                     Next
+								'gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & NomeDirectory)
+								'                     Dim Esistenti() As String = gf.RitornaFilesRilevati
+								'                     Dim qEsistenti As Integer = gf.RitornaQuantiFilesRilevati
+								'                     Dim Ok2 As Boolean = True
 
-							If Ok2 Then
-								If ScaricaFileDaPagina(Appoggio, "IMMAGINI", NomeImm) = 1 Then
-									Fatto = True
-									Exit Do
+								'                     For i As Integer = 1 To qEsistenti
+								'                         If Esistenti(i).ToUpper.IndexOf(nomeImmSolo.ToUpper.Trim) > -1 Then
+								'                             Ok2 = False
+								'                             Exit For
+								'                         End If
+								'                     Next
+
+								If Ok2 Then
+									If ScaricaFileDaPagina(Appoggio, "IMMAGINI", NomeImm) = 1 Then
+										Fatto = True
+										Exit Do
+									End If
 								End If
 							End If
 						End If
-                    End If
 
                     sourceCode = sourceCode.Replace(Cambia, "")
 

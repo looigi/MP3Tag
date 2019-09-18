@@ -619,23 +619,23 @@ Public Class frmMain
         Call cmdPlay_Click(sender, e)
     End Sub
 
-    'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
+	'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-		Dim DB As New SQLSERVERCE
-		Dim conn As Object = CreateObject("ADODB.Connection")
-		Dim rec As Object = CreateObject("ADODB.Recordset")
-		'Dim rec2 As Object = CreateObject("ADODB.Recordset")
-		Dim Sql As String
+	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+		'Dim DB As New SQLSERVERCE
+		'Dim conn As Object = CreateObject("ADODB.Connection")
+		'Dim rec As Object = CreateObject("ADODB.Recordset")
+		''Dim rec2 As Object = CreateObject("ADODB.Recordset")
+		'Dim Sql As String
 		Dim gf As New GestioneFilesDirectory
-		'Dim Canzone As String = ""
-		'Dim Bellezza As String = ""
-		DB.ImpostaNomeDB(PathDB)
-		DB.LeggeImpostazioniDiBase()
-		conn = DB.ApreDB()
+		''Dim Canzone As String = ""
+		''Dim Bellezza As String = ""
+		'DB.ImpostaNomeDB(PathDB)
+		'DB.LeggeImpostazioniDiBase()
+		'conn = DB.ApreDB()
 
-		Sql = "Delete From ImmaginiEliminate"
-		DB.EsegueSql(conn, Sql)
+		'Sql = "Delete From ImmaginiEliminate"
+		'DB.EsegueSql(conn, Sql)
 
 		gf.ScansionaDirectorySingola(lblPathDestinazione.Text)
 		Dim filetti() As String = gf.RitornaFilesRilevati
@@ -643,17 +643,43 @@ Public Class frmMain
 
 		For i As Integer = 1 To qf
 			Dim filetto As String = filetti(i)
-			filetto = filetto.Replace(lblPathDestinazione.Text & "\", "")
-			If filetto.ToUpper.EndsWith(".DEL") Then
+			'	filetto = filetto.Replace(lblPathDestinazione.Text & "\", "")
+			If filetto.ToUpper.EndsWith(".DAT") Then
 				Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
-				filetto = filetto.Replace(este, "")
-				este = gf.TornaEstensioneFileDaPath(filetto)
-				filetto = filetto.Replace(este, "")
+				If este.Length < 5 Then
+					filetto = filetto.Replace(este, "")
+				End If
 
-				Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
-				DB.EsegueSql(conn, Sql)
+				If Not File.Exists(filetto) Then
+					If Not filetto.ToUpper.Contains(".JPG") Then
+						filetto &= ".jpg"
+					End If
+					File.Copy(filetti(i), filetto)
+				Else
+					Dim nomefile As String = gf.TornaNomeFileDaPath(filetto)
+					Dim cart As String = gf.TornaNomeDirectoryDaPath(filetto)
 
+					filetto = cart & "\" & Now.Second & "_" & nomefile & ".jpg"
+					File.Copy(filetti(i), filetto)
+				End If
 				File.Delete(filetti(i))
+				'		este = gf.TornaEstensioneFileDaPath(filetto)
+				'		filetto = filetto.Replace(este, "")
+
+				'		Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+				'		DB.EsegueSql(conn, Sql)
+
+				'		File.Delete(filetti(i))
+			Else
+				If Not filetto.Contains(".") Then
+					If Not File.Exists(filetto & ".jpg") Then
+						filetto &= ".jpg"
+					Else
+						filetto &= "_" & Now.Second & ".jpg"
+					End If
+					File.Copy(filetti(i), filetto)
+					File.Delete(filetti(i))
+				End If
 			End If
 		Next
 
@@ -685,8 +711,8 @@ Public Class frmMain
 		'Loop
 		'rec.Close()
 
-		conn.Close()
-		DB = Nothing
+		'conn.Close()
+		'DB = Nothing
 
 		'Panel1.Visible = True
 		'Dim v As New Video(Application.StartupPath & "\VideoYouTube\322dPZSs6No.mp4")

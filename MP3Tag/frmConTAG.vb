@@ -1540,8 +1540,8 @@ Public Class frmConTAG
 
         Dim gf As New GestioneFilesDirectory
         gf.CreaDirectoryDaPercorso(Percorso & "\" & NomeArtista & "\ZZZ-ImmaginiArtista\")
-        gf.ScansionaDirectorySingola(Percorso & "\" & NomeArtista & "\ZZZ-ImmaginiArtista", "*.dat")
-        Dim Filetti() As String = gf.RitornaFilesRilevati
+		gf.ScansionaDirectorySingola(Percorso & "\" & NomeArtista & "\ZZZ-ImmaginiArtista", "*.jpg")
+		Dim Filetti() As String = gf.RitornaFilesRilevati
         qImmaginiArtistaBox = gf.RitornaQuantiFilesRilevati
         Dim Dime1 As Long
         Dim Dime2 As Long

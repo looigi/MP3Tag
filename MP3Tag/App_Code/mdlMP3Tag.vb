@@ -47,14 +47,14 @@ Module mdlMP3Tag
 
     Public StrutturaDati As StrutturaCampivb
 
-    Public YouTubeClass As YouTube
-    Public YouTubeMostrato As Boolean
-    Public ScaricaVideoSubito As String
-    Public DimeWMP As Single
+	'Public YouTubeClass As YouTube
+	'Public YouTubeMostrato As Boolean
+	'Public ScaricaVideoSubito As String
+	'Public DimeWMP As Single
 
-    Public pPicSost As PictureBox
-    Public PosizioneMP As String
-    Public PosizioneTI As String
+	Public pPicSost As PictureBox
+	'Public PosizioneMP As String
+	Public PosizioneTI As String
 
     Public HaGiaScrittoAscoltataSulDB As Boolean = True
 
@@ -113,27 +113,27 @@ Module mdlMP3Tag
         DB.EsegueSql(conn, Sql)
     End Sub
 
-    Public Sub PrendeVideo(Player As AxWMPLib.AxWindowsMediaPlayer, sArtista As String, sAlbum As String, sCanzone As String)
-        'If YouTubeMostrato Then
-        Player.URL = ""
+	'Public Sub PrendeVideo(Player As AxWMPLib.AxWindowsMediaPlayer, sArtista As String, sAlbum As String, sCanzone As String)
+	'    'If YouTubeMostrato Then
+	'    Player.URL = ""
 
-        Dim artista As String = sArtista
-        Dim album As String = sAlbum
-        If Mid(album, 5, 1) <> "-" Then
-            album = "0000-" & album
-        End If
-        Dim canzone As String = sCanzone
-        If Mid(canzone, 3, 1) <> "-" Then
-            canzone = "00-" & canzone
-        End If
+	'    Dim artista As String = sArtista
+	'    Dim album As String = sAlbum
+	'    If Mid(album, 5, 1) <> "-" Then
+	'        album = "0000-" & album
+	'    End If
+	'    Dim canzone As String = sCanzone
+	'    If Mid(canzone, 3, 1) <> "-" Then
+	'        canzone = "00-" & canzone
+	'    End If
 
-        If Not YouTubeClass Is Nothing Then
-            YouTubeClass.PrendeVideo(artista, album, canzone)
-        End If
-        'End If
-    End Sub
+	'    If Not YouTubeClass Is Nothing Then
+	'        YouTubeClass.PrendeVideo(artista, album, canzone)
+	'    End If
+	'    'End If
+	'End Sub
 
-    Public Function ControllaNomeFisico(NomeCanzone As String, lstCanzone As String, lstAlbum As String) As String
+	Public Function ControllaNomeFisico(NomeCanzone As String, lstCanzone As String, lstAlbum As String) As String
         Dim NomeCanzoneRitorno As String = ""
         Dim gf As New GestioneFilesDirectory
 
