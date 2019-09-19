@@ -144,157 +144,160 @@ Public Class PrendeImmagineArtistaThread
         picImmagineArtista.Refresh()
         picImmagineArtista.BackColor = Color.Transparent
         Application.DoEvents()
-        trd = New Thread(AddressOf ScaricaImmagineArtista)
-        trd.IsBackground = True
+		trd = New Thread(AddressOf ScaricaImmagineArtista)
+		trd.IsBackground = True
 
         Dim Canzone As String = lstCanzone.Text
         If Canzone.IndexOf("-") > -1 Then Canzone = Mid(Canzone, Canzone.IndexOf("-") + 2, Canzone.Length)
         If Canzone.IndexOf(".") > -1 Then Canzone = Mid(Canzone, 1, Canzone.IndexOf("."))
 
         Dim sMembri As String = ""
-        If Membri <> "" Then
-            Dim c() As String = Membri.Split("§")
-            For Each cc As String In c
-                If cc <> "" Then
-                    Dim ccc() As String = cc.Split(";")
-                    If ccc(0) <> "" Then
-                        sMembri &= ccc(0) & "^"
-                    End If
-                End If
-            Next
-        End If
-        Dim cosa As String
+		If Membri <> "" Then
+			Dim c() As String = Membri.Split("§")
+			For Each cc As String In c
+				If cc <> "" Then
+					Dim ccc() As String = cc.Split(";")
+					If ccc(0) <> "" Then
+						sMembri &= ccc(0) & "^"
+					End If
+				End If
+			Next
+		End If
+
+		Dim cosa As String
         If sMembri <> "" Then
             cosa = lstArtista.Text & "%20band^" & sMembri & "^" & Canzone
         Else
             cosa = lstArtista.Text & "%20band^" & Canzone
         End If
 
-        trd.Start(cosa)
-    End Sub
+		trd.Start(cosa)
+	End Sub
 
-    Private Sub ScaricaImmagineArtista(CosaCercare As String)
-        Dim sCosaCercare() As String = CosaCercare.Split("^")
-        Dim NomeDirectory As String = sCosaCercare(0).Replace("%20band", "")
-        Dim xx As Integer
+	Private Sub ScaricaImmagineArtista(CosaCercare As String)
+		Dim sCosaCercare() As String = CosaCercare.Split("^")
+		Dim NomeDirectory As String = sCosaCercare(0).Replace("%20band", "")
+		Dim xx As Integer
 
-        Randomize()
-        Try
-            xx = Int(Rnd(1) * sCosaCercare.Length) ' - 1
-        Catch ex As Exception
-            xx = 1
-        End Try
+		Randomize()
+		Try
+			xx = Int(Rnd(1) * sCosaCercare.Length) ' - 1
+		Catch ex As Exception
+			xx = 1
+		End Try
 
-        If sCosaCercare(xx) <> "" And Not sCosaCercare(xx).ToUpper.Contains("NESSUNO") Then
-            Dim sourceCode As String
-            Dim sNomeFile As String = Application.StartupPath & "\Appoggio\Index.htm"
-            Dim Url As String = "https://www.bing.com/images/search?q=" & sCosaCercare(xx).Replace(" ", "%20") & "&qs=n&form=QBLH&scope=images&sp=-1&pq=" & sCosaCercare(xx).Replace(" ", "%20") & "&sc=8-5&sk=&cvid=C713FE68173A4CD3993A58C7F868EDE4"
+		If sCosaCercare(xx) <> "" And Not sCosaCercare(xx).ToUpper.Contains("NESSUNO") Then
+			Dim cosa As String = sCosaCercare(0).Replace("%20band", "") & " " & sCosaCercare(xx)
 
-            Dim gf As New GestioneFilesDirectory
-            gf.CreaDirectoryDaPercorso(gf.TornaNomeDirectoryDaPath(sNomeFile) & "\")
-            gf.ScansionaDirectorySingola(gf.TornaNomeDirectoryDaPath(sNomeFile) & "\")
-            Dim Filetti() As String = gf.RitornaFilesRilevati
-            Dim qFiles As Integer = gf.RitornaQuantiFilesRilevati
-            For i As Integer = 1 To qFiles
-                gf.EliminaFileFisico(Filetti(i))
-            Next
-            If File.Exists(sNomeFile) = True Then
-                Dim Conta As Integer = 1
-                Dim Estensione As String = gf.TornaEstensioneFileDaPath(sNomeFile)
+			Dim sourceCode As String
+			Dim sNomeFile As String = Application.StartupPath & "\Appoggio\Index.htm"
+			Dim Url As String = "https://www.bing.com/images/search?q=" & cosa.Replace(" ", "%20") & "&qs=n&form=QBLH&scope=images&sp=-1&pq=" & sCosaCercare(xx).Replace(" ", "%20") & "&sc=8-5&sk=&cvid=C713FE68173A4CD3993A58C7F868EDE4"
 
-                sNomeFile = sNomeFile.Replace(Estensione, "")
+			Dim gf As New GestioneFilesDirectory
+			gf.CreaDirectoryDaPercorso(gf.TornaNomeDirectoryDaPath(sNomeFile) & "\")
+			gf.ScansionaDirectorySingola(gf.TornaNomeDirectoryDaPath(sNomeFile) & "\")
+			Dim Filetti() As String = gf.RitornaFilesRilevati
+			Dim qFiles As Integer = gf.RitornaQuantiFilesRilevati
+			For i As Integer = 1 To qFiles
+				gf.EliminaFileFisico(Filetti(i))
+			Next
+			If File.Exists(sNomeFile) = True Then
+				Dim Conta As Integer = 1
+				Dim Estensione As String = gf.TornaEstensioneFileDaPath(sNomeFile)
 
-                Do While File.Exists(sNomeFile & Format(Conta, "00") & Estensione) = True
-                    Conta += 1
-                Loop
+				sNomeFile = sNomeFile.Replace(Estensione, "")
 
-                sNomeFile = sNomeFile & Format(Conta, "00") & Estensione
-            End If
+				Do While File.Exists(sNomeFile & Format(Conta, "00") & Estensione) = True
+					Conta += 1
+				Loop
 
-            Dim Ok As Boolean = True
+				sNomeFile = sNomeFile & Format(Conta, "00") & Estensione
+			End If
 
-            If TipoCollegamento.ToUpper.Trim = "PROXY" Then
-                Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create(Url)
-                request.Proxy.Credentials = New System.Net.NetworkCredential(Utenza, Password, Dominio)
-                Try
-                    Dim response As System.Net.HttpWebResponse = request.GetResponse()
-                    Application.DoEvents()
-                    Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
-                    Application.DoEvents()
-                    sourceCode = sr.ReadToEnd()
-                    sr.Close()
-                    response.Close()
-                    request = Nothing
+			Dim Ok As Boolean = True
 
-                    gf.CreaAggiornaFile(sNomeFile, sourceCode)
-                Catch ex As Exception
-                    Ok = False
-                End Try
-            Else
-                Try
-                    My.Computer.Network.DownloadFile(
-                        Url,
-                        sNomeFile)
-                Catch ex As Exception
-                    Ok = False
-                End Try
-            End If
+			If TipoCollegamento.ToUpper.Trim = "PROXY" Then
+				Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create(Url)
+				request.Proxy.Credentials = New System.Net.NetworkCredential(Utenza, Password, Dominio)
+				Try
+					Dim response As System.Net.HttpWebResponse = request.GetResponse()
+					Application.DoEvents()
+					Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
+					Application.DoEvents()
+					sourceCode = sr.ReadToEnd()
+					sr.Close()
+					response.Close()
+					request = Nothing
 
-            If Ok = True Then
-                sourceCode = gf.LeggeFileIntero(sNomeFile)
+					gf.CreaAggiornaFile(sNomeFile, sourceCode)
+				Catch ex As Exception
+					Ok = False
+				End Try
+			Else
+				Try
+					My.Computer.Network.DownloadFile(
+						Url,
+						sNomeFile)
+				Catch ex As Exception
+					Ok = False
+				End Try
+			End If
 
-                Dim a As Long
-                Dim Appoggio As String
-                Dim Inizio As Long
-                Dim Fine As Long
-                Dim Scaricate As Integer = 0
-                Dim Cambia As String
-                Dim Fatto As Boolean = False
+			If Ok = True Then
+				sourceCode = gf.LeggeFileIntero(sNomeFile)
 
-                ' Immagini
-                Contatore = 0
-                a = ControllaSeCiSonoImmagini(sourceCode)
-                Do While a > -1
-                    Appoggio = Mid(sourceCode, a, sourceCode.Length)
-                    For i As Long = a To 1 Step -1
-                        If Mid(sourceCode, i, 1) = Chr(34) Or Mid(sourceCode, i, 1) = "'" Or Mid(sourceCode, i, 1) = " " Then
-                            Inizio = i
-                            Exit For
-                        End If
-                    Next
-                    For i As Long = a To sourceCode.Length - 1
-                        If Mid(sourceCode, i, 1) = Chr(34) Or Mid(sourceCode, i, 1) = "'" Or Mid(sourceCode, i, 1) = " " Then
-                            Fine = i + 1
-                            Exit For
-                        End If
-                    Next
-                    Appoggio = Mid(sourceCode, Inizio, Fine - Inizio)
-                    Cambia = Appoggio
-                    Appoggio = Appoggio.Replace("\/", "\")
-                    Appoggio = Appoggio.Replace(Chr(34), "").Trim
-                    If Appoggio.IndexOf("(") > -1 Then
-                        Appoggio = Mid(Appoggio, Appoggio.IndexOf("(") + 2, Appoggio.Length)
-                    End If
-                    If Appoggio.IndexOf(")") > -1 Then
-                        Appoggio = Mid(Appoggio, 1, Appoggio.IndexOf(")"))
-                    End If
-                    If Appoggio.ToUpper.IndexOf(".HTM") = -1 Then
-                        If Mid(Appoggio, 1, 4).ToUpper = "HTTP" And Appoggio.IndexOf("yimg.com") = -1 And Appoggio.ToUpper.IndexOf("YAHOO") = -1 Then
-                            Dim NomeImm As String = Appoggio
-                            For i As Integer = NomeImm.Length To 1 Step -1
-                                If Mid(NomeImm, i, 1) = "\" Or Mid(NomeImm, i, 1) = "/" Then
-                                    NomeImm = Mid(NomeImm, i + 1, NomeImm.Length)
-                                    Exit For
-                                End If
-                            Next
+				Dim a As Long
+				Dim Appoggio As String
+				Dim Inizio As Long
+				Dim Fine As Long
+				Dim Scaricate As Integer = 0
+				Dim Cambia As String
+				Dim Fatto As Boolean = False
 
-                            Dim nomeImmSolo As String = NomeImm
-                            For i As Integer = nomeImmSolo.Length To 1 Step -1
-                                If Mid(nomeImmSolo, i, 1) = "." Then
-                                    nomeImmSolo = Mid(nomeImmSolo, 1, i - 1)
-                                    Exit For
-                                End If
-                            Next
+				' Immagini
+				Contatore = 0
+				a = ControllaSeCiSonoImmagini(sourceCode)
+				Do While a > -1
+					Appoggio = Mid(sourceCode, a, sourceCode.Length)
+					For i As Long = a To 1 Step -1
+						If Mid(sourceCode, i, 1) = Chr(34) Or Mid(sourceCode, i, 1) = "'" Or Mid(sourceCode, i, 1) = " " Then
+							Inizio = i
+							Exit For
+						End If
+					Next
+					For i As Long = a To sourceCode.Length - 1
+						If Mid(sourceCode, i, 1) = Chr(34) Or Mid(sourceCode, i, 1) = "'" Or Mid(sourceCode, i, 1) = " " Then
+							Fine = i + 1
+							Exit For
+						End If
+					Next
+					Appoggio = Mid(sourceCode, Inizio, Fine - Inizio)
+					Cambia = Appoggio
+					Appoggio = Appoggio.Replace("\/", "\")
+					Appoggio = Appoggio.Replace(Chr(34), "").Trim
+					If Appoggio.IndexOf("(") > -1 Then
+						Appoggio = Mid(Appoggio, Appoggio.IndexOf("(") + 2, Appoggio.Length)
+					End If
+					If Appoggio.IndexOf(")") > -1 Then
+						Appoggio = Mid(Appoggio, 1, Appoggio.IndexOf(")"))
+					End If
+					If Appoggio.ToUpper.IndexOf(".HTM") = -1 Then
+						If Mid(Appoggio, 1, 4).ToUpper = "HTTP" And Appoggio.IndexOf("yimg.com") = -1 And Appoggio.ToUpper.IndexOf("YAHOO") = -1 Then
+							Dim NomeImm As String = Appoggio
+							For i As Integer = NomeImm.Length To 1 Step -1
+								If Mid(NomeImm, i, 1) = "\" Or Mid(NomeImm, i, 1) = "/" Then
+									NomeImm = Mid(NomeImm, i + 1, NomeImm.Length)
+									Exit For
+								End If
+							Next
+
+							Dim nomeImmSolo As String = NomeImm
+							For i As Integer = nomeImmSolo.Length To 1 Step -1
+								If Mid(nomeImmSolo, i, 1) = "." Then
+									nomeImmSolo = Mid(nomeImmSolo, 1, i - 1)
+									Exit For
+								End If
+							Next
 
 							Dim Ok2 As Boolean = True
 
@@ -309,7 +312,7 @@ Public Class PrendeImmagineArtistaThread
 							conn = DB.ApreDB()
 							rec = DB.LeggeQuery(conn, Sql)
 							If Not rec.eof Then
-								ok2 = False
+								Ok2 = False
 							End If
 							rec.close
 							conn.Close()
@@ -322,52 +325,52 @@ Public Class PrendeImmagineArtistaThread
 
 							NomeImm = StrutturaDati.PathMP3 & "\" & NomeImm & ".jpg"
 
-								'gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & NomeDirectory)
-								'                     Dim Esistenti() As String = gf.RitornaFilesRilevati
-								'                     Dim qEsistenti As Integer = gf.RitornaQuantiFilesRilevati
-								'                     Dim Ok2 As Boolean = True
+							'gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & NomeDirectory)
+							'                     Dim Esistenti() As String = gf.RitornaFilesRilevati
+							'                     Dim qEsistenti As Integer = gf.RitornaQuantiFilesRilevati
+							'                     Dim Ok2 As Boolean = True
 
-								'                     For i As Integer = 1 To qEsistenti
-								'                         If Esistenti(i).ToUpper.IndexOf(nomeImmSolo.ToUpper.Trim) > -1 Then
-								'                             Ok2 = False
-								'                             Exit For
-								'                         End If
-								'                     Next
+							'                     For i As Integer = 1 To qEsistenti
+							'                         If Esistenti(i).ToUpper.IndexOf(nomeImmSolo.ToUpper.Trim) > -1 Then
+							'                             Ok2 = False
+							'                             Exit For
+							'                         End If
+							'                     Next
 
-								If Ok2 Then
-									If ScaricaFileDaPagina(Appoggio, "IMMAGINI", NomeImm) = 1 Then
-										Fatto = True
-										Exit Do
-									End If
+							If Ok2 Then
+								If ScaricaFileDaPagina(Appoggio, "IMMAGINI", NomeImm) = 1 Then
+									Fatto = True
+									Exit Do
 								End If
 							End If
 						End If
+					End If
 
-                    sourceCode = sourceCode.Replace(Cambia, "")
+					sourceCode = sourceCode.Replace(Cambia, "")
 
-                    a = ControllaSeCiSonoImmagini(sourceCode)
-                Loop
+					a = ControllaSeCiSonoImmagini(sourceCode)
+				Loop
 
-                gf = Nothing
+				gf = Nothing
 
-                If Fatto = False Then
-                    gi.PuliscePictureBox(picImmagineArtista)
-                End If
+				If Fatto = False Then
+					gi.PuliscePictureBox(picImmagineArtista)
+				End If
 
-                If EsceDalCiclo = False Then
-                    LeggeImmagini(NomeDirectory)
-                Else
-                    StaScaricando = False
-                    Exit Sub
-                End If
-            End If
-        Else
-        End If
+				If EsceDalCiclo = False Then
+					LeggeImmagini(NomeDirectory)
+				Else
+					StaScaricando = False
+					Exit Sub
+				End If
+			End If
+		Else
+		End If
 
-        StaScaricando = False
-    End Sub
+		StaScaricando = False
+	End Sub
 
-    Private Function ScaricaFileDaPagina(sUrl As String, Modalita As String, NomePassato As String) As Integer
+	Private Function ScaricaFileDaPagina(sUrl As String, Modalita As String, NomePassato As String) As Integer
         Dim Url As String = sUrl
         Dim Ritorno As Integer = 0
 
@@ -407,7 +410,16 @@ Public Class PrendeImmagineArtistaThread
             Application.DoEvents()
         End Try
 
-        Return Ritorno
+		Dim gi As New GestioneImmagini
+		gi.RidimensionaMantenendoProporzioni(sNomeFile, sNomeFile & ".rsz", 1024)
+		gi = Nothing
+
+		If File.Exists(sNomeFile & ".rsz") Then
+			File.Delete(sNomeFile)
+			File.Move(sNomeFile & ".rsz", sNomeFile)
+		End If
+
+		Return Ritorno
     End Function
 
     Private Function ControllaSeCiSonoImmagini(Cosa As String) As Long

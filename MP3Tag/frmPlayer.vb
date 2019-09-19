@@ -1730,22 +1730,23 @@ Public Class frmPlayer
         If StaSuonando() Or StaCambiandoAutomaticamente Then
             Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
 
-            Try
-                Dim c As String = Campi(5)
-                c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
-                If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
+			Try
+				Dim c As String = Campi(5)
+				c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
+				If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
 
-                Dim a As String = Campi(4)
-                Dim an As String = ""
-                If a.Contains("-") Then
-                    an = Mid(a, 1, a.IndexOf("-"))
-                    a = Mid(a, a.IndexOf("-") + 2, a.Length)
-                End If
+				Dim a As String = Campi(4)
+				Dim an As String = ""
+				If a.Contains("-") Then
+					an = Mid(a, 1, a.IndexOf("-"))
+					a = Mid(a, a.IndexOf("-") + 2, a.Length)
+				End If
 
-                lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi(3) & ": " & c & " - Album " & a & " (" & an & ")"
-            Catch ex As Exception
-                lblNomeCanzone.Text = "Prossimo brano: " & gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando))
-            End Try
+				lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi(3) & ": " & c & " - Album " & a & " (" & an & ")"
+			Catch ex As Exception
+				Dim campi2() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+				lblNomeCanzone.Text = "Prossimo brano: " & campi2(2) & " " & campi2(4)
+			End Try
             Application.DoEvents()
 
             bIndietro = False

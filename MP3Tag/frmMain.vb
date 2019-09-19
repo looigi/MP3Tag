@@ -637,32 +637,61 @@ Public Class frmMain
 		'Sql = "Delete From ImmaginiEliminate"
 		'DB.EsegueSql(conn, Sql)
 
+		pnlOperazioni.Visible = True
+		lblAggiornamento.Text = "Ridimensionamento immagini"
+		lblCopiati.Text = "Scansione directory"
+		Application.DoEvents()
+
 		gf.ScansionaDirectorySingola(lblPathDestinazione.Text)
 		Dim filetti() As String = gf.RitornaFilesRilevati
 		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
+		Dim gi As New GestioneImmagini
+		Dim Ridim As Integer = 0
+		Dim Errori As Integer = 0
 
 		For i As Integer = 1 To qf
 			Dim filetto As String = filetti(i)
 			'	filetto = filetto.Replace(lblPathDestinazione.Text & "\", "")
-			If filetto.ToUpper.EndsWith(".DAT") Then
-				Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
-				If este.Length < 5 Then
-					filetto = filetto.Replace(este, "")
-				End If
-
-				If Not File.Exists(filetto) Then
-					If Not filetto.ToUpper.Contains(".JPG") Then
-						filetto &= ".jpg"
-					End If
-					File.Copy(filetti(i), filetto)
+			If filetto.ToUpper.EndsWith(".JPG") Then
+				If filetto.ToUpper.Contains("ALBUMART") Then
+					File.Delete(filetto)
+					Errori += 1
 				Else
-					Dim nomefile As String = gf.TornaNomeFileDaPath(filetto)
-					Dim cart As String = gf.TornaNomeDirectoryDaPath(filetto)
+					Dim ret As String = gi.RidimensionaMantenendoProporzioni(filetto, filetto & ".rsz", 1024)
+					If ret.Contains("ERROR") Then
+						Errori += 1
+					End If
 
-					filetto = cart & "\" & Now.Second & "_" & nomefile & ".jpg"
-					File.Copy(filetti(i), filetto)
+					If File.Exists(filetto & ".rsz") Then
+						Ridim += 1
+						File.Delete(filetto)
+						File.Move(filetto & ".rsz", filetto)
+
+						lblCopiati.Text = "Ridimensionate: " & Ridim
+					End If
 				End If
-				File.Delete(filetti(i))
+
+				lblCopiati.Text = "Ridimensionate: " & Ridim & " - Eliminate: " & Errori
+				Application.DoEvents()
+
+				'	Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
+				'	If este.Length < 5 Then
+				'		filetto = filetto.Replace(este, "")
+				'	End If
+
+				'	If Not File.Exists(filetto) Then
+				'		If Not filetto.ToUpper.Contains(".JPG") Then
+				'			filetto &= ".jpg"
+				'		End If
+				'		File.Copy(filetti(i), filetto)
+				'	Else
+				'		Dim nomefile As String = gf.TornaNomeFileDaPath(filetto)
+				'		Dim cart As String = gf.TornaNomeDirectoryDaPath(filetto)
+
+				'		filetto = cart & "\" & Now.Second & "_" & nomefile & ".jpg"
+				'		File.Copy(filetti(i), filetto)
+				'	End If
+				'	File.Delete(filetti(i))
 				'		este = gf.TornaEstensioneFileDaPath(filetto)
 				'		filetto = filetto.Replace(este, "")
 
@@ -670,16 +699,16 @@ Public Class frmMain
 				'		DB.EsegueSql(conn, Sql)
 
 				'		File.Delete(filetti(i))
-			Else
-				If Not filetto.Contains(".") Then
-					If Not File.Exists(filetto & ".jpg") Then
-						filetto &= ".jpg"
-					Else
-						filetto &= "_" & Now.Second & ".jpg"
-					End If
-					File.Copy(filetti(i), filetto)
-					File.Delete(filetti(i))
-				End If
+				'Else
+				'	If Not filetto.Contains(".") Then
+				'		If Not File.Exists(filetto & ".jpg") Then
+				'			filetto &= ".jpg"
+				'		Else
+				'			filetto &= "_" & Now.Second & ".jpg"
+				'		End If
+				'		File.Copy(filetti(i), filetto)
+				'		File.Delete(filetti(i))
+				'	End If
 			End If
 		Next
 
@@ -735,5 +764,8 @@ Public Class frmMain
 		'retVal = mciSendString("open mpegvideo!" & filename & " alias myMovie parent " & Me.Handle.ToInt32 & " style child", vbNullString, 128, IntPtr.Zero)
 		'retVal = mciSendString("put movie window at 0 0 50 50", 0, 128, 0)
 		'retVal = mciSendString("play myMovie", vbNullString, 128, IntPtr.Zero)
+		MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
+
+		pnlOperazioni.Visible=false
 	End Sub
 End Class
