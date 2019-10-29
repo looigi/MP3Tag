@@ -49,7 +49,22 @@ Public Class frmMain
         ControllaAttivazionePulsanteEsegue()
         ControllaSeCiSonoUguali()
 
-        If Player = True Then
+		Dim s As ServiceReference1.looWPlayerSoapClient = New ServiceReference1.looWPlayerSoapClient
+		Dim rit As String = s.RitornaCanzoniDaEliminare()
+		If rit <> "" Then
+			' Canzoni da eliminare
+			Dim righe() As String = rit.Split(vbCrLf)
+			For Each rr As String In righe
+				Dim campi() As String = rr.Split(";")
+				' campi(0) = id canzone
+				' campi(1) = pathBase
+				' campi(2) = Artista
+				' campi(3) = Album
+				' campi(4) = Brano
+			Next
+		End If
+
+		If Player = True Then
             Timer1.Enabled = True
         End If
     End Sub
@@ -766,6 +781,6 @@ Public Class frmMain
 		'retVal = mciSendString("play myMovie", vbNullString, 128, IntPtr.Zero)
 		MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
 
-		pnlOperazioni.Visible=false
+		pnlOperazioni.Visible = False
 	End Sub
 End Class

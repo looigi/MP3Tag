@@ -58,12 +58,13 @@ Partial Class frmPlayer
 		Me.lstArtista = New System.Windows.Forms.ListBox()
 		Me.pnlImpostazioni = New System.Windows.Forms.Panel()
 		Me.pnlImpostazioniInterno = New System.Windows.Forms.Panel()
-		Me.cmdStatistiche = New System.Windows.Forms.Button()
-		Me.chkScaricaSubito = New System.Windows.Forms.CheckBox()
-		Me.cmdEliminaTesti = New System.Windows.Forms.Button()
 		Me.pnlAvanzamento = New System.Windows.Forms.Panel()
 		Me.lblAvanzamentoFile = New System.Windows.Forms.Label()
 		Me.lblAvanzamento = New System.Windows.Forms.Label()
+		Me.cmdCompattaMP3 = New System.Windows.Forms.Button()
+		Me.cmdSistemaImmagini = New System.Windows.Forms.Button()
+		Me.cmdStatistiche = New System.Windows.Forms.Button()
+		Me.cmdEliminaTesti = New System.Windows.Forms.Button()
 		Me.cmdChiudeImpostazioni = New System.Windows.Forms.Button()
 		Me.chkScaricaLyric = New System.Windows.Forms.CheckBox()
 		Me.cmdGestioneTAG = New System.Windows.Forms.Button()
@@ -554,7 +555,7 @@ Partial Class frmPlayer
 		Me.pnlImpostazioni.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
 		Me.pnlImpostazioni.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.pnlImpostazioni.Controls.Add(Me.pnlImpostazioniInterno)
-		Me.pnlImpostazioni.Location = New System.Drawing.Point(788, -1)
+		Me.pnlImpostazioni.Location = New System.Drawing.Point(475, 28)
 		Me.pnlImpostazioni.Name = "pnlImpostazioni"
 		Me.pnlImpostazioni.Size = New System.Drawing.Size(547, 561)
 		Me.pnlImpostazioni.TabIndex = 5
@@ -563,10 +564,11 @@ Partial Class frmPlayer
 		'
 		Me.pnlImpostazioniInterno.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
 		Me.pnlImpostazioniInterno.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdStatistiche)
-		Me.pnlImpostazioniInterno.Controls.Add(Me.chkScaricaSubito)
-		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdEliminaTesti)
 		Me.pnlImpostazioniInterno.Controls.Add(Me.pnlAvanzamento)
+		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdCompattaMP3)
+		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdSistemaImmagini)
+		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdStatistiche)
+		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdEliminaTesti)
 		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdChiudeImpostazioni)
 		Me.pnlImpostazioniInterno.Controls.Add(Me.chkScaricaLyric)
 		Me.pnlImpostazioniInterno.Controls.Add(Me.cmdGestioneTAG)
@@ -600,37 +602,6 @@ Partial Class frmPlayer
 		Me.pnlImpostazioniInterno.Name = "pnlImpostazioniInterno"
 		Me.pnlImpostazioniInterno.Size = New System.Drawing.Size(486, 520)
 		Me.pnlImpostazioniInterno.TabIndex = 31
-		'
-		'cmdStatistiche
-		'
-		Me.cmdStatistiche.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-		Me.cmdStatistiche.Location = New System.Drawing.Point(13, 168)
-		Me.cmdStatistiche.Name = "cmdStatistiche"
-		Me.cmdStatistiche.Size = New System.Drawing.Size(180, 23)
-		Me.cmdStatistiche.TabIndex = 34
-		Me.cmdStatistiche.Text = "Statistiche"
-		Me.cmdStatistiche.UseVisualStyleBackColor = True
-		'
-		'chkScaricaSubito
-		'
-		Me.chkScaricaSubito.AutoSize = True
-		Me.chkScaricaSubito.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-		Me.chkScaricaSubito.Location = New System.Drawing.Point(165, 117)
-		Me.chkScaricaSubito.Name = "chkScaricaSubito"
-		Me.chkScaricaSubito.Size = New System.Drawing.Size(141, 17)
-		Me.chkScaricaSubito.TabIndex = 33
-		Me.chkScaricaSubito.Text = "Scarica video subito"
-		Me.chkScaricaSubito.UseVisualStyleBackColor = True
-		'
-		'cmdEliminaTesti
-		'
-		Me.cmdEliminaTesti.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-		Me.cmdEliminaTesti.Location = New System.Drawing.Point(301, 168)
-		Me.cmdEliminaTesti.Name = "cmdEliminaTesti"
-		Me.cmdEliminaTesti.Size = New System.Drawing.Size(180, 23)
-		Me.cmdEliminaTesti.TabIndex = 31
-		Me.cmdEliminaTesti.Text = "Elimina tutti i testi"
-		Me.cmdEliminaTesti.UseVisualStyleBackColor = True
 		'
 		'pnlAvanzamento
 		'
@@ -667,6 +638,46 @@ Partial Class frmPlayer
 		Me.lblAvanzamento.TabIndex = 7
 		Me.lblAvanzamento.Text = "Label2"
 		Me.lblAvanzamento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		'
+		'cmdCompattaMP3
+		'
+		Me.cmdCompattaMP3.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdCompattaMP3.Location = New System.Drawing.Point(301, 226)
+		Me.cmdCompattaMP3.Name = "cmdCompattaMP3"
+		Me.cmdCompattaMP3.Size = New System.Drawing.Size(180, 23)
+		Me.cmdCompattaMP3.TabIndex = 36
+		Me.cmdCompattaMP3.Text = "Compatta MP3"
+		Me.cmdCompattaMP3.UseVisualStyleBackColor = True
+		'
+		'cmdSistemaImmagini
+		'
+		Me.cmdSistemaImmagini.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdSistemaImmagini.Location = New System.Drawing.Point(301, 197)
+		Me.cmdSistemaImmagini.Name = "cmdSistemaImmagini"
+		Me.cmdSistemaImmagini.Size = New System.Drawing.Size(180, 23)
+		Me.cmdSistemaImmagini.TabIndex = 35
+		Me.cmdSistemaImmagini.Text = "Sistema Immagini"
+		Me.cmdSistemaImmagini.UseVisualStyleBackColor = True
+		'
+		'cmdStatistiche
+		'
+		Me.cmdStatistiche.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdStatistiche.Location = New System.Drawing.Point(13, 168)
+		Me.cmdStatistiche.Name = "cmdStatistiche"
+		Me.cmdStatistiche.Size = New System.Drawing.Size(180, 23)
+		Me.cmdStatistiche.TabIndex = 34
+		Me.cmdStatistiche.Text = "Statistiche"
+		Me.cmdStatistiche.UseVisualStyleBackColor = True
+		'
+		'cmdEliminaTesti
+		'
+		Me.cmdEliminaTesti.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdEliminaTesti.Location = New System.Drawing.Point(301, 168)
+		Me.cmdEliminaTesti.Name = "cmdEliminaTesti"
+		Me.cmdEliminaTesti.Size = New System.Drawing.Size(180, 23)
+		Me.cmdEliminaTesti.TabIndex = 31
+		Me.cmdEliminaTesti.Text = "Elimina tutti i testi"
+		Me.cmdEliminaTesti.UseVisualStyleBackColor = True
 		'
 		'cmdChiudeImpostazioni
 		'
@@ -1691,11 +1702,12 @@ Partial Class frmPlayer
 	Friend WithEvents tmrSpostaYouTube As System.Windows.Forms.Timer
 	Friend WithEvents tmrChiudePannelloMP As System.Windows.Forms.Timer
 	Friend WithEvents pnlTuttoSchermo As System.Windows.Forms.PictureBox
-	Friend WithEvents chkScaricaSubito As System.Windows.Forms.CheckBox
 	Friend WithEvents tmrPrendeThumbs As System.Windows.Forms.Timer
 	Friend WithEvents cmdStatistiche As System.Windows.Forms.Button
 	Friend WithEvents pnlTestoInterno As System.Windows.Forms.Panel
 	Friend WithEvents pnlMembriInterno As System.Windows.Forms.Panel
 	Friend WithEvents AxWindowsMediaPlayer2 As AxWMPLib.AxWindowsMediaPlayer
 	Friend WithEvents cmdRicaricaMembri As Button
+	Friend WithEvents cmdCompattaMP3 As Button
+	Friend WithEvents cmdSistemaImmagini As Button
 End Class

@@ -269,6 +269,7 @@ Partial Class frmMain
 		Me.Button1.TabIndex = 24
 		Me.Button1.Text = "Sistema Immagini"
 		Me.Button1.UseVisualStyleBackColor = True
+		Me.Button1.Visible = False
 		'
 		'frmMain
 		'

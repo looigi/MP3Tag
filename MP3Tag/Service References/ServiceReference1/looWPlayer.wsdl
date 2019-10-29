@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://looWebPlayer.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://looWebPlayer.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://looWebPlayer.org/">
+      <s:element name="RitornaListaBrani">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Filtro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Refresh" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Dettagli" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaListaBraniResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaListaBraniResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaDettaglioBrano">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaDettaglioBranoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaDettaglioBranoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaMultimediaArtista">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PathBase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaMultimediaArtistaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaMultimediaArtistaResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaBrano">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DirectBase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Converte" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Qualita" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Attendi" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaBranoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaBranoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IncrementaAscoltate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IncrementaAscoltateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IncrementaAscoltateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SettaStelle">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Stelle" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SettaStelleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SettaStelleResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InserisceNuovoUtente">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amministratore" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CartellaBase" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InserisceNuovoUtenteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="InserisceNuovoUtenteResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaDatiUtente">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NomeUtente" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaDatiUtenteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaDatiUtenteResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaVersioneApplicazione">
+        <s:complexType />
+      </s:element>
+      <s:element name="RitornaVersioneApplicazioneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaVersioneApplicazioneResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EliminaCanzone">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PathBase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Album" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Canzone" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EliminaCanzoneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EliminaCanzoneResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaCanzoniDaEliminare">
+        <s:complexType />
+      </s:element>
+      <s:element name="RitornaCanzoniDaEliminareResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaCanzoniDaEliminareResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EliminaListaCanzoniDaEliminare">
+        <s:complexType />
+      </s:element>
+      <s:element name="EliminaListaCanzoniDaEliminareResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EliminaListaCanzoniDaEliminareResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RitornaListaBraniSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaListaBrani" />
+  </wsdl:message>
+  <wsdl:message name="RitornaListaBraniSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaListaBraniResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaDettaglioBrano" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaDettaglioBranoResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaMultimediaArtista" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaMultimediaArtistaResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaBrano" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaBranoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateSoapIn">
+    <wsdl:part name="parameters" element="tns:IncrementaAscoltate" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateSoapOut">
+    <wsdl:part name="parameters" element="tns:IncrementaAscoltateResponse" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleSoapIn">
+    <wsdl:part name="parameters" element="tns:SettaStelle" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleSoapOut">
+    <wsdl:part name="parameters" element="tns:SettaStelleResponse" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteSoapIn">
+    <wsdl:part name="parameters" element="tns:InserisceNuovoUtente" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteSoapOut">
+    <wsdl:part name="parameters" element="tns:InserisceNuovoUtenteResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaDatiUtente" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaDatiUtenteResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaVersioneApplicazioneSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaVersioneApplicazione" />
+  </wsdl:message>
+  <wsdl:message name="RitornaVersioneApplicazioneSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaVersioneApplicazioneResponse" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneSoapIn">
+    <wsdl:part name="parameters" element="tns:EliminaCanzone" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneSoapOut">
+    <wsdl:part name="parameters" element="tns:EliminaCanzoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaCanzoniDaEliminareSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaCanzoniDaEliminare" />
+  </wsdl:message>
+  <wsdl:message name="RitornaCanzoniDaEliminareSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaCanzoniDaEliminareResponse" />
+  </wsdl:message>
+  <wsdl:message name="EliminaListaCanzoniDaEliminareSoapIn">
+    <wsdl:part name="parameters" element="tns:EliminaListaCanzoniDaEliminare" />
+  </wsdl:message>
+  <wsdl:message name="EliminaListaCanzoniDaEliminareSoapOut">
+    <wsdl:part name="parameters" element="tns:EliminaListaCanzoniDaEliminareResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaListaBraniHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Filtro" type="s:string" />
+    <wsdl:part name="Refresh" type="s:string" />
+    <wsdl:part name="Dettagli" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaListaBraniHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoHttpGetIn">
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaHttpGetIn">
+    <wsdl:part name="PathBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="DirectBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Converte" type="s:string" />
+    <wsdl:part name="Qualita" type="s:string" />
+    <wsdl:part name="Attendi" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Stelle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Amministratore" type="s:string" />
+    <wsdl:part name="CartellaBase" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteHttpGetIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaVersioneApplicazioneHttpGetIn" />
+  <wsdl:message name="RitornaVersioneApplicazioneHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneHttpGetIn">
+    <wsdl:part name="PathBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Canzone" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaCanzoniDaEliminareHttpGetIn" />
+  <wsdl:message name="RitornaCanzoniDaEliminareHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaListaCanzoniDaEliminareHttpGetIn" />
+  <wsdl:message name="EliminaListaCanzoniDaEliminareHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaListaBraniHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Filtro" type="s:string" />
+    <wsdl:part name="Refresh" type="s:string" />
+    <wsdl:part name="Dettagli" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaListaBraniHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoHttpPostIn">
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDettaglioBranoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaHttpPostIn">
+    <wsdl:part name="PathBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaMultimediaArtistaHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="DirectBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Converte" type="s:string" />
+    <wsdl:part name="Qualita" type="s:string" />
+    <wsdl:part name="Attendi" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="IncrementaAscoltateHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Brano" type="s:string" />
+    <wsdl:part name="Stelle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettaStelleHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Amministratore" type="s:string" />
+    <wsdl:part name="CartellaBase" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InserisceNuovoUtenteHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteHttpPostIn">
+    <wsdl:part name="NomeUtente" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaDatiUtenteHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaVersioneApplicazioneHttpPostIn" />
+  <wsdl:message name="RitornaVersioneApplicazioneHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneHttpPostIn">
+    <wsdl:part name="PathBase" type="s:string" />
+    <wsdl:part name="Artista" type="s:string" />
+    <wsdl:part name="Album" type="s:string" />
+    <wsdl:part name="Canzone" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaCanzoneHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaCanzoniDaEliminareHttpPostIn" />
+  <wsdl:message name="RitornaCanzoniDaEliminareHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaListaCanzoniDaEliminareHttpPostIn" />
+  <wsdl:message name="EliminaListaCanzoniDaEliminareHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="looWPlayerSoap">
+    <wsdl:operation name="RitornaListaBrani">
+      <wsdl:input message="tns:RitornaListaBraniSoapIn" />
+      <wsdl:output message="tns:RitornaListaBraniSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <wsdl:input message="tns:RitornaDettaglioBranoSoapIn" />
+      <wsdl:output message="tns:RitornaDettaglioBranoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <wsdl:input message="tns:RitornaMultimediaArtistaSoapIn" />
+      <wsdl:output message="tns:RitornaMultimediaArtistaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <wsdl:input message="tns:RitornaBranoSoapIn" />
+      <wsdl:output message="tns:RitornaBranoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <wsdl:input message="tns:IncrementaAscoltateSoapIn" />
+      <wsdl:output message="tns:IncrementaAscoltateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <wsdl:input message="tns:SettaStelleSoapIn" />
+      <wsdl:output message="tns:SettaStelleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <wsdl:input message="tns:InserisceNuovoUtenteSoapIn" />
+      <wsdl:output message="tns:InserisceNuovoUtenteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <wsdl:input message="tns:RitornaDatiUtenteSoapIn" />
+      <wsdl:output message="tns:RitornaDatiUtenteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <wsdl:input message="tns:RitornaVersioneApplicazioneSoapIn" />
+      <wsdl:output message="tns:RitornaVersioneApplicazioneSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <wsdl:input message="tns:EliminaCanzoneSoapIn" />
+      <wsdl:output message="tns:EliminaCanzoneSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <wsdl:input message="tns:RitornaCanzoniDaEliminareSoapIn" />
+      <wsdl:output message="tns:RitornaCanzoniDaEliminareSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <wsdl:input message="tns:EliminaListaCanzoniDaEliminareSoapIn" />
+      <wsdl:output message="tns:EliminaListaCanzoniDaEliminareSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="looWPlayerHttpGet">
+    <wsdl:operation name="RitornaListaBrani">
+      <wsdl:input message="tns:RitornaListaBraniHttpGetIn" />
+      <wsdl:output message="tns:RitornaListaBraniHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <wsdl:input message="tns:RitornaDettaglioBranoHttpGetIn" />
+      <wsdl:output message="tns:RitornaDettaglioBranoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <wsdl:input message="tns:RitornaMultimediaArtistaHttpGetIn" />
+      <wsdl:output message="tns:RitornaMultimediaArtistaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <wsdl:input message="tns:RitornaBranoHttpGetIn" />
+      <wsdl:output message="tns:RitornaBranoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <wsdl:input message="tns:IncrementaAscoltateHttpGetIn" />
+      <wsdl:output message="tns:IncrementaAscoltateHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <wsdl:input message="tns:SettaStelleHttpGetIn" />
+      <wsdl:output message="tns:SettaStelleHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <wsdl:input message="tns:InserisceNuovoUtenteHttpGetIn" />
+      <wsdl:output message="tns:InserisceNuovoUtenteHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <wsdl:input message="tns:RitornaDatiUtenteHttpGetIn" />
+      <wsdl:output message="tns:RitornaDatiUtenteHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <wsdl:input message="tns:RitornaVersioneApplicazioneHttpGetIn" />
+      <wsdl:output message="tns:RitornaVersioneApplicazioneHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <wsdl:input message="tns:EliminaCanzoneHttpGetIn" />
+      <wsdl:output message="tns:EliminaCanzoneHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <wsdl:input message="tns:RitornaCanzoniDaEliminareHttpGetIn" />
+      <wsdl:output message="tns:RitornaCanzoniDaEliminareHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <wsdl:input message="tns:EliminaListaCanzoniDaEliminareHttpGetIn" />
+      <wsdl:output message="tns:EliminaListaCanzoniDaEliminareHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="looWPlayerHttpPost">
+    <wsdl:operation name="RitornaListaBrani">
+      <wsdl:input message="tns:RitornaListaBraniHttpPostIn" />
+      <wsdl:output message="tns:RitornaListaBraniHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <wsdl:input message="tns:RitornaDettaglioBranoHttpPostIn" />
+      <wsdl:output message="tns:RitornaDettaglioBranoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <wsdl:input message="tns:RitornaMultimediaArtistaHttpPostIn" />
+      <wsdl:output message="tns:RitornaMultimediaArtistaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <wsdl:input message="tns:RitornaBranoHttpPostIn" />
+      <wsdl:output message="tns:RitornaBranoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <wsdl:input message="tns:IncrementaAscoltateHttpPostIn" />
+      <wsdl:output message="tns:IncrementaAscoltateHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <wsdl:input message="tns:SettaStelleHttpPostIn" />
+      <wsdl:output message="tns:SettaStelleHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <wsdl:input message="tns:InserisceNuovoUtenteHttpPostIn" />
+      <wsdl:output message="tns:InserisceNuovoUtenteHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <wsdl:input message="tns:RitornaDatiUtenteHttpPostIn" />
+      <wsdl:output message="tns:RitornaDatiUtenteHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <wsdl:input message="tns:RitornaVersioneApplicazioneHttpPostIn" />
+      <wsdl:output message="tns:RitornaVersioneApplicazioneHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <wsdl:input message="tns:EliminaCanzoneHttpPostIn" />
+      <wsdl:output message="tns:EliminaCanzoneHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <wsdl:input message="tns:RitornaCanzoniDaEliminareHttpPostIn" />
+      <wsdl:output message="tns:RitornaCanzoniDaEliminareHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <wsdl:input message="tns:EliminaListaCanzoniDaEliminareHttpPostIn" />
+      <wsdl:output message="tns:EliminaListaCanzoniDaEliminareHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="looWPlayerSoap" type="tns:looWPlayerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RitornaListaBrani">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaListaBrani" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaDettaglioBrano" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaMultimediaArtista" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaBrano" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <soap:operation soapAction="http://looWebPlayer.org/IncrementaAscoltate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <soap:operation soapAction="http://looWebPlayer.org/SettaStelle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <soap:operation soapAction="http://looWebPlayer.org/InserisceNuovoUtente" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaDatiUtente" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaVersioneApplicazione" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <soap:operation soapAction="http://looWebPlayer.org/EliminaCanzone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <soap:operation soapAction="http://looWebPlayer.org/RitornaCanzoniDaEliminare" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <soap:operation soapAction="http://looWebPlayer.org/EliminaListaCanzoniDaEliminare" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="looWPlayerSoap12" type="tns:looWPlayerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RitornaListaBrani">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaListaBrani" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaDettaglioBrano" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaMultimediaArtista" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaBrano" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <soap12:operation soapAction="http://looWebPlayer.org/IncrementaAscoltate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <soap12:operation soapAction="http://looWebPlayer.org/SettaStelle" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <soap12:operation soapAction="http://looWebPlayer.org/InserisceNuovoUtente" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaDatiUtente" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaVersioneApplicazione" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <soap12:operation soapAction="http://looWebPlayer.org/EliminaCanzone" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <soap12:operation soapAction="http://looWebPlayer.org/RitornaCanzoniDaEliminare" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <soap12:operation soapAction="http://looWebPlayer.org/EliminaListaCanzoniDaEliminare" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="looWPlayerHttpGet" type="tns:looWPlayerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="RitornaListaBrani">
+      <http:operation location="/RitornaListaBrani" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <http:operation location="/RitornaDettaglioBrano" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <http:operation location="/RitornaMultimediaArtista" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <http:operation location="/RitornaBrano" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <http:operation location="/IncrementaAscoltate" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <http:operation location="/SettaStelle" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <http:operation location="/InserisceNuovoUtente" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <http:operation location="/RitornaDatiUtente" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <http:operation location="/RitornaVersioneApplicazione" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <http:operation location="/EliminaCanzone" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <http:operation location="/RitornaCanzoniDaEliminare" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <http:operation location="/EliminaListaCanzoniDaEliminare" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="looWPlayerHttpPost" type="tns:looWPlayerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="RitornaListaBrani">
+      <http:operation location="/RitornaListaBrani" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDettaglioBrano">
+      <http:operation location="/RitornaDettaglioBrano" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaMultimediaArtista">
+      <http:operation location="/RitornaMultimediaArtista" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBrano">
+      <http:operation location="/RitornaBrano" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IncrementaAscoltate">
+      <http:operation location="/IncrementaAscoltate" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettaStelle">
+      <http:operation location="/SettaStelle" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InserisceNuovoUtente">
+      <http:operation location="/InserisceNuovoUtente" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaDatiUtente">
+      <http:operation location="/RitornaDatiUtente" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaVersioneApplicazione">
+      <http:operation location="/RitornaVersioneApplicazione" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaCanzone">
+      <http:operation location="/EliminaCanzone" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaCanzoniDaEliminare">
+      <http:operation location="/RitornaCanzoniDaEliminare" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaListaCanzoniDaEliminare">
+      <http:operation location="/EliminaListaCanzoniDaEliminare" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="looWPlayer">
+    <wsdl:port name="looWPlayerSoap" binding="tns:looWPlayerSoap">
+      <soap:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="looWPlayerSoap12" binding="tns:looWPlayerSoap12">
+      <soap12:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="looWPlayerHttpGet" binding="tns:looWPlayerHttpGet">
+      <http:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="looWPlayerHttpPost" binding="tns:looWPlayerHttpPost">
+      <http:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

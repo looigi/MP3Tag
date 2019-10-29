@@ -5084,4 +5084,132 @@ Public Class frmPlayer
         End If
     End Sub
 
+	Private Sub CmdSistemaImmagini_Click(sender As Object, e As EventArgs) Handles cmdSistemaImmagini.Click
+		Dim gf As New GestioneFilesDirectory
+
+		pnlAvanzamento.Visible = True
+
+		lblAvanzamento.Text = "Ridimensionamento immagini"
+		lblAvanzamentoFile.Text = "Scansione directory"
+		Application.DoEvents()
+
+		gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
+		Dim filetti() As String = gf.RitornaFilesRilevati
+		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
+		Dim gi As New GestioneImmagini
+		Dim Ridim As Integer = 0
+		Dim Errori As Integer = 0
+
+		For i As Integer = 1 To qf
+			Dim filetto As String = filetti(i)
+			If filetto.ToUpper.EndsWith(".JPG") Then
+				If filetto.ToUpper.Contains("ALBUMART") Then
+					File.Delete(filetto)
+					Errori += 1
+				Else
+					Dim ret As String = gi.RidimensionaMantenendoProporzioni(filetto, filetto & ".rsz", 1024)
+					If ret.Contains("ERROR") Then
+						Errori += 1
+					End If
+
+					If File.Exists(filetto & ".rsz") Then
+						Ridim += 1
+						File.Delete(filetto)
+						File.Move(filetto & ".rsz", filetto)
+
+						lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim
+					End If
+				End If
+
+				lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim & " - Eliminate: " & Errori
+				Application.DoEvents()
+			End If
+		Next
+		MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
+
+		pnlAvanzamento.Visible = False
+	End Sub
+
+	Private Sub CmdCompattaMP3_Click(sender As Object, e As EventArgs) Handles cmdCompattaMP3.Click
+		Dim gf As New GestioneFilesDirectory
+
+		pnlAvanzamento.Visible = True
+
+		lblAvanzamento.Text = "Compressione MP3"
+		lblAvanzamentoFile.Text = "Scansione directory"
+		Application.DoEvents()
+
+		gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
+		Dim filetti() As String = gf.RitornaFilesRilevati
+		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
+		Dim gi As New GestioneImmagini
+		Dim Compressi As Integer = 0
+		Dim Errori As Integer = 0
+
+		Dim DB As New SQLSERVERCE
+		Dim conn As Object = CreateObject("ADODB.Connection")
+		Dim rec As Object = CreateObject("ADODB.Recordset")
+		Dim Sql As String = ""
+		DB.ImpostaNomeDB(PathDB)
+		DB.LeggeImpostazioniDiBase()
+		conn = DB.ApreDB()
+
+		For i As Integer = 1 To qf
+			Dim filetto As String = filetti(i)
+			If filetto.ToUpper.EndsWith(".MP3") Then
+				Dim dimeFile As Integer = gf.TornaDimensioneFile(filetto)
+				If dimeFile > 10000000 Then
+					Dim Campi() As String = filetto.Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
+					Dim id As Integer = -1
+					Sql = "Select * From ListaCanzone2 Where Artista='" & Campi(0).Replace("'", "''") & "' And Album='" & Campi(1).Replace("'", "''") & "' And Canzone='" & Campi(2).Replace("'", "''") & "'"
+					rec = DB.LeggeQuery(conn, Sql)
+					If Not rec.eof Then
+						id = rec("idCanzone").Value
+					End If
+					rec.Close
+					If id > -1 Then
+						Sql = "Select * From Compressi Where idCanzone=" & id
+						rec = DB.LeggeQuery(conn, Sql)
+						If rec.eof Then
+							gf.EliminaFileFisico(filetto & ".mp3")
+
+							Dim processoFFMpeg As Process = New Process()
+							Dim pi As ProcessStartInfo = New ProcessStartInfo()
+							pi.Arguments = "-i " & Chr(34) & filetto & Chr(34) & " -map 0:a:0 -b:a 128k " & Chr(34) & filetto & ".mp3" & Chr(34)
+							pi.FileName = Application.StartupPath & "\ffmpeg.exe"
+							pi.WindowStyle = ProcessWindowStyle.Hidden 
+							'D:\Sorgenti\VB.Net\Miei\Form\MP3Tag\MP3Tag\bin\Debug\ffmpeg.exe -i "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3" -map 0:a:0 -b:a 96k "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3.mp3"
+							processoFFMpeg.StartInfo = pi
+							'pi.UseShellExecute = False
+							processoFFMpeg.Start()
+							processoFFMpeg.WaitForExit()
+
+							If File.Exists(filetto & ".mp3") Then
+								gf.EliminaFileFisico(filetto)
+								File.Move(filetto & ".mp3", filetto)
+
+								Sql = "Insert Into Compressi Values (" & id & ")"
+								DB.EsegueSql(conn, Sql)
+
+								Compressi += 1
+							Else
+								Errori += 1
+							End If
+						End If
+						rec.Close
+					End If
+				End If
+
+				lblAvanzamentoFile.Text = "Compressione in corso: " & i & "/" & qf & " - Compressi: " & Compressi & " - Errori: " & Errori
+				Application.DoEvents()
+			End If
+		Next
+		conn.Close()
+		DB = Nothing
+
+		MsgBox("MP3 compressi", vbInformation)
+
+		pnlAvanzamento.Visible = False
+
+	End Sub
 End Class
