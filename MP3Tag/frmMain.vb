@@ -200,7 +200,9 @@ Public Class frmMain
 
         pnlOperazioni.Visible = False
 
-        Me.Cursor = Cursors.Default
+		EliminaFilesRemoti()
+
+		Me.Cursor = Cursors.Default
 
         MsgBox("Elaborazione completata")
     End Sub
