@@ -49,20 +49,7 @@ Public Class frmMain
         ControllaAttivazionePulsanteEsegue()
         ControllaSeCiSonoUguali()
 
-		Dim s As ServiceReference1.looWPlayerSoapClient = New ServiceReference1.looWPlayerSoapClient
-		Dim rit As String = s.RitornaCanzoniDaEliminare()
-		If rit <> "" Then
-			' Canzoni da eliminare
-			Dim righe() As String = rit.Split(vbCrLf)
-			For Each rr As String In righe
-				Dim campi() As String = rr.Split(";")
-				' campi(0) = id canzone
-				' campi(1) = pathBase
-				' campi(2) = Artista
-				' campi(3) = Album
-				' campi(4) = Brano
-			Next
-		End If
+		EliminaFilesRemoti()
 
 		If Player = True Then
             Timer1.Enabled = True

@@ -1,8 +1,9 @@
 ﻿Public Class DoubleBufferedPanels
-    Inherits Panel
+	Inherits Panel
 
-    Public Sub New()
-        DoubleBuffered = True
-    End Sub
+	Public Sub New()
+		DoubleBuffered = True
+	End Sub
 End Class
+
 
