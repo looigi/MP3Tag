@@ -500,7 +500,7 @@ Module mdlMP3Tag
 				Next
 
 				If eliminate > 0 Then
-					s.EliminaListaCanzoniDaEliminare()
+					's.EliminaListaCanzoniDaEliminare()
 
 					MsgBox("Canzoni eliminate: " & eliminate, vbInformation)
 				End If

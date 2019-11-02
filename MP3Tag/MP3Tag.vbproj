@@ -46,7 +46,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
@@ -55,7 +55,7 @@
     <DocumentationFile>MP3Tag.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <WarningLevel>1</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -118,9 +118,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\DoubleBuffers.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="App_Code\Download.vb" />
     <Compile Include="App_Code\GestioneFilesDirectory.vb" />
     <Compile Include="App_Code\GestioneImmagini.vb" />
@@ -207,6 +204,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DoubleBuffers.Designer.vb">
+      <DependentUpon>DoubleBuffers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\DoubleBuffers.vb">
+      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

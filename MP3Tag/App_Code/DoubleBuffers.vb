@@ -5,5 +5,3 @@
 		DoubleBuffered = True
 	End Sub
 End Class
-
-
