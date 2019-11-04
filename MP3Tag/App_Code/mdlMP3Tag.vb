@@ -466,51 +466,55 @@ Module mdlMP3Tag
 		Dim Sql As String = ""
 		DB.ImpostaNomeDB(PathDB)
 		DB.LeggeImpostazioniDiBase()
-		conn = DB.ApreDB()
 
-		Dim s As ServiceReference1.looWPlayerSoapClient = New ServiceReference1.looWPlayerSoapClient
-		Dim rit As String = s.RitornaCanzoniDaEliminare()
+		Try
+			Dim s As ServiceReference1.looWPlayerSoapClient = New ServiceReference1.looWPlayerSoapClient
+			Dim rit As String = s.RitornaCanzoniDaEliminare()
 
-		If rit <> "" Then
-			' Canzoni da eliminare
-			If Not rit.Contains("ERROR") Then
-				Dim righe() As String = rit.Split("|")
-				For Each rr As String In righe
-					If rr <> "" Then
-						Dim campi() As String = rr.Split(";")
-						' campi(0) = id canzone
-						' campi(1) = pathBase
-						' campi(2) = Artista
-						' campi(3) = Album
-						' campi(4) = Brano
-						Dim path As String = pathMp3 & "\" & campi(2) & "\" & campi(3) & "\" & campi(4)
-						Dim idCanzone As Integer = campi(0)
+			conn = DB.ApreDB()
+			If rit <> "" Then
+				' Canzoni da eliminare
+				If Not rit.Contains("ERROR") Then
+					Dim righe() As String = rit.Split("|")
+					For Each rr As String In righe
+						If rr <> "" Then
+							Dim campi() As String = rr.Split(";")
+							' campi(0) = id canzone
+							' campi(1) = pathBase
+							' campi(2) = Artista
+							' campi(3) = Album
+							' campi(4) = Brano
+							Dim path As String = pathMp3 & "\" & campi(2) & "\" & campi(3) & "\" & campi(4)
+							Dim idCanzone As Integer = campi(0)
 
-						gf.EliminaFileFisico(path)
+							gf.EliminaFileFisico(path)
 
-						Sql = "Delete From ListaCanzone2 Where idCanzone = " & idCanzone
-						rit = DB.EsegueSql(conn, Sql)
+							Sql = "Delete From ListaCanzone2 Where idCanzone = " & idCanzone
+							rit = DB.EsegueSql(conn, Sql)
 
-						Sql = "Delete From Ascoltate Where idCanzone = " & idCanzone
-						rit = DB.EsegueSql(conn, Sql)
+							Sql = "Delete From Ascoltate Where idCanzone = " & idCanzone
+							rit = DB.EsegueSql(conn, Sql)
 
-						eliminate += 1
-						' MsgBox(idCanzone & " -> " & path)
+							eliminate += 1
+							' MsgBox(idCanzone & " -> " & path)
+						End If
+					Next
+
+					If eliminate > 0 Then
+						's.EliminaListaCanzoniDaEliminare()
+
+						MsgBox("Canzoni eliminate: " & eliminate, vbInformation)
 					End If
-				Next
-
-				If eliminate > 0 Then
-					's.EliminaListaCanzoniDaEliminare()
-
-					MsgBox("Canzoni eliminate: " & eliminate, vbInformation)
-				End If
-			Else
-				If Avvisa Then
-					MsgBox("Nessuna canzone da eliminare", vbInformation)
+				Else
+					If Avvisa Then
+						MsgBox("Nessuna canzone da eliminare", vbInformation)
+					End If
 				End If
 			End If
-
 			conn.close()
-		End If
+		Catch ex As Exception
+
+		End Try
+
 	End Sub
 End Module
