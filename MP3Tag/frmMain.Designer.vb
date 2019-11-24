@@ -47,6 +47,7 @@ Partial Class frmMain
 		Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 		Me.BindingSource2 = New System.Windows.Forms.BindingSource(Me.components)
 		Me.Button1 = New System.Windows.Forms.Button()
+		Me.picUguali2 = New System.Windows.Forms.PictureBox()
 		CType(Me.picEsegue, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.picPlayer, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.picSettings, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -57,6 +58,7 @@ Partial Class frmMain
 		CType(Me.picUscita, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.BindingSource2, System.ComponentModel.ISupportInitialize).BeginInit()
+		CType(Me.picUguali2, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
 		'
 		'lblPathOrigine
@@ -156,6 +158,7 @@ Partial Class frmMain
 		Me.chkUguali.TabIndex = 9
 		Me.chkUguali.Text = "Controlla uguali"
 		Me.chkUguali.UseVisualStyleBackColor = True
+		Me.chkUguali.Visible = False
 		'
 		'chkSposta
 		'
@@ -271,6 +274,18 @@ Partial Class frmMain
 		Me.Button1.UseVisualStyleBackColor = True
 		Me.Button1.Visible = False
 		'
+		'picUguali2
+		'
+		Me.picUguali2.BackColor = System.Drawing.Color.Transparent
+		Me.picUguali2.BackgroundImage = Global.MP3Tag.My.Resources.Resources.visualizzato_tondo
+		Me.picUguali2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+		Me.picUguali2.Location = New System.Drawing.Point(235, 71)
+		Me.picUguali2.Name = "picUguali2"
+		Me.picUguali2.Size = New System.Drawing.Size(40, 37)
+		Me.picUguali2.TabIndex = 25
+		Me.picUguali2.TabStop = False
+		Me.picUguali2.Visible = False
+		'
 		'frmMain
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -278,9 +293,10 @@ Partial Class frmMain
 		Me.BackColor = System.Drawing.Color.Green
 		Me.ClientSize = New System.Drawing.Size(478, 111)
 		Me.ControlBox = False
+		Me.Controls.Add(Me.pnlOperazioni)
+		Me.Controls.Add(Me.picUguali2)
 		Me.Controls.Add(Me.Button1)
 		Me.Controls.Add(Me.picUscita)
-		Me.Controls.Add(Me.pnlOperazioni)
 		Me.Controls.Add(Me.picSenzaTag)
 		Me.Controls.Add(Me.picUguali)
 		Me.Controls.Add(Me.picConTAG)
@@ -309,6 +325,7 @@ Partial Class frmMain
 		CType(Me.picUscita, System.ComponentModel.ISupportInitialize).EndInit()
 		CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).EndInit()
 		CType(Me.BindingSource2, System.ComponentModel.ISupportInitialize).EndInit()
+		CType(Me.picUguali2, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
 		Me.PerformLayout()
 
@@ -336,4 +353,5 @@ Partial Class frmMain
     Friend WithEvents BindingSource1 As System.Windows.Forms.BindingSource
     Friend WithEvents BindingSource2 As System.Windows.Forms.BindingSource
     Friend WithEvents Button1 As System.Windows.Forms.Button
+	Friend WithEvents picUguali2 As PictureBox
 End Class

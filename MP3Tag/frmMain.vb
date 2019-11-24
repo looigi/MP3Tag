@@ -31,9 +31,10 @@ Public Class frmMain
 
         Dim tt As New ToolTip()
 
-        tt.SetToolTip(picUguali, "Apre la maschera di gestione degli MP3 uguali")
-        tt.SetToolTip(picSenzaTag, "Apre la maschera di gestione degli MP3 senza TAG")
-        tt.SetToolTip(picConTAG, "Apre la maschera di gestione degli MP3 con i TAG")
+		tt.SetToolTip(picUguali, "Cerca MP3 uguali")
+		tt.SetToolTip(picUguali2, "Apre la maschera di gestione degli MP3 uguali")
+		tt.SetToolTip(picSenzaTag, "Apre la maschera di gestione degli MP3 senza TAG")
+		tt.SetToolTip(picConTAG, "Apre la maschera di gestione degli MP3 con i TAG")
         tt.SetToolTip(picSettings, "Apre la maschera di gestione delle impostazioni")
         tt.SetToolTip(picPlayer, "Apre la maschera del Player MP3")
         tt.SetToolTip(picEsegue, "Esegue la routine di sistemazione")
@@ -46,8 +47,9 @@ Public Class frmMain
         u.ControllaAggiornamentoDB()
 
         CreaTabellaImmaginiSalvateSeNonEsiste()
-        ControllaAttivazionePulsanteEsegue()
-        ControllaSeCiSonoUguali()
+		ControllaAttivazionePulsanteEsegue()
+		picUguali2.Visible = False
+		ControllaSeCiSonoUguali()
 
 		EliminaFilesRemoti()
 
@@ -105,31 +107,31 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub ControllaSeCiSonoUguali()
-        If File.Exists(PathDB) Then
-            Dim DB As New SQLSERVERCE
-            Dim conn As Object = CreateObject("ADODB.Connection")
-            Dim rec As Object = CreateObject("ADODB.Recordset")
-            Dim Sql As String
-            DB.ImpostaNomeDB(PathDB)
-            DB.LeggeImpostazioniDiBase()
-            conn = DB.ApreDB()
+	Private Sub ControllaSeCiSonoUguali()
+		If File.Exists(PathDB) Then
+			Dim DB As New SQLSERVERCE
+			Dim conn As Object = CreateObject("ADODB.Connection")
+			Dim rec As Object = CreateObject("ADODB.Recordset")
+			Dim Sql As String
+			DB.ImpostaNomeDB(PathDB)
+			DB.LeggeImpostazioniDiBase()
+			conn = DB.ApreDB()
 
-            Sql = "Select * From Uguali"
-            rec = DB.LeggeQuery(conn, Sql)
-            If rec.Eof = True Then
-                picUguali.Visible = False
-            Else
-                picUguali.Visible = True
-            End If
-            rec.Close()
+			Sql = "Select * From Uguali"
+			rec = DB.LeggeQuery(conn, Sql)
+			If rec.Eof = True Then
+				picUguali2.Visible = False
+			Else
+				picUguali2.Visible = True
+			End If
+			rec.Close()
 
-            conn.Close()
-            DB = Nothing
-        End If
-    End Sub
+			conn.Close()
+			DB = Nothing
+		End If
+	End Sub
 
-    Private Sub LeggeFiles()
+	Private Sub LeggeFiles()
         If File.Exists(PathDB) Then
             Dim DB As New SQLSERVERCE
             Dim conn As Object = CreateObject("ADODB.Connection")
@@ -399,61 +401,75 @@ Public Class frmMain
         DB.LeggeImpostazioniDiBase()
         conn = DB.ApreDB()
 
-        Sql = "Delete From Uguali"
-        DB.EsegueSql(conn, Sql)
+		pnlOperazioni.Visible = True
 
-        Dim gf As New GestioneFilesDirectory
-        gf.ScansionaDirectorySingola(lblPathDestinazione.Text & "\")
+		lblAggiornamento.Text = "Pulizia uguali"
+		Application.DoEvents()
+
+		Sql = "Delete From Uguali"
+		DB.EsegueSql(conn, Sql)
+
+		lblAggiornamento.Text = "Scansione uguali"
+		Application.DoEvents()
+
+		Dim gf As New GestioneFilesDirectory
+		gf.ScansionaDirectorySingola(lblPathDestinazione.Text & "\")
         Dim Filetti() As String = gf.RitornaFilesRilevati
         Dim qFiles As Integer = gf.RitornaQuantiFilesRilevati
         Dim PrimoNome As String = ""
         Dim SecondoNome As String = ""
         Dim Rilevati As Integer = 0
 
-        lblAggiornamento.Text = "Controlla uguali"
-        Application.DoEvents()
+		lblAggiornamento.Text = "Controllo uguali"
+		Application.DoEvents()
 
-        'gf.ApreFileDiTestoPerScrittura(Application.StartupPath & "\Uguali.txt")
+		'gf.ApreFileDiTestoPerScrittura(Application.StartupPath & "\Uguali.txt")
 
-        For i As Integer = 1 To qFiles
-            PrimoNome = gf.TornaNomeFileDaPath(Filetti(i))
-            PrimoNome = Mid(PrimoNome, 1, PrimoNome.IndexOf(".")).Trim.ToUpper
-            If PrimoNome.IndexOf("-") > -1 Then
-                PrimoNome = Mid(PrimoNome, PrimoNome.IndexOf("-") + 2, PrimoNome.Length)
-            End If
+		For i As Integer = 1 To qFiles
+			If Filetti(i).ToUpper.Contains(".MP3") Or Filetti(i).ToUpper.Contains(".WMA") Then
+				PrimoNome = gf.TornaNomeFileDaPath(Filetti(i))
+				PrimoNome = Mid(PrimoNome, 1, PrimoNome.IndexOf(".")).Trim.ToUpper
+				If PrimoNome.IndexOf("-") > -1 Then
+					PrimoNome = Mid(PrimoNome, PrimoNome.IndexOf("-") + 2, PrimoNome.Length)
+				End If
 
-            lblCopiati.Text = "Controllo: " & i & "/" & qFiles & " - Rilevati: " & Rilevati
-            Application.DoEvents()
+				lblCopiati.Text = "Controllo: " & i & "/" & qFiles & " - Rilevati: " & Rilevati
+				Application.DoEvents()
 
-            For k As Integer = i + 1 To qFiles
-                SecondoNome = gf.TornaNomeFileDaPath(Filetti(k))
-                SecondoNome = Mid(SecondoNome, 1, SecondoNome.IndexOf(".")).Trim.ToUpper
-                If SecondoNome.IndexOf("-") > -1 Then
-                    SecondoNome = Mid(SecondoNome, SecondoNome.IndexOf("-") + 2, SecondoNome.Length)
-                End If
+				For k As Integer = i + 1 To qFiles
+					If Filetti(k).ToUpper.Contains(".MP3") Or Filetti(k).ToUpper.Contains(".WMA") Then
+						SecondoNome = gf.TornaNomeFileDaPath(Filetti(k))
+						SecondoNome = Mid(SecondoNome, 1, SecondoNome.IndexOf(".")).Trim.ToUpper
+						If SecondoNome.IndexOf("-") > -1 Then
+							SecondoNome = Mid(SecondoNome, SecondoNome.IndexOf("-") + 2, SecondoNome.Length)
+						End If
 
-                If PrimoNome = SecondoNome Then
-                    Rilevati += 1
+						If PrimoNome = SecondoNome Then
+							Rilevati += 1
 
-                    Sql = "Insert Into Uguali Values (" &
-                        " " & Rilevati & ", " &
-                        "'" & Filetti(i).Replace("'", "''") & "', " &
-                        "'" & Filetti(k).Replace("'", "''") & "' " &
-                        ")"
-                    DB.EsegueSql(conn, Sql)
-                End If
-            Next
-        Next
+							Sql = "Insert Into Uguali Values (" &
+								" " & Rilevati & ", " &
+								"'" & Filetti(i).Replace("'", "''") & "', " &
+								"'" & Filetti(k).Replace("'", "''") & "' " &
+								")"
+							DB.EsegueSql(conn, Sql)
+						End If
+					End If
+				Next
+			End If
+		Next
 
-        conn.Close()
+		conn.Close()
 
-        If Rilevati > 0 Then
-            picUguali.Visible = True
-        Else
-            picUguali.Visible = False
-        End If
+		pnlOperazioni.Visible = False
 
-        DB = Nothing
+		If Rilevati > 0 Then
+			picUguali2.Visible = True
+		Else
+			MsgBox("Nessun mp3 uguale rilevato", vbInformation)
+		End If
+
+		DB = Nothing
         gf = Nothing
     End Sub
 
@@ -588,12 +604,11 @@ Public Class frmMain
         SaveSetting("MP3Tag", "Impostazioni", "Smista", chkSposta.Checked)
     End Sub
 
-    Private Sub cmdUguali_Click(sender As Object, e As EventArgs) Handles picUguali.Click
-        frmUguali.Show()
-        Me.Hide()
-    End Sub
+	Private Sub cmdUguali_Click(sender As Object, e As EventArgs) Handles picUguali.Click
+		ControllaUguali()
+	End Sub
 
-    Private Sub cmdSenzaTAG_Click(sender As Object, e As EventArgs) Handles picSenzaTag.Click
+	Private Sub cmdSenzaTAG_Click(sender As Object, e As EventArgs) Handles picSenzaTag.Click
         frmSenzaTAG.ImpostaPercorso(lblPathDestinazione.Text)
         frmSenzaTAG.Show()
         Me.Hide()
@@ -771,5 +786,10 @@ Public Class frmMain
 		MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
 
 		pnlOperazioni.Visible = False
+	End Sub
+
+	Private Sub picUguali2_Click(sender As Object, e As EventArgs) Handles picUguali2.Click
+		frmUguali.Show()
+		Me.Hide()
 	End Sub
 End Class

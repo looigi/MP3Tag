@@ -43,9 +43,9 @@ Public Class frmUguali
             ReDim Preserve Canzone2(qCanzoni)
             ReDim Preserve Stato(qCanzoni)
             ReDim Preserve Numero(qCanzoni)
-            Canzone1(qCanzoni) = rec("Prima").Value
-            Canzone2(qCanzoni) = rec("Seconda").Value
-            Stato(qCanzoni) = 0
+			Canzone1(qCanzoni) = rec("Primo").Value
+			Canzone2(qCanzoni) = rec("Secondo").Value
+			Stato(qCanzoni) = 0
             Numero(qCanzoni) = rec("idUguale").Value
             qCanzoni += 1
 
