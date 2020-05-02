@@ -95,50 +95,55 @@ Public Class LetturaCanzoni
         Else
             conta = rec(0).Value
         End If
-        'rec.Close()
+		'rec.Close()
 
-        For i As Integer = 1 To qFiles
-            Campi = Filetti(i).Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
+		' Dim gf As New GestioneFilesDirectory
+		For i As Integer = 1 To qFiles
+			If Filetti(i) <> "" Then
+				Campi = Filetti(i).Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
 
-            If (Filetti(i).ToUpper.Contains(".MP3") Or Filetti(i).ToUpper.Contains(".WMA")) And File.Exists(Filetti(i)) Then
-                Datella = FileDateTime(Filetti(i))
-                f = New FileInfo(Filetti(i))
-                Datella = f.CreationTime
-                sDatella = r.ConverteDataPerDB(Datella)
+				gf.CreaAggiornaFile(Application.StartupPath & "\ppp.txt", Filetti(i))
 
-                Sql = "Select * From ListaCanzone2 Where Artista='" & r.SistemaTestoPerDB(Campi(0)) & "' And Album='" & r.SistemaTestoPerDB(Campi(1)) & "' And Canzone='" & r.SistemaTestoPerDB(Campi(2)) & "'"
-                rec = DB.LeggeQuery(conn, Sql)
-                If rec.Eof Then
-                    Try
-                        Sql = "Insert Into ListaCanzone2 Values (" &
-                            " " & conta & ", " &
-                            "'" & r.SistemaTestoPerDB(Campi(0)) & "', " &
-                            "'" & r.SistemaTestoPerDB(Campi(1)) & "', " &
-                            "'" & r.SistemaTestoPerDB(Campi(2)) & "', " &
-                            " " & sDatella & ", " &
-                            "0, " &
-                            "0, " &
-                            "'', " &
-                            "'')"
-                        DB.EsegueSql(conn, Sql)
+				If (Filetti(i).ToUpper.Contains(".MP3") Or Filetti(i).ToUpper.Contains(".WMA")) And File.Exists(Filetti(i)) Then
+					Datella = FileDateTime(Filetti(i))
+					f = New FileInfo(Filetti(i))
+					Datella = f.CreationTime
+					sDatella = r.ConverteDataPerDB(Datella)
 
-                        conta += 1
-                    Catch ex As Exception
-                        Cosa = ""
-                    End Try
-                End If
-                ' rec.Close()
+					Sql = "Select * From ListaCanzone2 Where Artista='" & r.SistemaTestoPerDB(Campi(0)) & "' And Album='" & r.SistemaTestoPerDB(Campi(1)) & "' And Canzone='" & r.SistemaTestoPerDB(Campi(2)) & "'"
+					rec = DB.LeggeQuery(conn, Sql)
+					If rec.Eof Then
+						Try
+							Sql = "Insert Into ListaCanzone2 Values (" &
+						" " & conta & ", " &
+						"'" & r.SistemaTestoPerDB(Campi(0)) & "', " &
+						"'" & r.SistemaTestoPerDB(Campi(1)) & "', " &
+						"'" & r.SistemaTestoPerDB(Campi(2)) & "', " &
+						" " & sDatella & ", " &
+						"0, " &
+						"0, " &
+						"'', " &
+						"'')"
+							DB.EsegueSql(conn, Sql)
 
-                If Cosa <> "" Then
-                    ReDim Preserve StrutturaDati.Canzoni(i)
-                    StrutturaDati.Canzoni(i) = Filetti(i)
-                End If
-            End If
+							conta += 1
+						Catch ex As Exception
+							Cosa = ""
+						End Try
+					End If
+					' rec.Close()
 
-            Application.DoEvents()
-        Next
+					If Cosa <> "" Then
+						ReDim Preserve StrutturaDati.Canzoni(i)
+						StrutturaDati.Canzoni(i) = Filetti(i)
+					End If
+				End If
+			End If
 
-        Dim Canzone As String = ""
+			Application.DoEvents()
+		Next
+
+		Dim Canzone As String = ""
 
         Sql = "Select * From ListaCanzone2"
         rec = DB.LeggeQuery(conn, Sql)
@@ -327,29 +332,31 @@ Public Class LetturaCanzoni
 
             StrutturaDati.lstAlbum.Items.Clear()
             For i As Integer = 1 To qAlbum
-                If Album(i).IndexOf(StrutturaDati.lstArtista.Text) > -1 Then
-                    Nome = Album(i).Replace(StrutturaDati.PathMP3 & "\" & StrutturaDati.lstArtista.Text & "\", "")
-                    Nome = Mid(Nome, 1, Nome.IndexOf("\"))
-                    If Nome.Length > 2 Then
-                        Ok = True
-                        If Mid(Nome, 1, 5) = "0000-" Then
-                            Nome = Mid(Nome, 6, Nome.Length)
-                        End If
-                        If Mid(Nome, 1).Trim = "-" Then
-                            Nome = Mid(Nome, 2, Nome.Length)
-                        End If
-                        For k As Integer = 0 To StrutturaDati.lstAlbum.Items.Count - 1
-                            If StrutturaDati.lstAlbum.Items(k) = Nome Then
-                                Ok = False
-                                Exit For
-                            End If
-                        Next
-                        If Ok = True Then
-                            StrutturaDati.lstAlbum.Items.Add(Nome.Trim)
-                        End If
-                    End If
-                End If
-            Next
+				If Album(i).IndexOf(StrutturaDati.lstArtista.Text) > -1 Then
+					Nome = Album(i).Replace(StrutturaDati.PathMP3 & "\" & StrutturaDati.lstArtista.Text & "\", "")
+					If Nome.IndexOf("\") > -1 Then
+						Nome = Mid(Nome, 1, Nome.IndexOf("\"))
+						If Nome.Length > 2 Then
+							Ok = True
+							If Mid(Nome, 1, 5) = "0000-" Then
+								Nome = Mid(Nome, 6, Nome.Length)
+							End If
+							If Mid(Nome, 1).Trim = "-" Then
+								Nome = Mid(Nome, 2, Nome.Length)
+							End If
+							For k As Integer = 0 To StrutturaDati.lstAlbum.Items.Count - 1
+								If StrutturaDati.lstAlbum.Items(k) = Nome Then
+									Ok = False
+									Exit For
+								End If
+							Next
+							If Ok = True Then
+								StrutturaDati.lstAlbum.Items.Add(Nome.Trim)
+							End If
+						End If
+					End If
+				End If
+			Next
 
             Dim NomeAlbumVero As String = ""
             Dim A As String
