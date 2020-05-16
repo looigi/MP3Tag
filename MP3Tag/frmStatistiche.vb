@@ -170,7 +170,25 @@ Public Class frmStatistiche
                     Dim ss As String = s.Replace(StrutturaDati.PathMP3 & "\", "")
 
                     t = ss.Split("\")
-                    Sql = "Select * From ListaCanzone2 Where Album='" & r1.SistemaTestoPerDB(t(1)) & "' And Artista='" & r1.SistemaTestoPerDB(t(0)) & "' And Canzone='" & r1.SistemaTestoPerDB(t(2)) & "'"
+
+                    Dim sAnno As String = ""
+                    Dim sTraccia As String = ""
+
+                    If t(1).Contains("-") Then
+                        sAnno = Mid(t(1), 1, t(1).IndexOf("-"))
+                        t(1) = Mid(t(1), t(1).IndexOf("-") + 2, t(1).Length)
+                    End If
+                    If t(2).Contains("-") Then
+                        sTraccia = Mid(t(2), 1, t(2).IndexOf("-"))
+                        t(2) = Mid(t(2), t(2).IndexOf("-") + 2, t(2).Length)
+                    End If
+
+                    Sql = "Select * From ListaCanzone2 Where " &
+                        "Album='" & r1.SistemaTestoPerDB(t(1)) & "' And " &
+                        "Artista='" & r1.SistemaTestoPerDB(t(0)) & "' And " &
+                        "Canzone='" & r1.SistemaTestoPerDB(t(2)) & "' And " &
+                        "Anno=" & sAnno & " And " &
+                        "Traccia=" & sTraccia
                     Rec = DB.LeggeQuery(conn, Sql)
                     If Not Rec.Eof Then
                         idCanzone = Rec(0).Value

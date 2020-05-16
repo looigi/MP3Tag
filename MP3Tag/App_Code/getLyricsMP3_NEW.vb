@@ -99,7 +99,7 @@ Public Class getLyricsMP3_NEW
         rec = DB.LeggeQuery(conn, Sql)
         Do Until rec.eof
             ReDim Preserve Canzoni(qCanzone)
-            Canzoni(qCanzone) = rec("Artista").Value & "\" & rec("Album").Value & "\" & rec("Canzone").Value
+            Canzoni(qCanzone) = rec("Artista").Value & "\" & rec("Anno").value & "-" & rec("Album").Value & "\" & rec("Traccia").value & "-" & rec("Canzone").Value
             qCanzone += 1
 
             rec.movenext()
@@ -123,9 +123,9 @@ Public Class getLyricsMP3_NEW
                     Do While sCanzone.Contains("-")
                         sCanzone = Mid(sCanzone, sCanzone.IndexOf("-") + 2, sCanzone.Length)
                     Loop
-                    If sCanzone.Contains(".") Then
-                        sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("."))
-                    End If
+                    'If sCanzone.Contains(".") Then
+                    '    sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("."))
+                    'End If
                     Do While sAlbum.Contains("-")
                         sAlbum = Mid(sAlbum, sAlbum.IndexOf("-") + 2, sAlbum.Length)
                     Loop
@@ -783,7 +783,24 @@ Public Class getLyricsMP3_NEW
 
         TestoRitorno = ""
 
-        Sql = "Select * From ListaCanzone2 Where Album='" & r.SistemaTestoPerDB(Album) & "' And Artista='" & r.SistemaTestoPerDB(Artista) & "' And Canzone='" & r.SistemaTestoPerDB(Canzone) & "'"
+        Dim Anno As String = ""
+        Dim Traccia As String = ""
+
+        If Album.Contains("-") Then
+            Anno = Mid(Album, 1, Album.IndexOf("-"))
+            Album = Mid(Album, Album.IndexOf("-") + 2, Album.Length)
+        End If
+        If Canzone.Contains("-") Then
+            Traccia = Mid(Canzone, 1, Canzone.IndexOf("-"))
+            Canzone = Mid(Canzone, Canzone.IndexOf("-") + 2, Canzone.Length)
+        End If
+
+        Sql = "Select * From ListaCanzone2 Where " &
+            "Album='" & r.SistemaTestoPerDB(Album) & "' And " &
+            "Artista='" & r.SistemaTestoPerDB(Artista) & "' And " &
+            "Canzone='" & r.SistemaTestoPerDB(Canzone) & "' And " &
+            "Anno=" & Anno & " And " &
+            "Traccia=" & Traccia
         Rec = DB.LeggeQuery(conn, Sql)
         If Not Rec.Eof Then
             idCanzone = Rec(0).Value
@@ -815,12 +832,12 @@ Public Class getLyricsMP3_NEW
         If sTitolo.Contains("-") Then
             sTitolo = Mid(sTitolo, sTitolo.IndexOf("-") + 2, sTitolo.Length)
         End If
-        If (sTitolo.Contains(".")) Then
-            sTitolo = Mid(sTitolo, 1, sTitolo.IndexOf("."))
-        End If
-        If (sTitolo.Contains("(")) Then
-            sTitolo = Mid(sTitolo, 1, sTitolo.IndexOf("("))
-        End If
+        'If (sTitolo.Contains(".")) Then
+        '    sTitolo = Mid(sTitolo, 1, sTitolo.IndexOf("."))
+        'End If
+        'If (sTitolo.Contains("(")) Then
+        '    sTitolo = Mid(sTitolo, 1, sTitolo.IndexOf("("))
+        'End If
 
         If Not CeTesto Then
             Dim Url As String = "http://lyrics.wikia.com/wiki/" & sArtista & ":" & sTitolo
@@ -868,12 +885,12 @@ Public Class getLyricsMP3_NEW
             If sCanzone.Contains("-") Then
                 sCanzone = Mid(sCanzone, sCanzone.IndexOf("-") + 2, sCanzone.Length)
             End If
-            If sCanzone.Contains(".") Then
-                sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("."))
-            End If
-            If sCanzone.Contains("(") Then
-                sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("("))
-            End If
+            'If sCanzone.Contains(".") Then
+            '    sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("."))
+            'End If
+            'If sCanzone.Contains("(") Then
+            '    sCanzone = Mid(sCanzone, 1, sCanzone.IndexOf("("))
+            'End If
 
             If Ok = False Then
                 TestoRitorno = Artista.ToUpper.Trim & "§"

@@ -20,7 +20,7 @@
     Private _picMP3 As PictureBox
     Private _BarraAvanzamento As TrackBar
     Private _BarraAvanzamentoInterna As TrackBar
-    Private _Canzoni() As String
+    Private _DettaglioBrani() As StrutturaCanzone.StrutturaBrano
     Private _qCanzoni As Integer
     Private _PathMP3 As String
     Private _FiltroRicerca As String
@@ -167,12 +167,12 @@
         End Set
     End Property
 
-    Property Canzoni As String()
+    Property DettaglioBrani As StrutturaCanzone.StrutturaBrano()
         Get
-            Return _Canzoni
+            Return _DettaglioBrani
         End Get
-        Set(ByVal value As String())
-            _Canzoni = value
+        Set(ByVal value As StrutturaCanzone.StrutturaBrano())
+            _DettaglioBrani = value
         End Set
     End Property
 

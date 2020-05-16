@@ -134,6 +134,7 @@
     <Compile Include="App_Code\RoutineVarie.vb" />
     <Compile Include="App_Code\SQLSERVERCE.vb" />
     <Compile Include="App_Code\StrutturaCampivb.vb" />
+    <Compile Include="App_Code\StrutturaCanzone.vb" />
     <Compile Include="App_Code\UpdateDB.vb" />
     <Compile Include="App_Code\YouTube.vb" />
     <Compile Include="frmConTAG.Designer.vb">
@@ -246,6 +247,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

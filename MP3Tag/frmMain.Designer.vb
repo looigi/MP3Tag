@@ -158,7 +158,6 @@ Partial Class frmMain
 		Me.chkUguali.TabIndex = 9
 		Me.chkUguali.Text = "Controlla uguali"
 		Me.chkUguali.UseVisualStyleBackColor = True
-		Me.chkUguali.Visible = False
 		'
 		'chkSposta
 		'
@@ -266,7 +265,7 @@ Partial Class frmMain
 		'
 		'Button1
 		'
-		Me.Button1.Location = New System.Drawing.Point(257, 85)
+		Me.Button1.Location = New System.Drawing.Point(281, 85)
 		Me.Button1.Name = "Button1"
 		Me.Button1.Size = New System.Drawing.Size(98, 23)
 		Me.Button1.TabIndex = 24

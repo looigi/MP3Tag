@@ -61,8 +61,9 @@
         Try
             Conn.Execute(Sql)
         Catch ex As Exception
+            MsgBox(ex.Message)
             Dim ec As Integer = ex.HResult
-            ' Stop
+            Stop
         End Try
 
         ChiudeDB(AperturaManuale, Conn)

@@ -47,6 +47,8 @@ Public Class Download
 		End If
 	End Sub
 
+	Private ultimoUrl As String = ""
+
 	Public Function ScaricaPagina(Url As String) As Boolean
 		Dim Ok As Boolean = True
 		Dim sourceCode As String
@@ -54,6 +56,11 @@ Public Class Download
 
 		If TipoCollegamento Is Nothing = True Then TipoCollegamento = ""
 
+		If ultimoUrl = Url Then
+			Return False
+		End If
+
+		ultimoUrl = Url
 		If TipoCollegamento.Trim.ToUpper = "PROXY" Then
 			Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create(Url)
 			request.Proxy.Credentials = New System.Net.NetworkCredential(Utenza, Password, Dominio)

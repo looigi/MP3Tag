@@ -51,9 +51,9 @@ Public Class frmMain
 		picUguali2.Visible = False
 		ControllaSeCiSonoUguali()
 
-		EliminaFilesRemoti()
+        EliminaFilesRemoti(False)
 
-		If Player = True Then
+        If Player = True Then
             Timer1.Enabled = True
         End If
     End Sub
@@ -234,6 +234,27 @@ Public Class frmMain
         Dim album2 As String
         Dim modificato As Boolean
 
+        Dim DB As SQLSERVERCE
+        Dim r As New RoutineVarie
+        Dim conn As Object = CreateObject("ADODB.Connection")
+        Dim Rec As Object = CreateObject("ADODB.Recordset")
+        Dim Sql As String = ""
+        DB = New SQLSERVERCE
+        DB.ImpostaNomeDB(PathDB)
+        DB.LeggeImpostazioniDiBase()
+        conn = DB.ApreDB()
+
+        Dim Conta As Integer
+
+        Sql = "Select max(idCanzone)+1 From ListaCanzone2"
+        Rec = DB.LeggeQuery(conn, Sql)
+        If Rec(0).Value Is DBNull.Value Then
+            Conta = 1
+        Else
+            Conta = Rec(0).Value
+        End If
+        Rec.Close()
+
         For i As Integer = 1 To qFiles
             estensione = gf.TornaEstensioneFileDaPath(Filetti(i))
 
@@ -360,7 +381,43 @@ Public Class frmMain
 
                             FileCopy(Filetti(i), pathDest)
 
+                            Dim s As New StrutturaCanzone.StrutturaBrano
+                            s.Artista = artista
+                            s.Album = album
+                            s.Data = FileDateTime(Filetti(i)).ToString("yyyy-MM-dd HH:mm:ss.fff")
+                            s.Canzone = title
+                            s.Testo = ""
+                            s.TestoTradotto = ""
+                            s.Ascoltata = 0
+                            s.Traccia = traccia
+                            s.Anno = anno
+                            s.Estensione = estensione.Replace(".", "")
+
+                            For ii As Integer = s.Anno.Length + 1 To 4
+                                s.Anno = "0" & s.Anno
+                            Next
+                            If s.Traccia.Length = 1 Then
+                                s.Traccia = "0" & s.Traccia
+                            End If
+
+                            Sql = "Insert Into ListaCanzone2 Values (" &
+                                " " & Conta & ", " &
+                                "'" & r.SistemaTestoPerDB(artista) & "', " &
+                                "'" & r.SistemaTestoPerDB(album) & "', " &
+                                "'" & r.SistemaTestoPerDB(title) & "', " &
+                                "'" & s.Data & "', " &
+                                "0, " &
+                                "0, " &
+                                "'', " &
+                                "'', " &
+                                " " & traccia & ", " &
+                                " " & anno & ", " &
+                                "'" & s.Estensione & "')"
+                            DB.EsegueSql(conn, Sql)
+
                             gf.EliminaFileFisico(Filetti(i))
+
+                            Conta += 1
                         Else
                             gf.EliminaFileFisico(Filetti(i))
                         End If
@@ -390,6 +447,7 @@ Public Class frmMain
             End Select
         Next
 
+        DB = Nothing
         gf = Nothing
     End Sub
 
@@ -641,22 +699,83 @@ Public Class frmMain
 	'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
 
 	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-		'Dim DB As New SQLSERVERCE
-		'Dim conn As Object = CreateObject("ADODB.Connection")
-		'Dim rec As Object = CreateObject("ADODB.Recordset")
-		''Dim rec2 As Object = CreateObject("ADODB.Recordset")
-		'Dim Sql As String
-		Dim gf As New GestioneFilesDirectory
-		''Dim Canzone As String = ""
-		''Dim Bellezza As String = ""
-		'DB.ImpostaNomeDB(PathDB)
-		'DB.LeggeImpostazioniDiBase()
-		'conn = DB.ApreDB()
+        Dim DB As New SQLSERVERCE
+        Dim conn As Object = CreateObject("ADODB.Connection")
+        Dim rec As Object = CreateObject("ADODB.Recordset")
+        Dim Sql As String
+        Dim gf As New GestioneFilesDirectory
+        DB.ImpostaNomeDB(PathDB)
+        DB.LeggeImpostazioniDiBase()
+        conn = DB.ApreDB()
 
-		'Sql = "Delete From ImmaginiEliminate"
-		'DB.EsegueSql(conn, Sql)
+        Sql = "Select * From ListaCanzone2"
+        rec = DB.LeggeQuery(conn, Sql)
+        Do Until rec.Eof
+            'Dim canzone As String = rec("Canzone").Value.ToString
+            'Dim traccia As String = ""
+            'If canzone.Contains("-") Then
+            '    traccia = Mid(canzone, 1, canzone.IndexOf("-")).Trim
+            '    canzone = Mid(canzone, canzone.IndexOf("-") + 2, Len(canzone))
+            '    Dim est As String = gf.TornaEstensioneFileDaPath(canzone)
+            '    canzone = canzone.Replace(est, "")
+            'End If
+            'Dim album As String = rec("Album").value.ToString
+            'Dim anno As String = ""
+            'If album.Contains("-") Then
+            '    anno = Mid(album, 1, album.IndexOf("-")).Trim
+            '    album = Mid(album, album.IndexOf("-") + 2, Len(album))
+            'End If
+            'canzone = canzone.Replace("'", "''")
+            'album = album.Replace("'", "''")
+            Dim Estensione As String = ""
+            Dim Anno As String = rec("Anno").value.ToString.Trim
+            Dim Traccia As String = rec("Traccia").value.ToString.Trim
+            For i As Integer = Anno.Length + 1 To 4
+                Anno = "0" & Anno
+            Next
+            If Traccia.Length = 1 Then
+                Traccia = "0" & Traccia
+            End If
 
-		pnlOperazioni.Visible = True
+            Dim Path As String = lblPathDestinazione.Text & "\" & rec("Artista").value & "\" & Anno & "-" & rec("Album").Value & "\" & Traccia & "-" & rec("Canzone").value
+            'MsgBox(Path)
+            If IO.File.Exists(Path & ".mp3") Then
+                Estensione = "MP3"
+            Else
+                If IO.File.Exists(Path & ".wma") Then
+                    Estensione = "WMA"
+                Else
+                    Stop
+                End If
+            End If
+            Sql = "update ListaCanzone2 Set Estensione='" & Estensione & "' where idCanzone=" & rec("idCanzone").value
+            DB.EsegueSql(conn, Sql)
+
+            ' MsgBox(Sql)
+
+            rec.movenext
+        Loop
+        rec.close
+
+        DB = Nothing
+        Exit Sub
+
+        'Dim DB As New SQLSERVERCE
+        'Dim conn As Object = CreateObject("ADODB.Connection")
+        'Dim rec As Object = CreateObject("ADODB.Recordset")
+        ''Dim rec2 As Object = CreateObject("ADODB.Recordset")
+        'Dim Sql As String
+        'Dim gf As New GestioneFilesDirectory
+        ''Dim Canzone As String = ""
+        ''Dim Bellezza As String = ""
+        'DB.ImpostaNomeDB(PathDB)
+        'DB.LeggeImpostazioniDiBase()
+        'conn = DB.ApreDB()
+
+        'Sql = "Delete From ImmaginiEliminate"
+        'DB.EsegueSql(conn, Sql)
+
+        pnlOperazioni.Visible = True
 		lblAggiornamento.Text = "Ridimensionamento immagini"
 		lblCopiati.Text = "Scansione directory"
 		Application.DoEvents()

@@ -154,12 +154,12 @@ Module mdlMP3Tag
             End If
 
             For i As Integer = 1 To StrutturaDati.qCanzoni
-                If StrutturaDati.Canzoni(i).IndexOf(c) > -1 And StrutturaDati.Canzoni(i).IndexOf(a) > -1 Then
-                    NomeCanzoneRitorno = StrutturaDati.Canzoni(i)
-                    NomeCanzoneRitorno = NomeCanzoneRitorno.Replace(StrutturaDati.PathMP3 & "\", "")
-                    NomeCanzoneRitorno = NomeCanzoneRitorno.Replace("'", "''")
-                    Exit For
-                End If
+                'If StrutturaDati.Canzoni(i).IndexOf(c) > -1 And StrutturaDati.Canzoni(i).IndexOf(a) > -1 Then
+                '    NomeCanzoneRitorno = StrutturaDati.Canzoni(i)
+                '    NomeCanzoneRitorno = NomeCanzoneRitorno.Replace(StrutturaDati.PathMP3 & "\", "")
+                '    NomeCanzoneRitorno = NomeCanzoneRitorno.Replace("'", "''")
+                '    Exit For
+                'End If
             Next
         End If
         If NomeCanzoneRitorno = "" Then
@@ -456,7 +456,46 @@ Module mdlMP3Tag
         HaGiaScrittoAscoltataSulDB = True
     End Sub
 
-	Public Sub EliminaFilesRemoti(Optional Avvisa As Boolean = False)
+    Public Function ConverteFilesInStruttura(Files() As String, Quanti As Integer) As StrutturaCanzone.StrutturaBrano()
+        Dim gf As New GestioneFilesDirectory
+        Dim Ritorno(Quanti + 1) As StrutturaCanzone.StrutturaBrano
+
+        For i As Integer = 1 To Quanti
+            Dim s As New StrutturaCanzone.StrutturaBrano
+            s.Estensione = gf.TornaEstensioneFileDaPath(Files(i)).ToUpper.Trim().Replace(".", "")
+
+            Dim Campi() As String = (Files(i).Replace(StrutturaDati.PathMP3 & "\", "")).Split("\")
+            Dim Anno As String = ""
+            If Campi(1).Contains("-") Then
+                Anno = Mid(Campi(1), 1, Campi(1).IndexOf("-"))
+                Campi(1) = Mid(Campi(1), Campi(1).IndexOf("-") + 2, Campi(1).Length)
+            End If
+            Dim Traccia As String = ""
+            If Campi(2).Contains("-") Then
+                Traccia = Mid(Campi(2), 1, Campi(2).IndexOf("-"))
+                Campi(2) = Mid(Campi(2), Campi(2).IndexOf("-") + 2, Campi(2).Length)
+            End If
+
+            s.idCanzone = i
+            s.Artista = Campi(0)
+            s.Album = Campi(1)
+            s.Canzone = Campi(2)
+            s.Testo = ""
+            s.TestoTradotto = ""
+            s.Ascoltata = 0
+            s.Data = FileDateTime(Files(i))
+            s.Bellezza = 0
+            s.Traccia = Traccia
+            s.Anno = Anno
+
+            Ritorno(i) = s
+        Next
+        gf = Nothing
+
+        Return Ritorno
+    End Function
+
+    Public Sub EliminaFilesRemoti(Optional Avvisa As Boolean = False)
 		Dim pathMp3 As String = GetSetting("MP3Tag", "Impostazioni", "PercorsoDestinazione", "")
 		Dim gf As New GestioneFilesDirectory
 		Dim DB As New SQLSERVERCE
@@ -473,40 +512,42 @@ Module mdlMP3Tag
 
 			conn = DB.ApreDB()
 			If rit <> "" Then
-				' Canzoni da eliminare
-				If Not rit.Contains("ERROR") Then
-					Dim righe() As String = rit.Split("|")
-					For Each rr As String In righe
-						If rr <> "" Then
-							Dim campi() As String = rr.Split(";")
-							' campi(0) = id canzone
-							' campi(1) = pathBase
-							' campi(2) = Artista
-							' campi(3) = Album
-							' campi(4) = Brano
-							Dim path As String = pathMp3 & "\" & campi(2) & "\" & campi(3) & "\" & campi(4)
-							Dim idCanzone As Integer = campi(0)
+                ' Canzoni da eliminare
+                If Not rit.Contains("ERROR") Then
+                    Dim righe() As String = rit.Split("|")
+                    For Each rr As String In righe
+                        If rr <> "" Then
+                            Dim campi() As String = rr.Split(";")
+                            ' campi(0) = id canzone
+                            ' campi(1) = pathBase
+                            ' campi(2) = Artista
+                            ' campi(3) = Album
+                            ' campi(4) = Brano
+                            Dim path As String = pathMp3 & "\" & campi(2) & "\" & campi(3) & "\" & campi(4)
+                            Dim idCanzone As Integer = campi(0)
 
-							gf.EliminaFileFisico(path)
+                            gf.EliminaFileFisico(path)
 
-							Sql = "Delete From ListaCanzone2 Where idCanzone = " & idCanzone
-							rit = DB.EsegueSql(conn, Sql)
+                            Sql = "Delete From ListaCanzone2 Where idCanzone = " & idCanzone
+                            rit = DB.EsegueSql(conn, Sql)
 
-							Sql = "Delete From Ascoltate Where idCanzone = " & idCanzone
-							rit = DB.EsegueSql(conn, Sql)
+                            Sql = "Delete From Ascoltate Where idCanzone = " & idCanzone
+                            rit = DB.EsegueSql(conn, Sql)
 
-							eliminate += 1
-							' MsgBox(idCanzone & " -> " & path)
-						End If
-					Next
+                            eliminate += 1
+                            ' MsgBox(idCanzone & " -> " & path)
+                        End If
+                    Next
 
-					If eliminate > 0 Then
-						's.EliminaListaCanzoniDaEliminare()
+                    If eliminate > 0 Then
+                        's.EliminaListaCanzoniDaEliminare()
 
-						MsgBox("Canzoni eliminate: " & eliminate, vbInformation)
-					End If
-				Else
-					If Avvisa Then
+                        If Avvisa Then
+                            MsgBox("Canzoni eliminate: " & eliminate, vbInformation)
+                        End If
+                    End If
+                Else
+                    If Avvisa Then
 						MsgBox("Nessuna canzone da eliminare", vbInformation)
 					End If
 				End If

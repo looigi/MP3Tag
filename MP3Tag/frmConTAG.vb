@@ -440,18 +440,29 @@ Public Class frmConTAG
         Dim Ritorno As Integer = 0
 
         Dim Album As String = lstAlbum.Text
-        If Mid(Album, 5, 1) <> "-" Then
-            Album = "0000-" & Album
-        End If
         Dim Canzone As String = lstCanzone.Text
-        If Canzone.IndexOf("-") = -1 Then Canzone = "00-" & Canzone
+        Dim Anno As String = ""
+        If Mid(Album, 5, 1) = "-" Then
+            Anno = Mid(Album, 1, 4)
+            Album = Mid(Album, 6, Len(Album))
+        End If
+        Dim Traccia As String = ""
+        If Canzone.IndexOf("-") = -1 Then
+            Traccia = Mid(Canzone, 1, 2)
+            Canzone = Mid(Canzone, 4, Len(Canzone))
+        End If
 
-        Dim NomeCanzone As String = lstArtista.Text & "\" & Album & "\" & Canzone
-        NomeCanzone = NomeCanzone.Replace("'", "''")
+        'Dim NomeCanzone As String = lstArtista.Text & "\" & Album & "\" & Canzone
+        'NomeCanzone = NomeCanzone.Replace("'", "''")
 
         Dim idCanzone As Integer
 
-        Sql = "Select * From ListaCanzone2 Where Album='" & r.SistemaTestoPerDB(lstAlbum.Text) & "' And Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And Canzone='" & r.SistemaTestoPerDB(lstCanzone.Text) & "'"
+        Sql = "Select * From ListaCanzone2 Where " &
+            "Album='" & r.SistemaTestoPerDB(Album) & "' And " &
+            "Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And " &
+            "Canzone='" & r.SistemaTestoPerDB(Canzone) & "' And " &
+            "Anno=" & Anno & " And " &
+            "Traccia=" & Traccia
         rec = DB.LeggeQuery(conn, Sql)
         If Not rec.Eof Then
             idCanzone = rec(0).Value
@@ -1199,7 +1210,25 @@ Public Class frmConTAG
         conn = DB.ApreDB()
         Dim r As New RoutineVarie
 
-        Sql = "Select * From ListaCanzone2 Where Album='" & r.SistemaTestoPerDB(lstAlbum.Text) & "' And Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And Canzone='" & r.SistemaTestoPerDB(lstCanzone.Text) & "'"
+        Dim Album As String = lstAlbum.Text
+        Dim Canzone As String = lstCanzone.Text
+        Dim Anno As String = ""
+        If Mid(Album, 5, 1) = "-" Then
+            Anno = Mid(Album, 1, 4)
+            Album = Mid(Album, 6, Len(Album))
+        End If
+        Dim Traccia As String = ""
+        If Canzone.IndexOf("-") = -1 Then
+            Traccia = Mid(Canzone, 1, 2)
+            Canzone = Mid(Canzone, 4, Len(Canzone))
+        End If
+
+        Sql = "Select * From ListaCanzone2 Where " &
+            "Album='" & r.SistemaTestoPerDB(Album) & "' And " &
+            "Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And " &
+            "Canzone='" & r.SistemaTestoPerDB(Canzone) & "' And " &
+            "Anno = " & Anno & " And " &
+            "Traccia = " & Traccia
         Rec = DB.LeggeQuery(conn, Sql)
         If Not Rec.Eof Then
             idCanzone = Rec(0).Value
@@ -1526,14 +1555,16 @@ Public Class frmConTAG
         End If
 
         ' NonUscire = True
-        For i As Integer = 0 To qImmaginiArtistaBox
-            Try
-                picsArtista(i).Image = Nothing
-                picsArtista(i).Dispose()
-                picsArtista(i) = Nothing
-            Catch ex As Exception
+        For i As Integer = 1 To qImmaginiArtistaBox
+            If Not picsArtista(i) Is Nothing Then
+                Try
+                    picsArtista(i).Image = Nothing
+                    picsArtista(i).Dispose()
+                    picsArtista(i) = Nothing
+                Catch ex As Exception
 
-            End Try
+                End Try
+            End If
         Next
 
         qImmaginiArtistaBox = 0

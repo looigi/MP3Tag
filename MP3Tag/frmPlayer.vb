@@ -438,18 +438,18 @@ Public Class frmPlayer
         End If
 
         If chkBellezza.Checked = False And chkFiltroTesto.Checked = False Then
-            Dim Appoggio As String
+            Dim Appoggio As StrutturaCanzone.StrutturaBrano
 
             gf.ScansionaDirectorySingola(StrutturaDati.PathMP3, FiltroRicerca)
-            StrutturaDati.Canzoni = gf.RitornaFilesRilevati
             StrutturaDati.qCanzoni = gf.RitornaQuantiFilesRilevati
+            StrutturaDati.DettaglioBrani = ConverteFilesInStruttura(gf.RitornaFilesRilevati, StrutturaDati.qCanzoni)
 
             For i As Integer = 1 To StrutturaDati.qCanzoni
                 For k As Integer = 1 To StrutturaDati.qCanzoni
-                    If StrutturaDati.Canzoni(i) > StrutturaDati.Canzoni(k) Then
-                        Appoggio = StrutturaDati.Canzoni(i)
-                        StrutturaDati.Canzoni(i) = StrutturaDati.Canzoni(k)
-                        StrutturaDati.Canzoni(k) = Appoggio
+                    If StrutturaDati.DettaglioBrani(i).Canzone > StrutturaDati.DettaglioBrani(k).Canzone Then
+                        Appoggio = StrutturaDati.DettaglioBrani(i)
+                        StrutturaDati.DettaglioBrani(i) = StrutturaDati.DettaglioBrani(k)
+                        StrutturaDati.DettaglioBrani(k) = Appoggio
                     End If
                 Next
             Next
@@ -501,49 +501,49 @@ Public Class frmPlayer
 
         tmrVisualizzaImmArtista.Enabled = True
 
-        LettCanzoni.LeggeCanzoniInBackground()
+        'LettCanzoni.LeggeCanzoniInBackground()
 
         tmrPartenza.Enabled = True
 
         instance = Me
 
-		'Dim g As New GestioneImmagini
-		'picYouTube.Image = My.Resources.youtube ' g.CaricaImmagineSenzaLockarla(Application.StartupPath & "\Immagini\youtube.png")
-		'g = Nothing
+        'Dim g As New GestioneImmagini
+        'picYouTube.Image = My.Resources.youtube ' g.CaricaImmagineSenzaLockarla(Application.StartupPath & "\Immagini\youtube.png")
+        'g = Nothing
 
-		'If Not chkYouTube.Checked Then
-		'          picYouTube.Visible = False
-		'          YouTubeMostrato = False
-		'          AxWindowsMediaPlayer1.Visible = False
-		'      End If
+        'If Not chkYouTube.Checked Then
+        '          picYouTube.Visible = False
+        '          YouTubeMostrato = False
+        '          AxWindowsMediaPlayer1.Visible = False
+        '      End If
 
-		Dim gl As New getLyricsMP3_NEW
+        Dim gl As New getLyricsMP3_NEW
         gl.ScaricaTestiInBackground(instance)
 
         StaUscendo = False
 
-		'AxWindowsMediaPlayer1.uiMode = "none"
-		'AxWindowsMediaPlayer1.stretchToFit = stf
-		'AxWindowsMediaPlayer1.settings.volume = 0
+        'AxWindowsMediaPlayer1.uiMode = "none"
+        'AxWindowsMediaPlayer1.stretchToFit = stf
+        'AxWindowsMediaPlayer1.settings.volume = 0
 
-		'AccendeSpegnePannelloVideo()
+        'AccendeSpegnePannelloVideo()
 
-		'YouTubeClass = New YouTube(instance, AxWindowsMediaPlayer1, chkYouTube, lblNomeVideo, picAvantiMP, picIndietroMP, picSalvaVideo, picApreChiudeBarraMP, picElimina)
+        'YouTubeClass = New YouTube(instance, AxWindowsMediaPlayer1, chkYouTube, lblNomeVideo, picAvantiMP, picIndietroMP, picSalvaVideo, picApreChiudeBarraMP, picElimina)
 
-		'MetteTogliePannelloYouTube()
+        'MetteTogliePannelloYouTube()
 
-		'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+        'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
 
-		pnlTS = pnlTuttoSchermo
+        pnlTS = pnlTuttoSchermo
 
         passoX = pnlTuttoSchermo.Width / (1 / 0.05)
         passoY = pnlTuttoSchermo.Height / (1 / 0.05)
 
-		'If Not YouTubeMostrato Then
-		'    pnlMediaPlayer.Visible = False
-		'End If
+        'If Not YouTubeMostrato Then
+        '    pnlMediaPlayer.Visible = False
+        'End If
 
-		tmrFadePanel = New System.Timers.Timer(100)
+        tmrFadePanel = New System.Timers.Timer(100)
         AddHandler tmrFadePanel.Elapsed, AddressOf SfumaPannello
         tmrFadePanel.Start()
     End Sub
@@ -556,7 +556,7 @@ Public Class frmPlayer
         Dim imgAttribute As New ImageAttributes
 
         imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.[Default], ColorAdjustType.Bitmap)
-        graphics__1.DrawImage(img, New Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height, _
+        graphics__1.DrawImage(img, New Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height,
          GraphicsUnit.Pixel, imgAttribute)
         graphics__1.Dispose()
 
@@ -708,10 +708,10 @@ Public Class frmPlayer
 
         QualeLista.Items.Clear()
         For i As Integer = 1 To StrutturaDati.qCanzoni
-            Appoggio = StrutturaDati.Canzoni(i).Replace(StrutturaDati.PathMP3 & "\", "")
-            If Appoggio.IndexOf("\") > -1 Then
-                Appoggio = Mid(Appoggio, 1, Appoggio.IndexOf("\"))
-            End If
+            Appoggio = StrutturaDati.DettaglioBrani(i).Artista ' .Replace(StrutturaDati.PathMP3 & "\", "")
+            'If Appoggio.IndexOf("\") > -1 Then
+            '    Appoggio = Mid(Appoggio, 1, Appoggio.IndexOf("\"))
+            'End If
             Ok = True
             For k As Integer = 0 To QualeLista.Items.Count - 1
                 If Appoggio = QualeLista.Items(k) Then
@@ -777,143 +777,148 @@ Public Class frmPlayer
         Dim maxLength As Integer = 0
 
         If gt.getFinitoThread Then
-            tmrTesto.Enabled = False
+            Try
+                tmrTesto.Enabled = False
 
-            Dim TestoRitorno As String = gt.getTesto
-            Dim TestoRitornoTradotto As String = gt.getTestoTradotto
+                Dim TestoRitorno As String = gt.getTesto
+                Dim TestoRitornoTradotto As String = gt.getTestoTradotto
 
-            ' maxCaratteriTesto = 0
-            maxRigheTesto = 0
+                ' maxCaratteriTesto = 0
+                maxRigheTesto = 0
 
-            lstTesto.Items.Clear()
-            pnlTestoInterno.Controls.Clear()
-            lstTraduzione.Items.Clear()
+                lstTesto.Items.Clear()
+                pnlTestoInterno.Controls.Clear()
+                lstTraduzione.Items.Clear()
 
-            If TestoRitorno <> "" Then
-                Dim r() As String = {}
-                Dim qr As Integer = 0
-                'Dim a1 As Integer
-                Dim maxColonne As Integer = 60
-                'Dim Testo As String
+                If TestoRitorno <> "" Then
+                    Dim r() As String = {}
+                    Dim qr As Integer = 0
+                    'Dim a1 As Integer
+                    Dim maxColonne As Integer = 60
+                    'Dim Testo As String
 
-                'a1 = TestoRitorno.IndexOf("§")
-                'While a1 > -1
-                '    Testo = Mid(TestoRitorno, 1, a1)
-                '    If Testo.Length <= maxColonne Then
-                '        ReDim Preserve r(qr)
-                '        r(qr) = Mid(TestoRitorno, 1, a1)
-                '        qr += 1
-                '    Else
-                Dim c As Integer = 0
-                'Dim inizio As Integer = 1
-                'Dim fine As Integer
-                'Dim Riga As String
+                    'a1 = TestoRitorno.IndexOf("§")
+                    'While a1 > -1
+                    '    Testo = Mid(TestoRitorno, 1, a1)
+                    '    If Testo.Length <= maxColonne Then
+                    '        ReDim Preserve r(qr)
+                    '        r(qr) = Mid(TestoRitorno, 1, a1)
+                    '        qr += 1
+                    '    Else
+                    Dim c As Integer = 0
+                    'Dim inizio As Integer = 1
+                    'Dim fine As Integer
+                    'Dim Riga As String
 
-                '        If Testo.Length > maxColonne Then
-                'Dim ii As Integer = 1
+                    '        If Testo.Length > maxColonne Then
+                    'Dim ii As Integer = 1
 
-                For i As Integer = 1 To TestoRitorno.Length
-                    c += 1
-                    If c >= maxColonne Then
-                        While Mid(TestoRitorno, i, 1) <> " " And Mid(TestoRitorno, i, 1) <> "." And Mid(TestoRitorno, i, 1) <> "," And Mid(TestoRitorno, i, 1) <> "§"
-                            i -= 1
-                        End While
-                        TestoRitorno = Mid(TestoRitorno, 1, i) & "§" & Mid(TestoRitorno, i + 1, TestoRitorno.Length)
-                        c = 0
-                    Else
-                        If Mid(TestoRitorno, i, 1) = "§" Then
+                    For i As Integer = 1 To TestoRitorno.Length
+                        c += 1
+                        If c >= maxColonne Then
+                            While Mid(TestoRitorno, i, 1) <> " " And Mid(TestoRitorno, i, 1) <> "." And Mid(TestoRitorno, i, 1) <> "," And Mid(TestoRitorno, i, 1) <> "§"
+                                i -= 1
+                            End While
+                            TestoRitorno = Mid(TestoRitorno, 1, i) & "§" & Mid(TestoRitorno, i + 1, TestoRitorno.Length)
                             c = 0
+                        Else
+                            If Mid(TestoRitorno, i, 1) = "§" Then
+                                c = 0
+                            End If
                         End If
-                    End If
-                Next
-
-                r = TestoRitorno.Split("§")
-
-                Dim l As New Label
-                l.Left = 7
-                l.BackColor = Color.Transparent
-                l.Top = 7
-                l.Font = New Font("Arial", 8)
-                l.AutoSize = True
-                If l.Width > maxLength Then
-                    maxLength = l.Width
-                End If
-
-                For i As Integer = 0 To r.Length - 1
-                    lstTesto.Items.Add(r(i).Replace("%20", " "))
-                    l.Text &= r(i).Replace("%20", " ") & vbCrLf
-                    If r(i).Length > maxCaratteriTesto Then
-                        maxCaratteriTesto = r(i).Length
-                    End If
-                    maxRigheTesto += 14
-                Next
-                pnlTestoInterno.Controls.Add(l)
-
-                If r.Length - 1 < 5 And lstTesto.Items.Count > 2 Then
-                    If pnlTestoInterno.Text.ToUpper.IndexOf("NESSUN TESTO") = -1 Then
-                        Dim ll As New Label
-                        ll.BackColor = Color.Transparent
-                        ll.Left = 7
-                        ll.Top = 7
-                        ll.Font = New Font("Arial", 8)
-                        ll.AutoSize = True
-                        'll.Text = Mid(ll.Text, 1, ll.Text.Length - 4)
-                        ll.Text += "Nessun testo rilevato"
-                        If ll.Width > maxLength Then
-                            maxLength = ll.Width
-                        End If
-                        pnlTestoInterno.Controls.Add(ll)
-
-                        maxRigheTesto -= 14
-
-                        'lstTesto.Items(3) = "Nessun testo rilevato"
-                    End If
-                    maxCaratteriTesto *= 2
-                End If
-            End If
-
-            lstTesto.Items.Add("")
-            lstTesto.Items.Add("")
-            lstTesto.Items.Add("")
-
-            If TestoRitornoTradotto <> "" Then
-                Dim r() As String = TestoRitornoTradotto.Split("§")
-
-                Try
-                    For i As Integer = 0 To r.Length - 1
-                        lstTraduzione.Items.Add(r(i).Replace("%20", " "))
                     Next
 
-                    If r.Length - 1 < 5 And lstTraduzione.Items.Count > 2 Then
-                        lstTraduzione.Items(3) = "Nessun testo rilevato"
+                    r = TestoRitorno.Split("§")
+
+                    Dim l As New Label
+                    l.Left = 7
+                    l.BackColor = Color.Transparent
+                    l.Top = 7
+                    l.Font = New Font("Arial", 8)
+                    l.AutoSize = True
+                    If l.Width > maxLength Then
+                        maxLength = l.Width
                     End If
-                Catch ex As Exception
+                    maxCaratteriTesto = 0
 
-                End Try
-            End If
+                    For i As Integer = 0 To r.Length - 1
+                        lstTesto.Items.Add(r(i).Replace("%20", " "))
+                        l.Text &= r(i).Replace("%20", " ") & vbCrLf
+                        If r(i).Length > maxCaratteriTesto Then
+                            maxCaratteriTesto = r(i).Length
+                        End If
+                        maxRigheTesto += 14
+                    Next
+                    pnlTestoInterno.Controls.Add(l)
 
-            TestoInternoOrig = TestoRitorno
-            TestoInternoTrad = TestoRitornoTradotto
+                    If r.Length - 1 < 5 And lstTesto.Items.Count > 2 Then
+                        If pnlTestoInterno.Text.ToUpper.IndexOf("NESSUN TESTO") = -1 Then
+                            Dim ll As New Label
+                            ll.BackColor = Color.Transparent
+                            ll.Left = 7
+                            ll.Top = 7
+                            ll.Font = New Font("Arial", 8)
+                            ll.AutoSize = True
+                            'll.Text = Mid(ll.Text, 1, ll.Text.Length - 4)
+                            ll.Text += "Nessun testo rilevato"
+                            If ll.Width > maxLength Then
+                                maxLength = ll.Width
+                            End If
+                            pnlTestoInterno.Controls.Add(ll)
 
-            pnlTestoInterno.Width = (maxLength * 2) + 20 ' maxCaratteriTesto * 8
-            pnlTestoInterno.Height = (maxRigheTesto + 20) 
-            'If pnlTestoInterno.Height > DimeX * 5 / 6 Then
-            '    pnlTestoInterno.Height = DimeY * 5 / 6
-            'End If
+                            maxRigheTesto -= 14
 
-            gt = Nothing
+                            'lstTesto.Items(3) = "Nessun testo rilevato"
+                        End If
+                        maxCaratteriTesto *= 2
+                    End If
+                End If
 
-            pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
-            pnlMembriInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "Membri", False)
+                lstTesto.Items.Add("")
+                lstTesto.Items.Add("")
+                lstTesto.Items.Add("")
 
-            ScriveMembri()
+                If TestoRitornoTradotto <> "" Then
+                    Dim r() As String = TestoRitornoTradotto.Split("§")
+
+                    Try
+                        For i As Integer = 0 To r.Length - 1
+                            lstTraduzione.Items.Add(r(i).Replace("%20", " "))
+                        Next
+
+                        If r.Length - 1 < 5 And lstTraduzione.Items.Count > 2 Then
+                            lstTraduzione.Items(3) = "Nessun testo rilevato"
+                        End If
+                    Catch ex As Exception
+
+                    End Try
+                End If
+
+                TestoInternoOrig = TestoRitorno
+                TestoInternoTrad = TestoRitornoTradotto
+
+                pnlTestoInterno.Width = (maxLength * 2) + 20 ' maxCaratteriTesto * 8
+                pnlTestoInterno.Height = (maxRigheTesto + 20)
+                'If pnlTestoInterno.Height > DimeX * 5 / 6 Then
+                '    pnlTestoInterno.Height = DimeY * 5 / 6
+                'End If
+
+                gt = Nothing
+
+                pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+                pnlMembriInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "Membri", False)
+
+                ScriveMembri()
+            Catch ex As Exception
+                Stop
+            End Try
         End If
     End Sub
 
     Private Sub CaricaCanzone(Optional Indietro As Boolean = False, Optional bCarica As Boolean = True, Optional SalvaNumero As Boolean = True)
         Indietro = bIndietro
 
-        If StrutturaDati.QualeCanzoneStaSuonando < StrutturaDati.Canzoni.Length Then
+        If StrutturaDati.QualeCanzoneStaSuonando < StrutturaDati.DettaglioBrani.Length Then
             pnlModifiche.Visible = False
 
             If piat Is Nothing = False Then
@@ -928,13 +933,13 @@ Public Class frmPlayer
                 End If
             End If
 
-            If StrutturaDati.QualeCanzoneStaSuonando > StrutturaDati.Canzoni.Length - 1 Or StrutturaDati.QualeCanzoneStaSuonando = 0 Then
+            If StrutturaDati.QualeCanzoneStaSuonando > StrutturaDati.DettaglioBrani.Length - 1 Or StrutturaDati.QualeCanzoneStaSuonando = 0 Then
                 StrutturaDati.QualeCanzoneStaSuonando = 1
             End If
 
             LettCanzoni.ImpostaListe()
 
-            Dim artista As String = lstArtista.Text.Trim
+            Dim artista As String = lstArtista.Text
             Dim album As String = lstAlbum.Text
             If Mid(album, 5, 1) <> "-" Then
                 album = "0000-" & album
@@ -946,29 +951,33 @@ Public Class frmPlayer
 
             Dim r As New RoutineVarie
             Dim Traccia As String = ""
-            Dim sss As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)
-            Dim NomeSong As String = gf.TornaNomeFileDaPath(sss.Replace(gf.TornaEstensioneFileDaPath(sss), ""))
-            Dim origNomeSong As String = NomeSong
-            If NomeSong.IndexOf("-") > -1 Then
-                Traccia = Mid(NomeSong, 1, NomeSong.IndexOf("-"))
-                NomeSong = Mid(NomeSong, NomeSong.IndexOf("-") + 2, NomeSong.Length)
-                If Traccia = "00" Or Traccia = "" Then Traccia = "" Else Traccia = "Traccia " & Traccia
-            End If
-            Dim sAlbum As String = album
-            Dim sAnno As String = ""
-            If sAlbum.IndexOf("-") > -1 Then
-                sAnno = Mid(sAlbum, 1, sAlbum.IndexOf("-")) & " "
-                sAlbum = Mid(sAlbum, sAlbum.IndexOf("-") + 2, sAlbum.Length)
-                If sAnno = "0000 " Then sAnno = ""
-            End If
+            Dim sss As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+            Dim NomeSong As String = sss.Canzone ' gf.TornaNomeFileDaPath(sss.Replace(gf.TornaEstensioneFileDaPath(sss), ""))
+            Dim sAnno As String = sss.Anno
+            Dim sAlbum As String = sss.Album
+            Dim NomeFile As String = StrutturaDati.PathMP3 & "\" & sss.Artista & "\" & sAnno & "-" & sAlbum & "\" & sss.Traccia & "-" & NomeSong & "." & sss.Estensione
+
+            'Dim origNomeSong As String = NomeSong
+            'If NomeSong.IndexOf("-") > -1 Then
+            '    Traccia = Mid(NomeSong, 1, NomeSong.IndexOf("-"))
+            '    NomeSong = Mid(NomeSong, NomeSong.IndexOf("-") + 2, NomeSong.Length)
+            '    'If Traccia = "00" Or Traccia = "" Then Traccia = "" Else Traccia = "Traccia " & Traccia
+            'End If
+            'Dim sAlbum As String = album
+            'Dim sAnno As String = ""
+            'If sAlbum.IndexOf("-") > -1 Then
+            '    sAnno = Mid(sAlbum, 1, sAlbum.IndexOf("-")) & " "
+            '    sAlbum = Mid(sAlbum, sAlbum.IndexOf("-") + 2, sAlbum.Length)
+            '    'If sAnno = "0000 " Then sAnno = ""
+            'End If
             Try
-                lblNomeCanzone.Text = artista & ": " & NomeSong & " (" & sAnno & sAlbum & ") " & " " & Traccia & vbCrLf & FileDateTime(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)) & _
-                    " Kb. " & r.FormattaNumero(FileLen(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)), False)
+                lblNomeCanzone.Text = NomeSong & ": " & artista & " (" & sAnno & "-" & sAlbum & ") " & " " & Traccia & vbCrLf & FileDateTime(NomeFile) &
+                    " Kb. " & r.FormattaNumero(FileLen(NomeFile), False)
             Catch ex As Exception
 
             End Try
 
-            LettCanzoni.PrendeDatiCanzone(artista, album, canzone, StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando))
+            LettCanzoni.PrendeDatiCanzone(StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando))
 
             ScaricaTestoCanzone(NomeSong, artista, album, canzone, False)
 
@@ -1001,27 +1010,27 @@ Public Class frmPlayer
             picMP3.Top = ((pnlImmagine.Height / 2) - (picMP3.Height / 2)) - 5
             picMP3.Left = (pnlImmagine.Width / 2) - (picMP3.Width / 2)
 
-			'If Not pnlImmagineArtista.Visible Then
-			'    AxWindowsMediaPlayer1.Left = picMP3.Left
-			'    AxWindowsMediaPlayer1.Top = picMP3.Top
-			'    AxWindowsMediaPlayer1.Width = picMP3.Width + 5
-			'    AxWindowsMediaPlayer1.Height = picMP3.Height + 5
-			'Else
-			'    AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width / DimeWMP
-			'    AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height / DimeWMP
+            'If Not pnlImmagineArtista.Visible Then
+            '    AxWindowsMediaPlayer1.Left = picMP3.Left
+            '    AxWindowsMediaPlayer1.Top = picMP3.Top
+            '    AxWindowsMediaPlayer1.Width = picMP3.Width + 5
+            '    AxWindowsMediaPlayer1.Height = picMP3.Height + 5
+            'Else
+            '    AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width / DimeWMP
+            '    AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height / DimeWMP
 
-			'    AxWindowsMediaPlayer1.Left = (pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2)
-			'    AxWindowsMediaPlayer1.Top = (pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2) ' pnlImmagineArtista.Height - AxWindowsMediaPlayer1.Height - 30
-			'End If
+            '    AxWindowsMediaPlayer1.Left = (pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2)
+            '    AxWindowsMediaPlayer1.Top = (pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2) ' pnlImmagineArtista.Height - AxWindowsMediaPlayer1.Height - 30
+            'End If
 
-			'picSostituzioneMP.Left = AxWindowsMediaPlayer1.Left
-			'picSostituzioneMP.Top = AxWindowsMediaPlayer1.Top
-			'picSostituzioneMP.Width = AxWindowsMediaPlayer1.Width
-			'picSostituzioneMP.Height = AxWindowsMediaPlayer1.Height
+            'picSostituzioneMP.Left = AxWindowsMediaPlayer1.Left
+            'picSostituzioneMP.Top = AxWindowsMediaPlayer1.Top
+            'picSostituzioneMP.Width = AxWindowsMediaPlayer1.Width
+            'picSostituzioneMP.Height = AxWindowsMediaPlayer1.Height
 
-			'AccendeSpegnePannelloVideo()
+            'AccendeSpegnePannelloVideo()
 
-			If Indietro = False Then
+            If Indietro = False Then
                 qAscoltate += 1
                 If qAscoltate > maxAscoltate Then
                     ReDim Preserve Ascoltate(qAscoltate)
@@ -1144,7 +1153,7 @@ Public Class frmPlayer
             End If
             qValoriDaScrivere += 1
             ReDim Preserve ValoriDaScrivere(qValoriDaScrivere)
-            ValoriDaScrivere(qValoriDaScrivere) = "Titolo: " & Canzone.Replace(gf.TornaEstensioneFileDaPath(Canzone), "")
+            ValoriDaScrivere(qValoriDaScrivere) = "Titolo: " & Canzone ' .Replace(gf.TornaEstensioneFileDaPath(Canzone), "")
 
             qValoriDaScrivere += 1
             ReDim Preserve ValoriDaScrivere(qValoriDaScrivere)
@@ -1334,77 +1343,77 @@ Public Class frmPlayer
             pnlStelle.Top = 2
             pnlStelle.Left = pnlImmagine.Width - 2 - pnlStelle.Width
 
-			'If Not chkYouTube.Checked Then
-			'    picYouTube.Visible = False
-			'    AxWindowsMediaPlayer1.Visible = False
-			'Else
-			'    picYouTube.Left = 20
-			'    picYouTube.Top = lblNomeArtistaImm.Top + 2
-			'    picYouTube.Height = pnlStelle.Height
+            'If Not chkYouTube.Checked Then
+            '    picYouTube.Visible = False
+            '    AxWindowsMediaPlayer1.Visible = False
+            'Else
+            '    picYouTube.Left = 20
+            '    picYouTube.Top = lblNomeArtistaImm.Top + 2
+            '    picYouTube.Height = pnlStelle.Height
 
-			'    'If AxWindowsMediaPlayer1.Visible = True Then
-			'    '    AxWindowsMediaPlayer1.Left = picMP3.Left
-			'    '    AxWindowsMediaPlayer1.Top = picMP3.Top + 37
-			'    '    AxWindowsMediaPlayer1.Width = picMP3.Width + 5
-			'    '    AxWindowsMediaPlayer1.Height = picMP3.Height - 35
-			'    'End If
-			'End If
+            '    'If AxWindowsMediaPlayer1.Visible = True Then
+            '    '    AxWindowsMediaPlayer1.Left = picMP3.Left
+            '    '    AxWindowsMediaPlayer1.Top = picMP3.Top + 37
+            '    '    AxWindowsMediaPlayer1.Width = picMP3.Width + 5
+            '    '    AxWindowsMediaPlayer1.Height = picMP3.Height - 35
+            '    'End If
+            'End If
 
-		Else
+        Else
             pnlStelleInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
             pnlStelleInterno.Left = (Me.Width / 2) - (pnlStelleInterno.Width / 2)
 
-			'If Not chkYouTube.Checked Then
-			'    picYouTube.Visible = False
-			'    AxWindowsMediaPlayer1.Visible = False
-			'Else
-			'    picYouTube.Left = 10
-			'    picYouTube.Top = pnlStelleInterno.Top
-			'    picYouTube.Height = pnlStelleInterno.Height
+            'If Not chkYouTube.Checked Then
+            '    picYouTube.Visible = False
+            '    AxWindowsMediaPlayer1.Visible = False
+            'Else
+            '    picYouTube.Left = 10
+            '    picYouTube.Top = pnlStelleInterno.Top
+            '    picYouTube.Height = pnlStelleInterno.Height
 
-			'    'If AxWindowsMediaPlayer1.Visible = True Then
-			'    'AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width / DimeWMP
-			'    'AxWindowsMediaPlayer1.Height = (pnlImmagineArtista.Height / DimeWMP) - 30
+            '    'If AxWindowsMediaPlayer1.Visible = True Then
+            '    'AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width / DimeWMP
+            '    'AxWindowsMediaPlayer1.Height = (pnlImmagineArtista.Height / DimeWMP) - 30
 
-			'    'AxWindowsMediaPlayer1.Left = (pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2)
-			'    'AxWindowsMediaPlayer1.Top = (pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2) ' pnlImmagineArtista.Height - AxWindowsMediaPlayer1.Height - 30
+            '    'AxWindowsMediaPlayer1.Left = (pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2)
+            '    'AxWindowsMediaPlayer1.Top = (pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2) ' pnlImmagineArtista.Height - AxWindowsMediaPlayer1.Height - 30
 
-			'    'If AxWindowsMediaPlayer1.Width > pnlImmagineArtista.Width - 40 Or AxWindowsMediaPlayer1.Height > pnlImmagineArtista.Height - 40 Then
-			'    '    AxWindowsMediaPlayer1.Left = 10
-			'    '    AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width - 30
-			'    '    AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height - 40
-			'    '    AxWindowsMediaPlayer1.Top = 20
-			'    'End If
-			'    'End If
-			'End If
+            '    'If AxWindowsMediaPlayer1.Width > pnlImmagineArtista.Width - 40 Or AxWindowsMediaPlayer1.Height > pnlImmagineArtista.Height - 40 Then
+            '    '    AxWindowsMediaPlayer1.Left = 10
+            '    '    AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width - 30
+            '    '    AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height - 40
+            '    '    AxWindowsMediaPlayer1.Top = 20
+            '    'End If
+            '    'End If
+            'End If
 
-			If PosizioneTI = "" Then
-                pnltestointerno.Left = ((pnlImmagineArtista.Width / 2) - (pnltestointerno.Width / 2))
-                pnltestointerno.Top = ((pnlImmagineArtista.Height / 2) - (pnltestointerno.Height / 2))
+            If PosizioneTI = "" Then
+                pnlTestoInterno.Left = ((pnlImmagineArtista.Width / 2) - (pnlTestoInterno.Width / 2))
+                pnlTestoInterno.Top = ((pnlImmagineArtista.Height / 2) - (pnlTestoInterno.Height / 2))
 
-                PosizioneTI = pnltestointerno.Top.ToString & ";" & pnltestointerno.Left & ";"
+                PosizioneTI = pnlTestoInterno.Top.ToString & ";" & pnlTestoInterno.Left & ";"
                 SaveSetting("MP3Tag", "Impostazioni", "PosTestoInterno", PosizioneTI)
             Else
                 Dim p() As String = PosizioneTI.Split(";")
 
-                pnltestointerno.Left = p(1) '  ((pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2))
-                pnltestointerno.Top = p(0) ' ((pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2))
+                pnlTestoInterno.Left = p(1) '  ((pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2))
+                pnlTestoInterno.Top = p(0) ' ((pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2))
             End If
         End If
 
-		'AccendeSpegnePannelloVideo()
+        'AccendeSpegnePannelloVideo()
 
-		'picSostituzioneMP.Left = AxWindowsMediaPlayer1.Left
-		'picSostituzioneMP.Top = AxWindowsMediaPlayer1.Top
-		'picSostituzioneMP.Width = AxWindowsMediaPlayer1.Width
-		'picSostituzioneMP.Height = AxWindowsMediaPlayer1.Height
+        'picSostituzioneMP.Left = AxWindowsMediaPlayer1.Left
+        'picSostituzioneMP.Top = AxWindowsMediaPlayer1.Top
+        'picSostituzioneMP.Width = AxWindowsMediaPlayer1.Width
+        'picSostituzioneMP.Height = AxWindowsMediaPlayer1.Height
 
-		'picNonCercareVideo.Left = AxWindowsMediaPlayer1.Left + 2
-		'picNonCercareVideo.Top = (AxWindowsMediaPlayer1.Top + AxWindowsMediaPlayer1.Height) - picNonCercareVideo.Height - 2
+        'picNonCercareVideo.Left = AxWindowsMediaPlayer1.Left + 2
+        'picNonCercareVideo.Top = (AxWindowsMediaPlayer1.Top + AxWindowsMediaPlayer1.Height) - picNonCercareVideo.Height - 2
 
-		'MetteTogliePannelloYouTube()
+        'MetteTogliePannelloYouTube()
 
-		If StaVisualizzandoImmagineArtista = True Then
+        If StaVisualizzandoImmagineArtista = True Then
             pnlSpectrum2.Top = pnlTasti.Top
             pnlSpectrum2.Left = 0
             pnlSpectrum2.Width = Me.Width - 10
@@ -1571,7 +1580,7 @@ Public Class frmPlayer
 
     Private Sub ImpostaTastiInterni()
         cmdEliminaImmagineArtista.Left = 5
-        cmdEliminaImmagineArtista.Top = lblNomeArtistaImm.top+1
+        cmdEliminaImmagineArtista.Top = lblNomeArtistaImm.Top + 1
 
         cmdSalva.Left = cmdEliminaImmagineArtista.Width + cmdEliminaImmagineArtista.Left + 2
         cmdSalva.Top = cmdEliminaImmagineArtista.Top
@@ -1659,31 +1668,31 @@ Public Class frmPlayer
     End Sub
 
     Private Sub PulisceAmbientePerCanzoneSuccessiva()
-		'If pnlImmagineArtista.Visible Then
-		'    pnlMediaPlayer.Visible = False
-		'Else
-		'    pnlMediaPlayer.Enabled = False
-		'End If
+        'If pnlImmagineArtista.Visible Then
+        '    pnlMediaPlayer.Visible = False
+        'Else
+        '    pnlMediaPlayer.Enabled = False
+        'End If
 
-		'If Not YouTubeClass Is Nothing Then
-		'          YouTubeClass.StopButton()
-		'      End If
-		StrutturaDati.NomeVideo = ""
-		'AxWindowsMediaPlayer1.URL = ""
-		'AxWindowsMediaPlayer1.close()
-		'lblNomeVideo.Text = ""
-		If pnlImmagineArtista.Visible Then
+        'If Not YouTubeClass Is Nothing Then
+        '          YouTubeClass.StopButton()
+        '      End If
+        StrutturaDati.NomeVideo = ""
+        'AxWindowsMediaPlayer1.URL = ""
+        'AxWindowsMediaPlayer1.close()
+        'lblNomeVideo.Text = ""
+        If pnlImmagineArtista.Visible Then
             pnlImmagineArtista.BackgroundImage = My.Resources.pleaseWait ' Image.FromFile("Immagini/pleaseWait.jpg")
             picImmagineArtista.Image = My.Resources.pleaseWait ' Image.FromFile("Immagini/pleaseWait.jpg")
             ImmagineVisualizzata = picImmagineArtista.Image
         End If
         Application.DoEvents()
-		'picSostituzioneMP.BackgroundImage = Image.FromFile("Immagini/pleaseWait.jpg")
-		'picSostituzioneMP.Visible = True
-		'Application.DoEvents()
+        'picSostituzioneMP.BackgroundImage = Image.FromFile("Immagini/pleaseWait.jpg")
+        'picSostituzioneMP.Visible = True
+        'Application.DoEvents()
 
-		'AccendeSpegnePannelloVideo()
-	End Sub
+        'AccendeSpegnePannelloVideo()
+    End Sub
 
     Public Sub AvantiCanzone()
         If DoppioClickSuCanzone Then Exit Sub
@@ -1715,7 +1724,7 @@ Public Class frmPlayer
 
                 If chkBellezza.Checked = True Then
                     If Valore = "Mai Votate" Then
-                        Dim Canzone As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)
+                        Dim Canzone As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
                         Dim bellezza As Integer = LettCanzoni.RitornaQuanteStelleCanzoneSenzaCaricarla(Canzone)
                         If bellezza > 0 Then
                             Ancora = True
@@ -1728,25 +1737,26 @@ Public Class frmPlayer
         inPausa = False
 
         If StaSuonando() Or StaCambiandoAutomaticamente Then
-            Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+            'Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+            Dim Campi As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
 
-			Try
-				Dim c As String = Campi(5)
-				c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
-				If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
+            Try
+                'Dim c As String = Campi(5)
+                'c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
+                'If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
 
-				Dim a As String = Campi(4)
-				Dim an As String = ""
-				If a.Contains("-") Then
-					an = Mid(a, 1, a.IndexOf("-"))
-					a = Mid(a, a.IndexOf("-") + 2, a.Length)
-				End If
+                'Dim a As String = Campi(4)
+                'Dim an As String = ""
+                'If a.Contains("-") Then
+                '	an = Mid(a, 1, a.IndexOf("-"))
+                '	a = Mid(a, a.IndexOf("-") + 2, a.Length)
+                'End If
 
-				lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi(3) & ": " & c & " - Album " & a & " (" & an & ")"
-			Catch ex As Exception
-				Dim campi2() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
-				lblNomeCanzone.Text = "Prossimo brano: " & campi2(2) & " " & campi2(4)
-			End Try
+                lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi.Canzone & ": " & Campi.Artista & " - Album " & Campi.Album & " (" & Campi.Anno & ")"
+            Catch ex As Exception
+                Dim campi2 As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+                lblNomeCanzone.Text = "Prossimo brano: " & campi2.Artista & " " & campi2.Canzone
+            End Try
             Application.DoEvents()
 
             bIndietro = False
@@ -1755,16 +1765,16 @@ Public Class frmPlayer
         Else
             CaricaCanzone()
 
-			'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+            'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
 
-			pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+            pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
         End If
     End Sub
 
     Private Sub cmdAvanti_Click(sender As Object, e As EventArgs) Handles picAvanti.Click
         DoppioClickSuCanzone = False
 
-        Avanticanzone()
+        AvantiCanzone()
     End Sub
 
     Private Sub IndietroCanzone()
@@ -1781,23 +1791,25 @@ Public Class frmPlayer
         inPausa = False
 
         If StaSuonando() Then
-            Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+            ' Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+            Dim Campi As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
 
             Try
-                Dim c As String = Campi(5)
-                c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
-                If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
+                'Dim c As String = Campi(5)
+                'c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
+                'If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
 
-                Dim a As String = Campi(4)
-                Dim an As String = ""
-                If a.Contains("-") Then
-                    an = Mid(a, 1, a.IndexOf("-"))
-                    a = Mid(a, a.IndexOf("-") + 2, a.Length)
-                End If
+                'Dim a As String = Campi(4)
+                'Dim an As String = ""
+                'If a.Contains("-") Then
+                '    an = Mid(a, 1, a.IndexOf("-"))
+                '    a = Mid(a, a.IndexOf("-") + 2, a.Length)
+                'End If
 
-                lblNomeCanzone.Text = "Brano precedente: " & vbCrLf & Campi(3) & ": " & c & " - Album " & a & " (" & an & ")"
+                lblNomeCanzone.Text = "Brano precedente: " & vbCrLf & Campi.Canzone & ": " & Campi.Artista & " - Album " & Campi.Album & " (" & Campi.Anno & ")"
             Catch ex As Exception
-                lblNomeCanzone.Text = "Brano precedente: " & vbCrLf & gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando))
+                Dim campi2 As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+                lblNomeCanzone.Text = "Brano precedente: " & campi2.Artista & " " & campi2.Canzone
             End Try
             Application.DoEvents()
 
@@ -1806,9 +1818,9 @@ Public Class frmPlayer
         Else
             CaricaCanzone(True)
 
-			'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+            'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
 
-			pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+            pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
         End If
     End Sub
 
@@ -1861,8 +1873,8 @@ Public Class frmPlayer
             'StaSuonando = False
             inPausa = True
 
-			'YouTubeClass.PauseButton()
-		End If
+            'YouTubeClass.PauseButton()
+        End If
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles tmrVisualizzaImmArtista.Tick
@@ -1904,7 +1916,7 @@ Public Class frmPlayer
                 tmrVisualizzaImmArtista.Enabled = False
                 tmrCambioImmagine.Enabled = True
 
-                pnltestointerno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+                pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
                 CambiaImmagine()
 
                 ' Visualizzazione spectrum in basso
@@ -1942,10 +1954,10 @@ Public Class frmPlayer
 
                 ScrittaTestiVisibile = lblTesti.Visible
                 lblTesti.Visible = False
-				'picYouTube.Visible = False
+                'picYouTube.Visible = False
 
-				'AccendeSpegnePannelloVideo()
-			End If
+                'AccendeSpegnePannelloVideo()
+            End If
         End If
     End Sub
 
@@ -2008,7 +2020,7 @@ Public Class frmPlayer
             staFermandoImmagine = False
 
             If presentePannelloMembri Then
-                pnlMembriInterno.Visible =true
+                pnlMembriInterno.Visible = True
             End If
 
             If presentePannelloTesto Then
@@ -2028,15 +2040,15 @@ Public Class frmPlayer
         piat = Nothing
         Secondi = 0
         pnlStelleInterno.Visible = False
-		'If chkYouTube.Checked Then
-		'    picYouTube.Visible = True
-		'End If
-		lblTesti.Visible = ScrittaTestiVisibile
+        'If chkYouTube.Checked Then
+        '    picYouTube.Visible = True
+        'End If
+        lblTesti.Visible = ScrittaTestiVisibile
 
         ImpostaSchermata()
 
-		'AccendeSpegnePannelloVideo()
-	End Sub
+        'AccendeSpegnePannelloVideo()
+    End Sub
 
     Private Sub RitornaAPlayerDaImmagine(sender As Object, e As EventArgs) Handles pnlImmagineArtista.Click, pnlSopra.Click, pnlSotto.Click
         EsciForaDaPnlImmagineArtista()
@@ -2059,10 +2071,13 @@ Public Class frmPlayer
                 pnlFiltro.Top = pnlCanzoni.Top + lstAlbum.Top + e.Location.Y
 
                 If pnlFiltro.Left + pnlFiltro.Width + 20 > Me.Width Then
-                    pnlFiltro.Left = Me.Width - pnlFiltro.Width - 20
+                    pnlFiltro.Left = (pnlCanzoni.Left + lstAlbum.Left) + (e.Location.X - pnlFiltro.Width - 2)
+                End If
+                If pnlFiltro.Left + pnlFiltro.Width + 20 < 10 Then
+                    pnlFiltro.Left = 10
                 End If
                 If pnlFiltro.Top + pnlFiltro.Height + 20 > Me.Height Then
-                    pnlFiltro.Top = Me.Height - pnlFiltro.Height - 20
+                    pnlFiltro.Top = (pnlCanzoni.Top + lstAlbum.Top) + (e.Location.Y - pnlFiltro.Height - 2)
                 End If
 
                 pnlFiltro.Visible = True
@@ -2084,10 +2099,13 @@ Public Class frmPlayer
                 pnlFiltro.Top = pnlCanzoni.Top + lstArtista.Top + e.Location.Y
 
                 If pnlFiltro.Left + pnlFiltro.Width + 20 > Me.Width Then
-                    pnlFiltro.Left = Me.Width - pnlFiltro.Width - 20
+                    pnlFiltro.Left = (pnlCanzoni.Left + lstArtista.Left) - (e.Location.X - pnlModifiche.Width - 2)
+                End If
+                If pnlFiltro.Left + pnlFiltro.Width + 20 < 10 Then
+                    pnlFiltro.Left = 10
                 End If
                 If pnlFiltro.Top + pnlFiltro.Height + 20 > Me.Height Then
-                    pnlFiltro.Top = Me.Height - pnlFiltro.Height - 20
+                    pnlFiltro.Top = (pnlCanzoni.Top + lstArtista.Top) + (e.Location.Y - pnlFiltro.Height - 2)
                 End If
 
                 pnlFiltro.Visible = True
@@ -2186,37 +2204,37 @@ Public Class frmPlayer
         CambiaImmagine()
     End Sub
 
-	Private Sub pnlImmagineArtista_MouseMove1(sender As Object, e As MouseEventArgs) Handles pnlImmagineArtista.MouseMove, picImmagineArtista.MouseMove,
-		pnlSopra.MouseMove, pnlSotto.MouseMove, pnlSpectrum2.MouseMove, pnlTestoInterno.MouseMove ', pnlMediaPlayer.MouseMove
+    Private Sub pnlImmagineArtista_MouseMove1(sender As Object, e As MouseEventArgs) Handles pnlImmagineArtista.MouseMove, picImmagineArtista.MouseMove,
+        pnlSopra.MouseMove, pnlSotto.MouseMove, pnlSpectrum2.MouseMove, pnlTestoInterno.MouseMove ', pnlMediaPlayer.MouseMove
 
-		If Not staFermandoImmagine Then
-			If Not pnlTasti.Visible Then
-				pnlTasti.Visible = True
-				lblNomeArtistaImm.Visible = True
-				cmdEliminaImmagineArtista.Visible = True
-				cmdSalva.Visible = True
-				cmdVisualizzaMembri.Visible = True
-				cmdRicaricaMembri.Visible = True
-				cmdTesto.Visible = True
-				cmdTraduzione.Visible = True
-				cmdApreCartella.Visible = True
-				lblFiltroImpostato.Visible = True
-				pnlStelleInterno.Visible = True
-				pnlStelleInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
-				pnlStelleInterno.Left = (Me.Width / 2) - (pnlStelleInterno.Width / 2)
-				cmdRefreshtestoInterno.Visible = True
-				tmrNascondeBarra.Enabled = True
-				picLingua.Visible = False
-				'If chkYouTube.Checked Then
-				'	picYouTube.Visible = True
-				'End If
-			End If
+        If Not staFermandoImmagine Then
+            If Not pnlTasti.Visible Then
+                pnlTasti.Visible = True
+                lblNomeArtistaImm.Visible = True
+                cmdEliminaImmagineArtista.Visible = True
+                cmdSalva.Visible = True
+                cmdVisualizzaMembri.Visible = True
+                cmdRicaricaMembri.Visible = True
+                cmdTesto.Visible = True
+                cmdTraduzione.Visible = True
+                cmdApreCartella.Visible = True
+                lblFiltroImpostato.Visible = True
+                pnlStelleInterno.Visible = True
+                pnlStelleInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
+                pnlStelleInterno.Left = (Me.Width / 2) - (pnlStelleInterno.Width / 2)
+                cmdRefreshtestoInterno.Visible = True
+                tmrNascondeBarra.Enabled = True
+                picLingua.Visible = False
+                'If chkYouTube.Checked Then
+                '	picYouTube.Visible = True
+                'End If
+            End If
 
-			SecondiPassatiPerFarScomparireIlPannello = 0
-		End If
-	End Sub
+            SecondiPassatiPerFarScomparireIlPannello = 0
+        End If
+    End Sub
 
-	Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles tmrNascondeBarra.Tick
+    Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles tmrNascondeBarra.Tick
         SecondiPassatiPerFarScomparireIlPannello += 1
         If SecondiPassatiPerFarScomparireIlPannello >= SecondiPerFarScomparireIlPannello Then
             FaScomparireBarra()
@@ -2241,34 +2259,34 @@ Public Class frmPlayer
         Catch ex As Exception
 
         End Try
-		'picYouTube.Visible = False
-	End Sub
+        'picYouTube.Visible = False
+    End Sub
 
     Private Sub cmdEliminaImmagineArtista_Click(sender As Object, e As EventArgs) Handles cmdEliminaImmagineArtista.Click
         If MsgBox("Si vuole eliminare l'immagine corrente?", vbYesNo + vbDefaultButton1 + vbInformation) = vbYes Then
-			'Try
-			'    Kill(lblNomeImmArtista.Text & ".DEL")
-			'Catch ex As Exception
+            'Try
+            '    Kill(lblNomeImmArtista.Text & ".DEL")
+            'Catch ex As Exception
 
-			'End Try
-			Dim filetto As String = lblNomeImmArtista.Text
-			filetto = filetto.Replace(StrutturaDati.PathMP3 & "\", "")
-			Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
-			filetto = filetto.Replace(este, "")
-			Dim DB As New SQLSERVERCE
-			Dim conn As Object = CreateObject("ADODB.Connection")
-			Dim rec As Object = CreateObject("ADODB.Recordset")
-			Dim Sql As String = ""
-			DB.ImpostaNomeDB(PathDB)
-			DB.LeggeImpostazioniDiBase()
-			conn = DB.ApreDB()
-			Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
-			DB.EsegueSql(conn, Sql)
-			conn.Close()
-			DB = Nothing
+            'End Try
+            Dim filetto As String = lblNomeImmArtista.Text
+            filetto = filetto.Replace(StrutturaDati.PathMP3 & "\", "")
+            Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
+            filetto = filetto.Replace(este, "")
+            Dim DB As New SQLSERVERCE
+            Dim conn As Object = CreateObject("ADODB.Connection")
+            Dim rec As Object = CreateObject("ADODB.Recordset")
+            Dim Sql As String = ""
+            DB.ImpostaNomeDB(PathDB)
+            DB.LeggeImpostazioniDiBase()
+            conn = DB.ApreDB()
+            Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+            DB.EsegueSql(conn, Sql)
+            conn.Close()
+            DB = Nothing
 
-			'gf.CreaAggiornaFile(lblNomeImmArtista.Text & ".DEL", "IMMAGINE ELIMINATA")
-			gf.EliminaFileFisico(lblNomeImmArtista.Text)
+            'gf.CreaAggiornaFile(lblNomeImmArtista.Text & ".DEL", "IMMAGINE ELIMINATA")
+            gf.EliminaFileFisico(lblNomeImmArtista.Text)
 
             gi.PuliscePictureBox(picImmagineArtista)
 
@@ -2291,35 +2309,35 @@ Public Class frmPlayer
                 End If
             End If
 
-            Dim sCanzoni() As String = {}
+            Dim sCanzoni() As StrutturaCanzone.StrutturaBrano = {}
             Dim qCanzoni As Integer = -1
 
             If chkBellezza.Checked = False And chkFiltroTesto.Checked = False Then
                 gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album, FiltroRicerca)
-                sCanzoni = gf.RitornaFilesRilevati
                 qCanzoni = gf.RitornaQuantiFilesRilevati
+                sCanzoni = ConverteFilesInStruttura(gf.RitornaFilesRilevati, StrutturaDati.qCanzoni)
             Else
-                sCanzoni = StrutturaDati.Canzoni
-                qCanzoni = StrutturaDati.Canzoni.Length - 1
-                lstAlbum.Items.Clear()
-                Dim art As String
-                Dim ok As Boolean
-                For i As Integer = 1 To qCanzoni
-                    If sCanzoni(i).IndexOf(lstArtista.Text & "\") > -1 Then
-                        ok = True
-                        art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\", "")
-                        art = Mid(art, 1, art.IndexOf("\"))
-                        For k As Integer = 0 To lstAlbum.Items.Count - 1
-                            If lstAlbum.Items(k) = art Then
-                                ok = False
-                                Exit For
-                            End If
-                        Next
-                        If ok = True Then
-                            lstAlbum.Items.Add(art)
-                        End If
-                    End If
-                Next
+                sCanzoni = StrutturaDati.DettaglioBrani
+                qCanzoni = StrutturaDati.DettaglioBrani.Length - 1
+                'lstAlbum.Items.Clear()
+                '    Dim ok As Boolean
+                '    For i As Integer = 1 To qCanzoni
+                '        Dim c As StrutturaCanzone.StrutturaBrano = sCanzoni(i)
+                '        If c.Album = Album Then
+                '            '    ok = True
+                '            '    art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\", "")
+                '            '    art = Mid(art, 1, art.IndexOf("\"))
+                '            For k As Integer = 0 To lstAlbum.Items.Count - 1
+                '                If lstAlbum.Items(k) = c.Anno & "-" & c.Album Then
+                '                    ok = False
+                '                    Exit For
+                '                End If
+                '            Next
+                '            If ok = True Then
+                '                lstAlbum.Items.Add(c.Album & "-" & c.Album)
+                '            End If
+                '        End If
+                '    Next
             End If
 
             If lstAlbum.Text = "" Then
@@ -2331,90 +2349,93 @@ Public Class frmPlayer
                 Next
             End If
 
-            Dim Nome As String
+            'Dim Nome As String
 
             lstCanzone.Items.Clear()
             For i As Integer = 1 To qCanzoni
-                If sCanzoni(i).IndexOf(Album & "\") > -1 And sCanzoni(i).IndexOf(lstArtista.Text & "\") > -1 Then
-                    Nome = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\", "")
-                    If Mid(Nome, 1, 3) = "00-" Then
-                        Nome = Mid(Nome, 4, Nome.Length)
-                    End If
-                    Nome = Nome.Trim
-                    If Mid(Nome, 1, 1) = "-" Then
-                        Nome = Mid(Nome, 2, Nome.Length)
-                    End If
-                    lstCanzone.Items.Add(Nome)
+                Dim c As StrutturaCanzone.StrutturaBrano = sCanzoni(i)
+                If c.Anno & "-" & c.Album = Album And c.Artista = lstArtista.Text Then
+                    'Nome = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\", "")
+                    'If Mid(Nome, 1, 3) = "00-" Then
+                    '    Nome = Mid(Nome, 4, Nome.Length)
+                    'End If
+                    'Nome = Nome.Trim
+                    'If Mid(Nome, 1, 1) = "-" Then
+                    '    Nome = Mid(Nome, 2, Nome.Length)
+                    'End If
+                    lstCanzone.Items.Add(c.Traccia & "-" & c.Canzone)
                 End If
             Next
         End If
     End Sub
 
     Private Sub lstArtista_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstArtista.Click
-        Dim sCanzoni() As String = {}
+        Dim sCanzoni() As StrutturaCanzone.StrutturaBrano = {}
         Dim qCanzoni As Integer = -1
         Dim Ok As Boolean
+        Dim Selezione As String = lstArtista.Text
 
         If chkBellezza.Checked = False And chkFiltroTesto.Checked = False Then
             gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\" & lstArtista.Text, FiltroRicerca)
-            sCanzoni = gf.RitornaFilesRilevati
             qCanzoni = gf.RitornaQuantiFilesRilevati
+            sCanzoni = ConverteFilesInStruttura(gf.RitornaFilesRilevati, StrutturaDati.qCanzoni)
         Else
             Dim appo As String = lstArtista.Text
-            Dim art As String
 
-            sCanzoni = StrutturaDati.Canzoni
-            qCanzoni = StrutturaDati.Canzoni.Length - 1
+            sCanzoni = StrutturaDati.DettaglioBrani
+            qCanzoni = StrutturaDati.DettaglioBrani.Length - 1
             lstArtista.Items.Clear()
 
             For i As Integer = 1 To qCanzoni
-                'If sCanzoni(i).IndexOf(lstArtista.Text) > -1 Then
+                Dim c As StrutturaCanzone.StrutturaBrano = sCanzoni(i)
+                'If c.Artista = Selezione Then
                 Ok = True
-                art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\", "")
-                art = Mid(art, 1, art.IndexOf("\"))
-                For k As Integer = 0 To lstArtista.Items.Count - 1
-                    If lstArtista.Items(k) = art Then
-                        Ok = False
-                        Exit For
-                    End If
-                Next
-                If Ok = True Then
-                    lstArtista.Items.Add(art)
-                End If
-                'End If
-            Next
-
-            lstArtista.Text = appo
-        End If
-
-        Dim Nome As String
-
-        lstAlbum.Items.Clear()
-        For i As Integer = 1 To qCanzoni
-            If sCanzoni(i).IndexOf(lstArtista.Text & "\") > -1 Then
-                Nome = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\", "")
-                If Nome.IndexOf("ZZZ-ImmaginiArtista") = -1 Then
-                    Nome = Mid(Nome, 1, Nome.IndexOf("\"))
-                    Ok = True
-                    If Mid(Nome, 1, 5) = "0000-" Then
-                        Nome = Mid(Nome, 6, Nome.Length)
-                    End If
-                    If Mid(Nome, 1).Trim = "-" Then
-                        Nome = Mid(Nome, 2, Nome.Length)
-                    End If
-                    For k As Integer = 0 To lstAlbum.Items.Count - 1
-                        If Nome = lstAlbum.Items(k) Then
+                    'art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\", "")
+                    'art = Mid(art, 1, art.IndexOf("\"))
+                    For k As Integer = 0 To lstArtista.Items.Count - 1
+                        If lstArtista.Items(k) = c.Artista Then
                             Ok = False
                             Exit For
                         End If
                     Next
                     If Ok = True Then
-                        If Nome.Length > 2 Then
-                            lstAlbum.Items.Add(Nome)
-                        End If
+                        lstArtista.Items.Add(c.Artista)
                     End If
+                ' End If
+            Next
+
+            lstArtista.Text = appo
+        End If
+
+        'Dim Nome As String
+
+        lstAlbum.Items.Clear()
+        For i As Integer = 1 To qCanzoni
+            Dim c As StrutturaCanzone.StrutturaBrano = sCanzoni(i)
+            If c.Artista = Selezione Then
+                'Nome = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\", "")
+                'If Nome.IndexOf("ZZZ-ImmaginiArtista") = -1 Then
+                '    Nome = Mid(Nome, 1, Nome.IndexOf("\"))
+                Ok = True
+                '    If Mid(Nome, 1, 5) = "0000-" Then
+                '        Nome = Mid(Nome, 6, Nome.Length)
+                '    End If
+                '    If Mid(Nome, 1).Trim = "-" Then
+                '        Nome = Mid(Nome, 2, Nome.Length)
+                '    End If
+                For k As Integer = 0 To lstAlbum.Items.Count - 1
+                    If c.Anno & "-" & c.Album = lstAlbum.Items(k) Then
+                        Ok = False
+                        Exit For
+                    End If
+                Next
+                If Ok = True Then
+                    '                    If c.Album.Length > 2 Then
+                    lstAlbum.Items.Add(c.Anno & "-" & c.Album)
+                    '                   End If
                 End If
             End If
+            ' End If
         Next
 
         lstCanzone.Items.Clear()
@@ -2423,12 +2444,13 @@ Public Class frmPlayer
     Private Sub lstCanzone_DoubleClick(sender As Object, e As EventArgs) Handles lstCanzone.DoubleClick
         Dim NomeCanzone As String = lstCanzone.Text
         Dim NomeAlbum As String = lstAlbum.Text
-        Dim NomeArtista As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\"
+        Dim NomeArtista As String = lstArtista.Text
 
         'Me.Cursor = Cursors.WaitCursor
 
         For i As Integer = 1 To StrutturaDati.qCanzoni
-            If StrutturaDati.Canzoni(i).IndexOf(NomeCanzone) > -1 And StrutturaDati.Canzoni(i).IndexOf(NomeAlbum) > -1 And StrutturaDati.Canzoni(i).IndexOf(NomeArtista) > -1 Then
+            Dim c As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(i)
+            If c.Traccia & "-" & c.Canzone = NomeCanzone And c.Anno & "-" & c.Album = NomeAlbum And c.Artista = NomeArtista Then
                 DoppioClickSuCanzone = True
 
                 StrutturaDati.QualeCanzoneStaSuonando = i
@@ -2444,9 +2466,9 @@ Public Class frmPlayer
                 If s = True Then
                     'StaSuonando = True
                     SfumaInEntrata()
-					'Else
-					'    PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
-				End If
+                    'Else
+                    '    PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+                End If
 
                 Exit For
             End If
@@ -2544,7 +2566,7 @@ Public Class frmPlayer
         DB.LeggeImpostazioniDiBase()
         conn = DB.ApreDB()
 
-        Erase StrutturaDati.Canzoni
+        Erase StrutturaDati.DettaglioBrani
         StrutturaDati.qCanzoni = 0
 
         Dim Altro2 As String = ""
@@ -2584,7 +2606,7 @@ Public Class frmPlayer
         'End If
         rec = DB.LeggeQuery(conn, Sql)
         StrutturaDati.qCanzoni = rec(0).value
-        ReDim StrutturaDati.Canzoni(StrutturaDati.qCanzoni)
+        ReDim StrutturaDati.DettaglioBrani(StrutturaDati.qCanzoni)
         rec.Close()
 
         Dim p As Integer = 0
@@ -2596,7 +2618,7 @@ Public Class frmPlayer
             Altro = ""
         End If
 
-        Sql = "Select A.Artista+'\'+A.Album+'\' As Canzone, A.Canzone As Testo, Ascoltate From ListaCanzone2 " & Altro2 & " Order By "
+        Sql = "Select A.Artista, A.Album, A.Canzone, A.Testo, A.TestoTradotto, A.Ascoltata, A.Traccia, A.Anno, A.Estensione From ListaCanzone2 " & Altro2 & " Order By "
         If chkRicordaAscoltate.Checked = True Then
             Sql += " Ascoltate, "
         End If
@@ -2604,7 +2626,25 @@ Public Class frmPlayer
         rec = DB.LeggeQuery(conn, Sql)
         Do Until rec.eof
             p += 1
-            StrutturaDati.Canzoni(p) = StrutturaDati.PathMP3 & "\" & rec("Canzone").Value & rec("Testo").Value
+            Dim s As New StrutturaCanzone.StrutturaBrano
+            s.Artista = rec("Artista").value
+            s.Album = rec("Album").value
+            s.Canzone = rec("Canzone").value
+            s.Testo = rec("Testo").value
+            s.TestoTradotto = rec("TestoTradotto").value
+            s.Ascoltata = rec("Ascoltata").value
+            s.Traccia = rec("Traccia").value
+            s.Anno = rec("Anno").value
+            s.Estensione = rec("Estensione").value
+
+            For i As Integer = s.Anno.Length + 1 To 4
+                s.Anno = "0" & s.Anno
+            Next
+            If s.Traccia.Length = 1 Then
+                s.Traccia = "0" & s.Traccia
+            End If
+
+            StrutturaDati.DettaglioBrani(p) = s
 
             rec.MoveNext()
         Loop
@@ -2703,10 +2743,13 @@ Public Class frmPlayer
                 pnlModifiche.Top = pnlCanzoni.Top + lstCanzone.Top + e.Location.Y
 
                 If pnlModifiche.Left + pnlModifiche.Width + 20 > Me.Width Then
-                    pnlModifiche.Left = Me.Width - pnlModifiche.Width - 20
+                    pnlModifiche.Left = (pnlCanzoni.Left + lstCanzone.Left) + (e.Location.X - pnlModifiche.Width - 2)
+                End If
+                If pnlFiltro.Left + pnlFiltro.Width + 20 < 10 Then
+                    pnlFiltro.Left = 10
                 End If
                 If pnlModifiche.Top + pnlModifiche.Height + 20 > Me.Height Then
-                    pnlModifiche.Top = Me.Height - pnlModifiche.Height - 20
+                    pnlModifiche.Top = (pnlCanzoni.Top + lstCanzone.Top) + (e.Location.Y - pnlModifiche.Height - 2)
                 End If
 
                 pnlModifiche.Visible = True
@@ -2722,10 +2765,10 @@ Public Class frmPlayer
         pnlModifiche.Visible = False
 
         Dim VecchioNome As String = lstCanzone.Text
-        Dim Estensione As String = gf.TornaEstensioneFileDaPath(VecchioNome)
+        ' Dim Estensione As String = gf.TornaEstensioneFileDaPath(VecchioNome)
         Dim Traccia As String = "00"
 
-        VecchioNome = VecchioNome.Replace(Estensione, "")
+        ' VecchioNome = VecchioNome.Replace(Estensione, "")
         If VecchioNome.IndexOf("-") > -1 Then
             Traccia = Mid(VecchioNome, 1, VecchioNome.IndexOf("-"))
             VecchioNome = Mid(VecchioNome, VecchioNome.IndexOf("-") + 2, VecchioNome.Length)
@@ -2750,23 +2793,68 @@ Public Class frmPlayer
 
         Dim NomeDaModificare As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\" & Canzone
 
-        If NomeDaModificare = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando) Then
+        Dim s As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+        Dim sAnno As String = s.Anno
+        For i As Integer = Anno.Length + 1 To 4
+            Anno = "0" & Anno
+        Next
+        Dim sTraccias As String = s.Traccia
+        If Traccia.Length = 1 Then
+            Traccia = "0" & Traccia
+        End If
+        Dim ss As String = s.Artista & "\" & sAnno & "-" & s.Album & "\" & Traccia & "-" & s.Canzone
+        If NomeDaModificare = ss Then
             MsgBox("Impossibile rinominare il brano." & vbCrLf & "Attualmente è in esecuzione")
             Exit Sub
         End If
 
         If NuovoNome <> "" And NuovoNome <> lstCanzone.Text Then
-            Dim NomeModificato As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\" & Traccia & "-" & NuovoNome & Estensione
+            Dim NomeModificato As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\" & Traccia & "-" & NuovoNome & "." & s.Estensione
+
+            Dim zs As New StrutturaCanzone.StrutturaBrano
+            zs.idCanzone = s.idCanzone
+            zs.Artista = lstArtista.Text
+            zs.Album = s.Album
+            zs.Data = s.Data
+            zs.Canzone = NuovoNome
+            zs.Testo = s.Testo
+            zs.TestoTradotto = s.TestoTradotto
+            zs.Ascoltata = s.Ascoltata
+            zs.Traccia = s.Traccia
+            zs.Anno = s.Anno
+            zs.Estensione = s.Estensione
+
+            For i As Integer = s.Anno.Length + 1 To 4
+                s.Anno = "0" & s.Anno
+            Next
+            If s.Traccia.Length = 1 Then
+                s.Traccia = "0" & s.Traccia
+            End If
+
+            StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando) = zs
+
             ImpostaTagCanzone(NomeDaModificare, NuovoNome, lstArtista.Text, Album, Anno, Traccia)
 
-            Try
-                Rename(NomeDaModificare, NomeModificato)
+            Dim errore As Boolean = False
 
-                LettCanzoni.LeggeCanzoniThread("RINFRESCALISTA", sender, e)
+            Try
+                Rename(NomeDaModificare & "." & s.Estensione.ToLower, NomeModificato)
+
+                ' LettCanzoni.LeggeCanzoniThread(lblAggiornamentoCanzoni, "RINFRESCALISTA", sender, e)
             Catch ex As Exception
-                MsgBox("Errore nella rinomina: " & ex.Message)
+                errore = True
             End Try
 
+            If errore Then
+                Try
+                    Rename(NomeDaModificare & "." & s.Estensione, NomeModificato)
+
+                    ' LettCanzoni.LeggeCanzoniThread(lblAggiornamentoCanzoni, "RINFRESCALISTA", sender, e)
+                Catch ex As Exception
+                    errore = True
+                    MsgBox("Errore nella rinomina: " & ex.Message)
+                End Try
+            End If
             'If StaSuonando = True Then
             '    cmdPlay_Click(sender, e)
             'End If
@@ -2784,38 +2872,38 @@ Public Class frmPlayer
     End Sub
 
     Private Sub cmdElimina_Click(sender As Object, e As EventArgs) Handles cmdElimina.Click
-        pnlModifiche.Visible = False
+        'pnlModifiche.Visible = False
 
-        Dim Anno As String = "0000"
-        Dim Album As String = lstAlbum.Text
-        If Mid(Album, 5, 1) <> "-" Then
-            Album = "0000-" & Album
-        Else
-            Anno = Mid(Album, 1, Album.IndexOf("-"))
-        End If
-        Dim Canzone As String = lstCanzone.Text
-        If Canzone.IndexOf("-") = -1 Then
-            Canzone = "00-" & Canzone
-        End If
-        Dim NomeDaModificare As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\" & Canzone
+        'Dim Anno As String = "0000"
+        'Dim Album As String = lstAlbum.Text
+        'If Mid(Album, 5, 1) <> "-" Then
+        '    Album = "0000-" & Album
+        'Else
+        '    Anno = Mid(Album, 1, Album.IndexOf("-"))
+        'End If
+        'Dim Canzone As String = lstCanzone.Text
+        'If Canzone.IndexOf("-") = -1 Then
+        '    Canzone = "00-" & Canzone
+        'End If
+        'Dim NomeDaModificare As String = StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\" & Album & "\" & Canzone
 
-        If NomeDaModificare = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando) Then
-            MsgBox("Impossibile eliminare il brano." & vbCrLf & "Attualmente è in esecuzione")
-            Exit Sub
-        End If
+        'If NomeDaModificare = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando) Then
+        '    MsgBox("Impossibile eliminare il brano." & vbCrLf & "Attualmente è in esecuzione")
+        '    Exit Sub
+        'End If
 
-        If MsgBox("Si vuole eliminare la canzone" & vbCrLf & vbCrLf & Canzone, vbYesNo + vbInformation + vbDefaultButton2) = vbYes Then
-            'If StaSuonando = True Then
-            '    cmdPlay_Click(sender, e)
-            'End If
+        'If MsgBox("Si vuole eliminare la canzone" & vbCrLf & vbCrLf & Canzone, vbYesNo + vbInformation + vbDefaultButton2) = vbYes Then
+        '    'If StaSuonando = True Then
+        '    '    cmdPlay_Click(sender, e)
+        '    'End If
 
-            If File.Exists(NomeDaModificare) Then
-                File.SetAttributes(NomeDaModificare, FileAttributes.Normal)
-                gf.EliminaFileFisico(NomeDaModificare)
-            End If
+        '    If File.Exists(NomeDaModificare) Then
+        '        File.SetAttributes(NomeDaModificare, FileAttributes.Normal)
+        '        gf.EliminaFileFisico(NomeDaModificare)
+        '    End If
 
-            LettCanzoni.LeggeCanzoniThread("RINFRESCALISTADOPOELIMINA", sender, e)
-        End If
+        '    LettCanzoni.LeggeCanzoniThread(lblAggiornamentoCanzoni, "RINFRESCALISTADOPOELIMINA", sender, e)
+        'End If
     End Sub
 
     Private Sub ScriveValori()
@@ -3293,7 +3381,7 @@ Public Class frmPlayer
 
         pnlImpostazioni.Visible = False
 
-        LettCanzoni.LeggeCanzoniInBackground()
+        LettCanzoni.LeggeCanzoniInBackground(lblAggiornamentoCanzoni)
     End Sub
 
     Private Sub cmdAnnullaFiltro_Click(sender As Object, e As EventArgs) Handles cmdAnnullaFiltro.Click
@@ -3352,7 +3440,7 @@ Public Class frmPlayer
         DB.LeggeImpostazioniDiBase()
         conn = DB.ApreDB()
 
-        Erase StrutturaDati.Canzoni
+        Erase StrutturaDati.DettaglioBrani
         StrutturaDati.qCanzoni = 0
 
         Dim Campi() As String = lblFiltro.Text.Split("^")
@@ -3367,7 +3455,7 @@ Public Class frmPlayer
         End If
         rec = DB.LeggeQuery(conn, Sql)
         StrutturaDati.qCanzoni = rec(0).value
-        ReDim StrutturaDati.Canzoni(StrutturaDati.qCanzoni)
+        ReDim StrutturaDati.DettaglioBrani(StrutturaDati.qCanzoni)
         rec.Close()
 
         Dim p As Integer = 0
@@ -3384,7 +3472,27 @@ Public Class frmPlayer
         rec = DB.LeggeQuery(conn, Sql)
         Do Until rec.eof
             p += 1
-            StrutturaDati.Canzoni(p) = StrutturaDati.PathMP3 & "\" & rec("Artista").Value & "\" & rec("Album").Value & "\" & rec("Canzone").Value
+            Dim s As New StrutturaCanzone.StrutturaBrano
+            s.idCanzone = rec("idCanzone").value
+            s.Artista = rec("Artista").value
+            s.Album = rec("Album").value
+            s.Data = rec("Datella").value
+            s.Canzone = rec("Canzone").value
+            s.Testo = rec("Testo").value
+            s.TestoTradotto = rec("TestoTradotto").value
+            s.Ascoltata = rec("Ascoltata").value
+            s.Traccia = rec("Traccia").value
+            s.Anno = rec("Anno").value
+            s.Estensione = rec("Estensione").value
+
+            For i As Integer = s.Anno.Length + 1 To 4
+                s.Anno = "0" & s.Anno
+            Next
+            If s.Traccia.Length = 1 Then
+                s.Traccia = "0" & s.Traccia
+            End If
+
+            StrutturaDati.DettaglioBrani(p) = s
 
             rec.MoveNext()
         Loop
@@ -3483,11 +3591,13 @@ Public Class frmPlayer
                     If StaUscendo Then
                         ChiudeTutto()
                     Else
-                        If Not File.Exists(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)) Then
+                        Dim s As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+                        Dim NomeFile As String = StrutturaDati.PathMP3 & "\" & s.Artista & "\" & s.Anno & "-" & s.Album & "\" & s.Traccia & "-" & s.Canzone & "." & s.Estensione
+                        If Not File.Exists(NomeFile) Then
                             If StaSuonando() Then
                                 Call cmdPlay_Click(sender, e)
                             End If
-                            MsgBox("Canzone inesistente: " & vbCrLf & vbCrLf & StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando), vbInformation)
+                            MsgBox("Canzone inesistente: " & vbCrLf & vbCrLf & NomeFile, vbInformation)
                         Else
                             tmrFadeOUT.Enabled = False
                             tmrCanzone.Enabled = True
@@ -3508,7 +3618,7 @@ Public Class frmPlayer
                             End Try
 
                             audioCorrente1 = New WMPLib.WindowsMediaPlayer
-                            audioCorrente1.URL = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)
+                            audioCorrente1.URL = NomeFile
                             audioCorrente1.settings.volume = 100
                             audioCorrente1.controls.play()
 
@@ -3516,29 +3626,29 @@ Public Class frmPlayer
 
                             CaricaCanzone()
 
-							'If (StaSuonando() Or StaCambiandoAutomaticamente) Then
-							'    PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
-							'    'Else
-							'    '    If YouTubeMostrato Then
-							'    '        pnlMediaPlayer.Visible = True
-							'    '    End If
-							'End If
+                            'If (StaSuonando() Or StaCambiandoAutomaticamente) Then
+                            '    PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+                            '    'Else
+                            '    '    If YouTubeMostrato Then
+                            '    '        pnlMediaPlayer.Visible = True
+                            '    '    End If
+                            'End If
 
-							pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+                            pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
 
                             lstCanzone.Enabled = True
                             picIndietro.Enabled = True
                             picAvanti.Enabled = True
 
-							'If (StaSuonando() Or StaCambiandoAutomaticamente) And YouTubeMostrato Then
-							'    YouTubeClass.PlayButton()
-							'End If
+                            'If (StaSuonando() Or StaCambiandoAutomaticamente) And YouTubeMostrato Then
+                            '    YouTubeClass.PlayButton()
+                            'End If
 
-							'If chkSpostaImmagini.Checked Then
-							'    tmrEffettoImmagine.Enabled = True
-							'End If
+                            'If chkSpostaImmagini.Checked Then
+                            '    tmrEffettoImmagine.Enabled = True
+                            'End If
 
-							StaCambiandoAutomaticamente = False
+                            StaCambiandoAutomaticamente = False
 
                             HaGiaScrittoAscoltataSulDB = False
                         End If
@@ -3549,9 +3659,12 @@ Public Class frmPlayer
         Else
             HaGiaScrittoAscoltataSulDB = False
 
+            Dim s As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+            Dim NomeFile As String = StrutturaDati.PathMP3 & "\" & s.Artista & "\" & s.Anno & "-" & s.Album & "\" & s.Traccia & "-" & s.Canzone & "." & s.Estensione
+
             Try
                 audioCorrente1 = New WMPLib.WindowsMediaPlayer
-                audioCorrente1.URL = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)
+                audioCorrente1.URL = NomeFile
                 audioCorrente1.settings.volume = 100
                 audioCorrente1.controls.play()
 
@@ -3559,8 +3672,8 @@ Public Class frmPlayer
 
                 tmrFadeOUT.Enabled = False
 
-				'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
-			Catch ex As Exception
+                'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+            Catch ex As Exception
                 tmrFadeOUT.Enabled = False
                 MsgBox("Errore nel caricamento del brano: " & vbCrLf & vbCrLf & ex.Message)
             End Try
@@ -3771,7 +3884,7 @@ Public Class frmPlayer
         SaveSetting("MP3Tag", "Impostazioni", "Bellezza", Valore)
 
         If StaSuonando() Then
-            picPlay.BackgroundImage = Image.FromFile(Application.StartupPath & "\Immagini\icona_Play.png")
+            picPlay.BackgroundImage = My.Resources.icona_PLAY ' Image.FromFile(Application.StartupPath & "\Immagini\icona_Play.png")
             tmrCanzone.Enabled = False
             'If QualeAudioStaSuonando = 2 Then
             audioCorrente1.controls.pause()
@@ -3845,19 +3958,22 @@ Public Class frmPlayer
     End Sub
 
     Private Sub cmdRefreshTesto_Click(sender As Object, e As EventArgs) Handles cmdRefreshTesto.Click, cmdRefreshtestoInterno.Click
-        Dim NomeSong As String = gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)).Replace(gf.TornaEstensioneFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)), "")
-        If NomeSong.IndexOf("-") > -1 Then
-            NomeSong = Mid(NomeSong, NomeSong.IndexOf("-") + 2, NomeSong.Length)
-        End If
+        Dim s As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+        Dim NomeSong As String = s.Canzone
 
-        Dim artista As String = lstArtista.Text.Trim
-        Dim album As String = lstAlbum.Text
-        If Mid(album, 5, 1) <> "-" Then
-            album = "0000-" & album
-        End If
-        Dim canzone As String = lstCanzone.Text
-        If Mid(canzone, 3, 1) <> "-" Then
-            canzone = "00-" & canzone
+        ' Dim NomeSong As String = gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)).Replace(gf.TornaEstensioneFileDaPath(StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando)), "")
+        'If NomeSong.IndexOf("-") > -1 Then
+        'NomeSong = Mid(NomeSong, NomeSong.IndexOf("-") + 2, NomeSong.Length)
+        'End If
+
+        Dim artista As String = s.Artista ' lstArtista.Text.Trim
+        Dim album As String = s.Album 'Album ' lstAlbum.Text
+        'If Mid(album, 5, 1) <> "-" Then
+        '    album = "0000-" & album
+        'End If
+        Dim canzone As String = s.Canzone ' lstCanzone.Text
+        If Mid(canzone, 3, 1) = "-" Then
+            canzone = Mid(canzone, 4, Len(canzone))
         End If
 
         'Try
@@ -3932,11 +4048,14 @@ Public Class frmPlayer
 
             Me.Cursor = Cursors.WaitCursor
             For i As Integer = 1 To StrutturaDati.qCanzoni
+                Dim s As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(i)
+                Dim NomeFile As String = StrutturaDati.PathMP3 & "\" & s.Artista & "\" & s.Anno & "-" & s.Album & "\" & s.Traccia & "-" & s.Canzone & "." & s.Estensione.ToLower
+
                 lblAvanzamento.Text = i & "/" & StrutturaDati.qCanzoni
-                lblAvanzamentoFile.Text = gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(i))
+                lblAvanzamentoFile.Text = gf.TornaNomeFileDaPath(NomeFile)
                 Application.DoEvents()
 
-                sPercorso = gf.TornaNomeDirectoryDaPath(StrutturaDati.Canzoni(i))
+                sPercorso = gf.TornaNomeDirectoryDaPath(NomeFile)
                 sPercorso = sPercorso.Replace(StrutturaDati.PathMP3 & "\", "")
 
                 If chkPath.Checked = True Then
@@ -3946,12 +4065,16 @@ Public Class frmPlayer
                     sPercorso = Percorso & "\"
                 End If
 
-                Nome = sPercorso & gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(i))
+                Nome = sPercorso & s.Canzone ' gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(i))
 
-                If File.Exists(Nome) = False And File.Exists(StrutturaDati.Canzoni(i)) = True Then
-                    File.Copy(StrutturaDati.Canzoni(i), Nome)
+                If File.Exists(Nome) = False And File.Exists(NomeFile) = True Then
+                    File.Copy(NomeFile, Nome)
+                Else
+                    If File.Exists(NomeFile) = False Then
+                        MsgBox(NomeFile)
+                        Stop
+                    End If
                 End If
-
             Next
             Me.Cursor = Cursors.Default
 
@@ -3995,7 +4118,7 @@ Public Class frmPlayer
         DB.LeggeImpostazioniDiBase()
         conn = DB.ApreDB()
 
-        Sql = "Select Artista, Album, Canzone As Brano From ListaCanzone2 Where Bellezza<5 And Bellezza>0"
+        Sql = "Select Artista, Album, Canzone, Traccia, Anno, Estensione From ListaCanzone2 Where Bellezza<5 And Bellezza>0"
         rec = DB.LeggeQuery(conn, Sql)
         Do Until rec.Eof
             Brani += 1
@@ -4009,12 +4132,22 @@ Public Class frmPlayer
             'If Album.Contains("-") Then
             '    Album = Mid(Album, Album.IndexOf("-") + 2, Album.Length)
             'End If
-            Brano = rec("Brano").Value
+            Brano = rec("Canzone").Value
             'If Brano.Contains("-") Then
             '    Brano = Mid(Brano, Brano.IndexOf("-") + 2, Brano.Length)
             'End If
+            Dim Anno As String = rec("Anno").value
+            Dim Traccia As String = rec("Traccia").value
+            Dim Estensione As String = rec("Estensione").value
 
-            Brano = StrutturaDati.PathMP3 & "\" & Artista & "\" & Album & "\" & Brano
+            For i As Integer = Anno.Length + 1 To 4
+                Anno = "0" & Anno
+            Next
+            If Traccia.Length = 1 Then
+                Traccia = "0" & Traccia
+            End If
+
+            Brano = StrutturaDati.PathMP3 & "\" & Artista & "\" & Anno & "-" & Album & "\" & Traccia & "-" & Brano & "." & estensione
             Brano = Brano.Replace("''", "'")
             Quale += 1
 
@@ -4041,7 +4174,7 @@ Public Class frmPlayer
         lblAvanzamentoFile.Text = ""
         Application.DoEvents()
 
-        Sql = "Delete From ListaCanzone2 Where Bellezza<5"
+        Sql = "Delete From ListaCanzone2 Where Bellezza<5 And Bellezza>0"
         DB.EsegueSql(conn, Sql)
 
         conn.Close()
@@ -5161,8 +5294,11 @@ Public Class frmPlayer
 				If dimeFile > 10000000 Then
 					Dim Campi() As String = filetto.Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
 					Dim id As Integer = -1
-					Sql = "Select * From ListaCanzone2 Where Artista='" & Campi(0).Replace("'", "''") & "' And Album='" & Campi(1).Replace("'", "''") & "' And Canzone='" & Campi(2).Replace("'", "''") & "'"
-					rec = DB.LeggeQuery(conn, Sql)
+                    Sql = "Select * From ListaCanzone2 Where " &
+                        "Artista='" & Campi(0).Replace("'", "''") & "' And " &
+                        "Album='" & Campi(1).Replace("'", "''") & "' And " &
+                        "Canzone='" & Campi(2).Replace("'", "''") & "'"
+                    rec = DB.LeggeQuery(conn, Sql)
 					If Not rec.eof Then
 						id = rec("idCanzone").Value
 					End If
