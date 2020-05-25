@@ -2,6 +2,7 @@
 Imports System.Threading
 Imports System.Runtime.InteropServices
 Imports System.Drawing.Imaging
+Imports System.ServiceModel.Activation
 
 Public Class frmPlayer
     <DllImportAttribute("user32.dll")>
@@ -206,14 +207,14 @@ Public Class frmPlayer
         StrutturaDati.lstArtista = lstArtista
         StrutturaDati.lstAlbum = lstAlbum
         StrutturaDati.lstCanzone = lstCanzone
-		'StrutturaDati.PicNonCercareVideo = picNonCercareVideo
-		StrutturaDati.VideoLockati = False
+        'StrutturaDati.PicNonCercareVideo = picNonCercareVideo
+        StrutturaDati.VideoLockati = False
         StrutturaDati.pnlBarra = pnlBarra
         StrutturaDati.pnlImmagine = pnlImmagine
         StrutturaDati.pnlImmagineArtista = pnlImmagineArtista
-		'StrutturaDati.pnlMediaPlayer = pnlMediaPlayer
-		'StrutturaDati.AxWindowsMediaPlayer1 = AxWindowsMediaPlayer1
-		StrutturaDati.PathMP3 = GetSetting("MP3Tag", "Impostazioni", "PercorsoDestinazione", "")
+        'StrutturaDati.pnlMediaPlayer = pnlMediaPlayer
+        'StrutturaDati.AxWindowsMediaPlayer1 = AxWindowsMediaPlayer1
+        StrutturaDati.PathMP3 = GetSetting("MP3Tag", "Impostazioni", "PercorsoDestinazione", "")
 
         LettCanzoni = New LetturaCanzoni(Me)
 
@@ -232,9 +233,9 @@ Public Class frmPlayer
         'lstTestoInterno.BackColor = Color.FromArgb(50, 0, 0, 0)
         'lstTestoInterno.ForeColor = Color.FromArgb(50, 255, 0, 0)
         pnlTestoInterno.BackColor = Color.FromArgb(40, Color.Blue)
-        pnltestointerno.ForeColor = Color.Yellow
-        pnltestointerno.Left = 3
-        pnltestointerno.Top = 30
+        pnlTestoInterno.ForeColor = Color.Yellow
+        pnlTestoInterno.Left = 3
+        pnlTestoInterno.Top = 30
         'pnltestointerno.Width = 200
 
         pnlImmagineArtista.Left = 0
@@ -281,9 +282,9 @@ Public Class frmPlayer
         lblNomeArtistaImm.BackColor = Color.FromArgb(145, Color.DarkGreen)
         lblNomeArtistaImm.ForeColor = Color.FromArgb(145, Color.GreenYellow)
         pnlStelleInterno.Visible = False
-		'picYouTube.Visible = True
+        'picYouTube.Visible = True
 
-		pnlMembriInterno.BackColor = Color.FromArgb(40, Color.Blue)
+        pnlMembriInterno.BackColor = Color.FromArgb(40, Color.Blue)
         pnlMembriInterno.ForeColor = Color.Yellow
         pnlMembriInterno.Left = 5
         pnlMembriInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
@@ -298,15 +299,15 @@ Public Class frmPlayer
         tmrSpostaScrittaTitolo.Enabled = False
         picPlay.BackgroundImage = My.Resources.icona_PLAY ' Image.FromFile(Application.StartupPath & "\Immagini\icona_Play.png")
 
-		'picAvantiMP.BackgroundImage = My.Resources.avanti ' Image.FromFile(Application.StartupPath & "\Immagini\Icone\icona_AVANTI.png")
-		'picIndietroMP.BackgroundImage = My.Resources.indietro ' Image.FromFile(Application.StartupPath & "\Immagini\Icone\icona_INDIETRO.png")
-		'picMeno.BackgroundImage = My.Resources.meno ' Image.FromFile(Application.StartupPath & "\Immagini\meno.png")
-		'picPiu.BackgroundImage = My.Resources.piu ' Image.FromFile(Application.StartupPath & "\Immagini\piu.png")
-		'picElimina.BackgroundImage = My.Resources.icona_ELIMINA_TAG ' Image.FromFile(Application.StartupPath & "\Immagini\icona_ELIMINA-TAG.png")
-		'picSalvaVideo.BackgroundImage = My.Resources.icona_SALVA ' Image.FromFile(Application.StartupPath & "\Immagini\icona_SALVA.png")
-		'picApreChiudeBarraMP.BackgroundImage = My.Resources.SuGiu ' Image.FromFile(Application.StartupPath & "\Immagini\SuGiu.png")
+        'picAvantiMP.BackgroundImage = My.Resources.avanti ' Image.FromFile(Application.StartupPath & "\Immagini\Icone\icona_AVANTI.png")
+        'picIndietroMP.BackgroundImage = My.Resources.indietro ' Image.FromFile(Application.StartupPath & "\Immagini\Icone\icona_INDIETRO.png")
+        'picMeno.BackgroundImage = My.Resources.meno ' Image.FromFile(Application.StartupPath & "\Immagini\meno.png")
+        'picPiu.BackgroundImage = My.Resources.piu ' Image.FromFile(Application.StartupPath & "\Immagini\piu.png")
+        'picElimina.BackgroundImage = My.Resources.icona_ELIMINA_TAG ' Image.FromFile(Application.StartupPath & "\Immagini\icona_ELIMINA-TAG.png")
+        'picSalvaVideo.BackgroundImage = My.Resources.icona_SALVA ' Image.FromFile(Application.StartupPath & "\Immagini\icona_SALVA.png")
+        'picApreChiudeBarraMP.BackgroundImage = My.Resources.SuGiu ' Image.FromFile(Application.StartupPath & "\Immagini\SuGiu.png")
 
-		Dim tt As New ToolTip()
+        Dim tt As New ToolTip()
 
         tt.SetToolTip(cmdEliminaImmagineArtista, "Elimina immagine")
         tt.SetToolTip(cmdSalva, "Salva immagine")
@@ -320,16 +321,16 @@ Public Class frmPlayer
         tt.SetToolTip(cmdVisualizzaMembri, "Visualizza i membri del gruppo")
         tt.SetToolTip(cmdRicaricaMembri, "Ricarica i membri del gruppo")
 
-		'tt.SetToolTip(picAvantiMP, "Visualizza il video successivo")
-		'tt.SetToolTip(picIndietroMP, "Visualizza il video precedente")
-		'tt.SetToolTip(picMeno, "Rimpicciolisce la schermata video")
-		'tt.SetToolTip(picPiu, "Ingrandisce la schermata video")
-		'tt.SetToolTip(picElimina, "Elimina il video selezionato")
-		'tt.SetToolTip(picSalvaVideo, "Salva il video selezionato")
-		'tt.SetToolTip(picApreChiudeBarraMP, "Visualizza o meno la barra MP")
-		'tt.SetToolTip(picNonCercareVideo, "Permette o meno la ricerca di nuovi video")
+        'tt.SetToolTip(picAvantiMP, "Visualizza il video successivo")
+        'tt.SetToolTip(picIndietroMP, "Visualizza il video precedente")
+        'tt.SetToolTip(picMeno, "Rimpicciolisce la schermata video")
+        'tt.SetToolTip(picPiu, "Ingrandisce la schermata video")
+        'tt.SetToolTip(picElimina, "Elimina il video selezionato")
+        'tt.SetToolTip(picSalvaVideo, "Salva il video selezionato")
+        'tt.SetToolTip(picApreChiudeBarraMP, "Visualizza o meno la barra MP")
+        'tt.SetToolTip(picNonCercareVideo, "Permette o meno la ricerca di nuovi video")
 
-		frmWiki = New frmWikipedia
+        frmWiki = New frmWikipedia
         frmWiki.Visible = False
 
         Me.Cursor = Cursors.WaitCursor
@@ -345,33 +346,33 @@ Public Class frmPlayer
         chkSpostaImmagini.Checked = GetSetting("MP3Tag", "Impostazioni", "SpostaImmagini", True)
         chkPath.Checked = GetSetting("MP3Tag", "Impostazioni", "CreaPath", True)
         chkSuperiori.Checked = GetSetting("MP3Tag", "Impostazioni", "Superiori", 1)
-		'chkYouTube.Checked = GetSetting("MP3Tag", "Impostazioni", "VisualizzaYouTube", False)
-		chkRicordaAscoltate.Checked = GetSetting("MP3Tag", "Impostazioni", "RicordaAscoltate", True)
-        pnltestointerno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+        'chkYouTube.Checked = GetSetting("MP3Tag", "Impostazioni", "VisualizzaYouTube", False)
+        chkRicordaAscoltate.Checked = GetSetting("MP3Tag", "Impostazioni", "RicordaAscoltate", True)
+        pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
         pnlMembriInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "Membri", False)
         LinguaOriginale = GetSetting("MP3Tag", "Impostazioni", "Lingua", True)
-		'YouTubeMostrato = GetSetting("MP3Tag", "Impostazioni", "YouTube", False)
-		'PosizioneMP = GetSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", "")
-		PosizioneTI = GetSetting("MP3Tag", "Impostazioni", "PosTestoInterno", "")
-		'If YouTubeMostrato Then
-		'    chkYouTube.Checked = True
-		'    chkScaricaSubito.Visible = True
-		'Else
-		'    chkYouTube.Checked = False
-		'    chkScaricaSubito.Visible = False
-		'End If
-		'ScaricaVideoSubito = GetSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "S")
-		'If ScaricaVideoSubito = "N" Then
-		'    chkScaricaSubito.Checked = False
-		'Else
-		'    chkScaricaSubito.Checked = True
-		'End If
-		'DimeWMP = GetSetting("MP3Tag", "Impostazioni", "DimensioniYT", 3)
+        'YouTubeMostrato = GetSetting("MP3Tag", "Impostazioni", "YouTube", False)
+        'PosizioneMP = GetSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", "")
+        PosizioneTI = GetSetting("MP3Tag", "Impostazioni", "PosTestoInterno", "")
+        'If YouTubeMostrato Then
+        '    chkYouTube.Checked = True
+        '    chkScaricaSubito.Visible = True
+        'Else
+        '    chkYouTube.Checked = False
+        '    chkScaricaSubito.Visible = False
+        'End If
+        'ScaricaVideoSubito = GetSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "S")
+        'If ScaricaVideoSubito = "N" Then
+        '    chkScaricaSubito.Checked = False
+        'Else
+        '    chkScaricaSubito.Checked = True
+        'End If
+        'DimeWMP = GetSetting("MP3Tag", "Impostazioni", "DimensioniYT", 3)
 
-		'pnlMediaPlayer.Visible = chkYouTube.Checked
-		'pnlContMP.Visible = pnlMediaPlayer.Visible
+        'pnlMediaPlayer.Visible = chkYouTube.Checked
+        'pnlContMP.Visible = pnlMediaPlayer.Visible
 
-		ImpostaLingua()
+        ImpostaLingua()
 
         cmbBellezza.Items.Clear()
         cmbBellezza.Items.Add("Mai Votate")
@@ -1697,6 +1698,8 @@ Public Class frmPlayer
     Public Sub AvantiCanzone()
         If DoppioClickSuCanzone Then Exit Sub
 
+        Dim Errore As Boolean = False
+
         PulisceAmbientePerCanzoneSuccessiva()
 
         If qAscoltate < maxAscoltate Then
@@ -1704,6 +1707,7 @@ Public Class frmPlayer
         Else
             Dim Ancora As Boolean = True
             Dim Valore As String = cmbBellezza.SelectedItem
+            Dim Quanti As Integer = 0
 
             Do While Ancora
                 If chkRandom.Checked = True Then
@@ -1728,46 +1732,96 @@ Public Class frmPlayer
                         Dim bellezza As Integer = LettCanzoni.RitornaQuanteStelleCanzoneSenzaCaricarla(Canzone)
                         If bellezza > 0 Then
                             Ancora = True
+                            Quanti += 1
+                            If Quanti > 30 Then
+                                MsgBox("Tentativi di trovare la canzone successiva esauriti", vbExclamation)
+                                Errore = True
+                                Exit Do
+                            End If
                         End If
                     End If
                 End If
             Loop
         End If
 
-        inPausa = False
+        If Errore Then
+            inPausa = False
+            If StaSuonando() = False Then
+                menuItem1.ImpostaImmagineDaImage(My.Resources.icona_STOP, 24)
+                ' menuItem1.ImpostaImmagine("Immagini\Icone\icona_stop.png", 24)
+                menuItem1.ImpostaTesto("Stop")
+                picPlay.BackgroundImage = My.Resources.icona_pausa ' Image.FromFile(Application.StartupPath & "\Immagini\icona_pausa.png")
+                Application.DoEvents()
+                'NotifyIcon1.Icon = New Icon("Immagini\Icone\play.ico")
+                tmrCanzone.Enabled = True
+                If inPausa = False Then
+                    DisabilitaControlli()
 
-        If StaSuonando() Or StaCambiandoAutomaticamente Then
-            'Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
-            Dim Campi As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
-
-            Try
-                'Dim c As String = Campi(5)
-                'c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
-                'If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
-
-                'Dim a As String = Campi(4)
-                'Dim an As String = ""
-                'If a.Contains("-") Then
-                '	an = Mid(a, 1, a.IndexOf("-"))
-                '	a = Mid(a, a.IndexOf("-") + 2, a.Length)
+                    SfumaInEntrata()
+                Else
+                    'sa.FaiPartireTimer()
+                    'If QualeAudioStaSuonando = 2 Then
+                    'audioCorrente1.controls.play()
+                    '    Else
+                    '    audioCorrente2.controls.play()
+                    'End If
+                    inPausa = False
+                    'StaSuonando = True
+                End If
+            Else
+                menuItem1.ImpostaImmagineDaImage(My.Resources.icona_PLAY, 24)
+                ' menuItem1.ImpostaImmagine("Immagini\Icone\icona_play.png", 24)
+                menuItem1.ImpostaTesto("Play")
+                'NotifyIcon1.Icon = New Icon("Immagini\Icone\pause.ico")
+                'sa.FermaTimer()
+                picPlay.BackgroundImage = My.Resources.icona_PLAY ' Image.FromFile(Application.StartupPath & "\Immagini\icona_Play.png")
+                tmrCanzone.Enabled = False
+                'If QualeAudioStaSuonando = 2 Then
+                audioCorrente1.controls.pause()
+                'Else
+                '    audioCorrente2.controls.pause()
                 'End If
+                'StaSuonando = False
+                inPausa = True
 
-                lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi.Canzone & ": " & Campi.Artista & " - Album " & Campi.Album & " (" & Campi.Anno & ")"
-            Catch ex As Exception
-                Dim campi2 As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
-                lblNomeCanzone.Text = "Prossimo brano: " & campi2.Artista & " " & campi2.Canzone
-            End Try
-            Application.DoEvents()
-
-            bIndietro = False
-
-            SfumaInEntrata()
+                'YouTubeClass.PauseButton()
+            End If
         Else
-            CaricaCanzone()
+            inPausa = False
 
-            'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+            If StaSuonando() Or StaCambiandoAutomaticamente Then
+                'Dim Campi() As String = StrutturaDati.Canzoni(StrutturaDati.QualeCanzoneStaSuonando).Split("\")
+                Dim Campi As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
 
-            pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+                Try
+                    'Dim c As String = Campi(5)
+                    'c = c.Replace(gf.TornaEstensioneFileDaPath(c), "")
+                    'If c.Contains("-") Then c = Mid(c, c.IndexOf("-") + 2, c.Length)
+
+                    'Dim a As String = Campi(4)
+                    'Dim an As String = ""
+                    'If a.Contains("-") Then
+                    '	an = Mid(a, 1, a.IndexOf("-"))
+                    '	a = Mid(a, a.IndexOf("-") + 2, a.Length)
+                    'End If
+
+                    lblNomeCanzone.Text = "Prossimo brano: " & vbCrLf & Campi.Canzone & ": " & Campi.Artista & " - Album " & Campi.Album & " (" & Campi.Anno & ")"
+                Catch ex As Exception
+                    Dim campi2 As StrutturaCanzone.StrutturaBrano = StrutturaDati.DettaglioBrani(StrutturaDati.QualeCanzoneStaSuonando)
+                    lblNomeCanzone.Text = "Prossimo brano: " & campi2.Artista & " " & campi2.Canzone
+                End Try
+                Application.DoEvents()
+
+                bIndietro = False
+
+                SfumaInEntrata()
+            Else
+                CaricaCanzone()
+
+                'PrendeVideo(AxWindowsMediaPlayer1, lstArtista.Text.Trim, lstAlbum.Text, lstCanzone.Text)
+
+                pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
+            End If
         End If
     End Sub
 
@@ -4065,7 +4119,7 @@ Public Class frmPlayer
                     sPercorso = Percorso & "\"
                 End If
 
-                Nome = sPercorso & s.Canzone ' gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(i))
+                Nome = sPercorso & s.Canzone & "." & s.Estensione.ToLower  ' gf.TornaNomeFileDaPath(StrutturaDati.Canzoni(i))
 
                 If File.Exists(Nome) = False And File.Exists(NomeFile) = True Then
                     File.Copy(NomeFile, Nome)
