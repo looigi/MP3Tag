@@ -403,9 +403,9 @@ Public Class LetturaCanzoni
             s.Data = rec("Datella").value
             s.Ascoltata = rec("Ascoltata").value
             s.Bellezza = rec("Bellezza").value
-            s.Estensione = rec("Estensione").value
-            s.Testo = rec("Testo").value
-            s.TestoTradotto = rec("TestoTradotto").value
+            s.Estensione = "" & rec("Estensione").value
+            s.Testo = "" & rec("Testo").value
+            s.TestoTradotto = "" & rec("TestoTradotto").value
 
             StrutturaDati.DettaglioBrani(p) = s
 

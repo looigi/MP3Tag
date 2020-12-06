@@ -22,9 +22,9 @@
     End Sub
 
     Public Function LeggeImpostazioniDiBase() As Boolean
-        Dim connectionString As String = "Data Source=" & NomeDB
+        Dim connectionString As String = "Persist Security Info=False;User ID=looigi;Password=looigi227;Initial Catalog=looWebPlayer;Data Source=192.168.0.227\WIN-KD8P5AQNTPQ\SQLEXPRESS,1433;Initial File Name="""";Server SPN="""""
 
-        Connessione = "Provider=" & "Microsoft.SQLSERVER.CE.OLEDB.4.0;" & ";" & connectionString
+        Connessione = "Provider=SQLNCLI11.1;" & connectionString
 
         Return True
     End Function
@@ -84,6 +84,7 @@
         Try
             Rec.Open(Sql, Conn)
         Catch ex As Exception
+            MsgBox(ex.Message)
             Rec = Nothing
         End Try
 

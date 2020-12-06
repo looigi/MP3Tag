@@ -95,7 +95,7 @@ Public Class getLyricsMP3_NEW
         Dim Canzoni() As String = {}
         Dim qCanzone As Long = 0
 
-        Sql = "Select * From ListaCanzone2 Where Testo='' Or Testo Is Null"
+        Sql = "Select * From ListaCanzone2 Where Cast(Testo As Varchar)=''"
         rec = DB.LeggeQuery(conn, Sql)
         Do Until rec.eof
             ReDim Preserve Canzoni(qCanzone)

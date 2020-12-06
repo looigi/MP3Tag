@@ -279,7 +279,6 @@
     <None Include="bin\Debug\Immagini\indietro.png" />
     <None Include="bin\Debug\Immagini\indietro_flip.png" />
     <Content Include="Boom Box.ico" />
-    <Content Include="DB\MP3Tag.sdf" />
     <Content Include="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
