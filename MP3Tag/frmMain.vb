@@ -132,8 +132,8 @@ Public Class frmMain
 	End Sub
 
 	Private Sub LeggeFiles()
-        If File.Exists(PathDB) Then
-            Dim DB As New SQLSERVERCE
+        'If File.Exists(PathDB) Then
+        Dim DB As New SQLSERVERCE
             Dim conn As Object = CreateObject("ADODB.Connection")
             Dim rec As Object = CreateObject("ADODB.Recordset")
             Dim Sql As String
@@ -165,10 +165,10 @@ Public Class frmMain
 
             conn.Close()
             DB = Nothing
-        Else
-            MsgBox("Path DB non trovato: " & vbCrLf & vbCrLf & PathDB)
-            End
-        End If
+        'Else
+        '    MsgBox("Path DB non trovato: " & vbCrLf & vbCrLf & PathDB)
+        '    End
+        'End If
     End Sub
 
     Private Sub cmdEsegue_Click(sender As Object, e As EventArgs) Handles picEsegue.Click
