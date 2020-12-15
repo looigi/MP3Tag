@@ -532,10 +532,11 @@ Public Class getLyricsMP3_NEW
             If ScaricaTestoSeNonLoTrova = True Then
                 Dim sArtista As String = Artista
                 Dim sTitolo As String = Titolo
-                sArtista = sArtista.Replace(" ", "%20").Replace("'", "%27")
-                sTitolo = sTitolo.Replace(" ", "%20").Replace("'", "%27")
-                Dim Url As String = "http://lyrics.wikia.com/wiki/" & sArtista & ":" & sTitolo
+                sArtista = sArtista.Replace(" ", "-") '.Replace("'", "%27")
+                sTitolo = sTitolo.Replace(" ", "-") '.Replace("'", "%27")
+                Dim Url As String = "" ' "http://lyrics.wikia.com/wiki/" & sArtista & ":" & sTitolo
 
+                Url = "https://www.musixmatch.com/it/testo/" & sArtista & "/" & sTitolo
                 Dim gd As New Download
 
                 gd.ImpostaValori(TipoCollegamento, Utenza, Password, Dominio, sNomeFile)
@@ -543,14 +544,14 @@ Public Class getLyricsMP3_NEW
                 Ok = gd.ScaricaPagina(Url)
 
                 If Ok = False Then
-                    If Titolo.IndexOf("'") > -1 Then
-                        Dim TitoloApicettato As String = AccorpaApici(Titolo)
-                        Dim ArtistaApicettato As String = AccorpaApici(Artista)
+                    'If Titolo.IndexOf("'") > -1 Then
+                    '    Dim TitoloApicettato As String = AccorpaApici(Titolo)
+                    '    Dim ArtistaApicettato As String = AccorpaApici(Artista)
 
-                        Url = "http://lyrics.wikia.com/wiki/" & ArtistaApicettato & ":" & TitoloApicettato
+                    '    Url = "http://lyrics.wikia.com/wiki/" & ArtistaApicettato & ":" & TitoloApicettato
 
-                        Ok = gd.ScaricaPagina(Url)
-                    End If
+                    '    Ok = gd.ScaricaPagina(Url)
+                    'End If
                 Else
                     If File.Exists(sNomeFile) = True Then
                         If FileLen(sNomeFile) = 0 Then
@@ -588,116 +589,141 @@ Public Class getLyricsMP3_NEW
                             Filetto = ""
                         End Try
 
-                        If Filetto.IndexOf("<b>Did you mean ") > -1 Then
-                            Dim NomePagina As String
-                            NomePagina = Mid(Filetto, Filetto.IndexOf("<b>Did you mean ") + 1, Filetto.Length)
-                            NomePagina = Mid(NomePagina, 1, NomePagina.IndexOf("</b> "))
-                            NomePagina = Mid(NomePagina, NomePagina.IndexOf("href=" & Chr(34)) + 7, NomePagina.Length)
-                            NomePagina = "http://lyrics.wikia.com" & Mid(NomePagina, 1, NomePagina.IndexOf(Chr(34)))
+                        'If Filetto.IndexOf("<b>Did you mean ") > -1 Then
+                        '    Dim NomePagina As String
+                        '    NomePagina = Mid(Filetto, Filetto.IndexOf("<b>Did you mean ") + 1, Filetto.Length)
+                        '    NomePagina = Mid(NomePagina, 1, NomePagina.IndexOf("</b> "))
+                        '    NomePagina = Mid(NomePagina, NomePagina.IndexOf("href=" & Chr(34)) + 7, NomePagina.Length)
+                        '    NomePagina = "http://lyrics.wikia.com" & Mid(NomePagina, 1, NomePagina.IndexOf(Chr(34)))
 
-                            gd.CreaEPulisceCartellaDiLavoro()
-                            Ok = gd.ScaricaPagina(NomePagina)
+                        '    gd.CreaEPulisceCartellaDiLavoro()
+                        '    Ok = gd.ScaricaPagina(NomePagina)
 
-                            If Ok = False Then
+                        '    If Ok = False Then
 
-                                TestoRitorno = NessunTestoRilevato()
-                            Else
-                                If File.Exists(sNomeFile) = True Then
-                                    Filetto = gf.LeggeFileIntero(sNomeFile)
-                                Else
-                                    Filetto = ""
+                        '        TestoRitorno = NessunTestoRilevato()
+                        '    Else
+                        '        If File.Exists(sNomeFile) = True Then
+                        '            Filetto = gf.LeggeFileIntero(sNomeFile)
+                        '        Else
+                        '            Filetto = ""
 
-                                    TestoRitorno = NessunTestoRilevato()
-                                End If
-                            End If
-                        Else
-                            If Filetto.Contains("<ul class=""redirectText"">") Then
-                                Dim NomePagina As String = Filetto
+                        '            TestoRitorno = NessunTestoRilevato()
+                        '        End If
+                        '    End If
+                        'Else
+                        '    Dim Ricerca As String = "lyrics__content__warning"">"
+                        '    If Filetto.Contains("lyrics__content__warning"">") Then
+                        '        Dim NomePagina As String = Filetto
 
-                                NomePagina = Mid(NomePagina, NomePagina.IndexOf("<ul class=""redirectText"">") + 26, NomePagina.Length)
-                                NomePagina = Mid(NomePagina, NomePagina.IndexOf("<a href=""") + 10, NomePagina.Length)
-                                NomePagina = Mid(NomePagina, 1, NomePagina.IndexOf(Chr(34)))
-                                NomePagina = "http://lyrics.wikia.com" & NomePagina
+                        '        NomePagina = Mid(NomePagina, NomePagina.IndexOf(Ricerca) + Ricerca.Length + 1, NomePagina.Length)
+                        '        NomePagina = Mid(NomePagina, NomePagina.IndexOf("</span>"), NomePagina.Length)
+                        '        'NomePagina = Mid(NomePagina, 1, NomePagina.IndexOf(Chr(34)))
+                        '        'NomePagina = "http://lyrics.wikia.com" & NomePagina
 
-                                gd.CreaEPulisceCartellaDiLavoro()
-                                Ok = gd.ScaricaPagina(NomePagina)
-                                Thread.Sleep(500)
+                        '        gd.CreaEPulisceCartellaDiLavoro()
+                        '        Ok = gd.ScaricaPagina(NomePagina)
+                        '        Thread.Sleep(500)
 
-                                If Ok = False Then
-                                    TestoRitorno = NessunTestoRilevato()
-                                Else
-                                    If File.Exists(sNomeFile) = True Then
-                                        Filetto = gf.LeggeFileIntero(sNomeFile)
-                                        If Filetto = "" Then
-                                            For i As Integer = 1 To 5
-                                                Thread.Sleep(1000)
+                        '        If Ok = False Then
+                        '            TestoRitorno = NessunTestoRilevato()
+                        '        Else
+                        '            If File.Exists(sNomeFile) = True Then
+                        '                Filetto = gf.LeggeFileIntero(sNomeFile)
+                        '                If Filetto = "" Then
+                        '                    For i As Integer = 1 To 5
+                        '                        Thread.Sleep(1000)
 
-                                                Ok = gd.ScaricaPagina(NomePagina)
-                                                If Not Ok Then
-                                                    TestoRitorno = NessunTestoRilevato()
-                                                    Filetto = ""
-                                                    Exit For
-                                                Else
-                                                    If File.Exists(sNomeFile) Then
-                                                        Filetto = gf.LeggeFileIntero(sNomeFile)
-                                                        If Filetto <> "" Then
-                                                            Exit For
-                                                        End If
-                                                    End If
-                                                End If
-                                            Next
-                                        End If
-                                    Else
-                                        Filetto = ""
+                        '                        Ok = gd.ScaricaPagina(NomePagina)
+                        '                        If Not Ok Then
+                        '                            TestoRitorno = NessunTestoRilevato()
+                        '                            Filetto = ""
+                        '                            Exit For
+                        '                        Else
+                        '                            If File.Exists(sNomeFile) Then
+                        '                                Filetto = gf.LeggeFileIntero(sNomeFile)
+                        '                                If Filetto <> "" Then
+                        '                                    Exit For
+                        '                                End If
+                        '                            End If
+                        '                        End If
+                        '                    Next
+                        '                End If
+                        '            Else
+                        '                Filetto = ""
 
-                                        TestoRitorno = Artista.ToUpper.Trim & "§"
-                                        TestoRitorno += sTitolo.ToUpper.Trim & "§§"
-                                        TestoRitorno += "Nessun testo rilevato"
-                                    End If
-                                End If
-                                'Else
-                                '    Filetto = ""
-                            End If
-                        End If
+                        '                TestoRitorno = Artista.ToUpper.Trim & "§"
+                        '                TestoRitorno += sTitolo.ToUpper.Trim & "§§"
+                        '                TestoRitorno += "Nessun testo rilevato"
+                        '            End If
+                        '        End If
+                        '        'Else
+                        '        '    Filetto = ""
+                        '    End If
+                        'End If
 
                         If Filetto <> "" Then
-                            Dim Inizio As Integer = Filetto.IndexOf("<div class='lyricbox'>")
+                            Dim Ricerca1 As String = "<span class=""lyrics__content__warning"">"
+                            Dim Ricerca2 As String = "<span class=""lyrics__content__ok"">"
+                            Dim Ricerca As String = ""
+                            Dim Inizio As Integer = Filetto.IndexOf(Ricerca1)
+                            If Inizio = -1 Then
+                                Inizio = Filetto.IndexOf(Ricerca2)
+                                Ricerca = Ricerca2
+                            Else
+                                Ricerca = Ricerca1
+                            End If
+
                             If Inizio > -1 Then
-                                Filetto = Mid(Filetto, Inizio + 1, Filetto.Length)
-                                Filetto = Mid(Filetto, Filetto.IndexOf(">") + 2, Filetto.Length)
-                                Filetto = Mid(Filetto, 1, Filetto.IndexOf("<div class='lyricsbreak'>"))
-
-                                Dim AppoggioCaratteri() As String = {}
-                                Dim c As String
-
-                                AppoggioCaratteri = Filetto.Split(";")
-
-                                For i As Integer = 0 To AppoggioCaratteri.Length - 1
-                                    If AppoggioCaratteri(i) <> "" Then
-                                        If AppoggioCaratteri(i).IndexOf("<br />") = -1 Then
-                                            If AppoggioCaratteri(i).IndexOf("<span") > -1 Then
-                                                AppoggioCaratteri(i) = Mid(AppoggioCaratteri(i), AppoggioCaratteri(i).IndexOf("/span>") + 7, AppoggioCaratteri(i).Length)
-                                            End If
-                                            c = AppoggioCaratteri(i).Replace("&#", "").Replace("<b>", "").Replace("</b>", "")
-                                            If c <> "" Then
-                                                Try
-                                                    TestoRitorno += Chr(c)
-                                                Catch ex As Exception
-                                                    TestoRitorno += "?"
-                                                End Try
-                                            End If
-                                        Else
-                                            TestoRitorno += "§"
-                                            Try
-                                                TestoRitorno += Chr(AppoggioCaratteri(i).Replace("&#", "").Replace("<br />", ""))
-                                            Catch ex As Exception
-                                                TestoRitorno += "?"
-                                            End Try
-                                        End If
+                                Dim Testone As String = ""
+                                Filetto = Mid(Filetto, Inizio + Ricerca.Length + 1, Filetto.Length)
+                                Testone = Mid(Filetto, 1, Filetto.IndexOf("</span>"))
+                                Inizio = Filetto.IndexOf(Ricerca)
+                                Filetto = Mid(Filetto, Inizio + Ricerca.Length + 1, Filetto.Length)
+                                Filetto = Mid(Filetto, 1, Filetto.IndexOf("</span>"))
+                                Testone &= Filetto
+                                Dim Testone2 As String = ""
+                                For i As Integer = 1 To Testone.Length
+                                    If Asc(Mid(Testone, i, 1)) >= Asc("A") And Asc(Mid(Testone, i, 1)) <= Asc("Z") Then
+                                        Testone2 &= "§" & Mid(Testone, i, 1)
+                                    Else
+                                        Testone2 &= Mid(Testone, i, 1)
                                     End If
                                 Next
+                                ' Filetto = Mid(Filetto, Filetto.IndexOf(">") + 2, Filetto.Length)
+                                ' Filetto = Mid(Filetto, 1, Filetto.IndexOf("</span>"))
 
-                                TestoRitorno = sArtista.ToUpper & "§" & Titolo.ToUpper & "§§" & TestoRitorno
+                                'Dim AppoggioCaratteri() As String = {}
+                                'Dim c As String
+
+                                'AppoggioCaratteri = Filetto.Split(";")
+
+                                'For i As Integer = 0 To AppoggioCaratteri.Length - 1
+                                '    If AppoggioCaratteri(i) <> "" Then
+                                '        If AppoggioCaratteri(i).IndexOf("<br />") = -1 Then
+                                '            If AppoggioCaratteri(i).IndexOf("<span") > -1 Then
+                                '                AppoggioCaratteri(i) = Mid(AppoggioCaratteri(i), AppoggioCaratteri(i).IndexOf("/span>") + 7, AppoggioCaratteri(i).Length)
+                                '            End If
+                                '            c = AppoggioCaratteri(i).Replace("&#", "").Replace("<b>", "").Replace("</b>", "")
+                                '            If c <> "" Then
+                                '                Try
+                                '                    TestoRitorno += Chr(c)
+                                '                Catch ex As Exception
+                                '                    TestoRitorno += "?"
+                                '                End Try
+                                '            End If
+                                '        Else
+                                '            TestoRitorno += "§"
+                                '            Try
+                                '                TestoRitorno += Chr(AppoggioCaratteri(i).Replace("&#", "").Replace("<br />", ""))
+                                '            Catch ex As Exception
+                                '                TestoRitorno += "?"
+                                '            End Try
+                                '        End If
+                                '    End If
+                                'Next
+
+                                TestoRitorno = sArtista.ToUpper & "§" & Titolo.ToUpper & "§" & Testone2
 
                                 If TestoRitorno = "" Then
                                     TestoRitorno = NessunTestoRilevato()

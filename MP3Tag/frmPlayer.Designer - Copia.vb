@@ -136,10 +136,9 @@ Partial Class frmPlayer
 		Me.pnlTuttoSchermo = New System.Windows.Forms.PictureBox()
 		Me.tmrPrendeThumbs = New System.Windows.Forms.Timer(Me.components)
 		Me.pnlImmagineArtista = New DoubleBufferedPanels()
-		Me.cmdResetOggetti = New System.Windows.Forms.Button()
-		Me.pnlTestoInterno = New System.Windows.Forms.Panel()
 		Me.cmdRicaricaMembri = New System.Windows.Forms.Button()
 		Me.pnlMembriInterno = New System.Windows.Forms.Panel()
+		Me.pnlTestoInterno = New System.Windows.Forms.Panel()
 		Me.cmdApreCartella = New System.Windows.Forms.Button()
 		Me.cmdRefreshtestoInterno = New System.Windows.Forms.Button()
 		Me.cmdTraduzione = New System.Windows.Forms.Button()
@@ -556,7 +555,7 @@ Partial Class frmPlayer
 		Me.pnlImpostazioni.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
 		Me.pnlImpostazioni.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.pnlImpostazioni.Controls.Add(Me.pnlImpostazioniInterno)
-		Me.pnlImpostazioni.Location = New System.Drawing.Point(797, 95)
+		Me.pnlImpostazioni.Location = New System.Drawing.Point(475, 28)
 		Me.pnlImpostazioni.Name = "pnlImpostazioni"
 		Me.pnlImpostazioni.Size = New System.Drawing.Size(547, 561)
 		Me.pnlImpostazioni.TabIndex = 5
@@ -1354,10 +1353,9 @@ Partial Class frmPlayer
 		'pnlImmagineArtista
 		'
 		Me.pnlImmagineArtista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-		Me.pnlImmagineArtista.Controls.Add(Me.cmdResetOggetti)
-		Me.pnlImmagineArtista.Controls.Add(Me.pnlTestoInterno)
 		Me.pnlImmagineArtista.Controls.Add(Me.cmdRicaricaMembri)
 		Me.pnlImmagineArtista.Controls.Add(Me.pnlMembriInterno)
+		Me.pnlImmagineArtista.Controls.Add(Me.pnlTestoInterno)
 		Me.pnlImmagineArtista.Controls.Add(Me.cmdApreCartella)
 		Me.pnlImmagineArtista.Controls.Add(Me.cmdRefreshtestoInterno)
 		Me.pnlImmagineArtista.Controls.Add(Me.cmdTraduzione)
@@ -1371,26 +1369,8 @@ Partial Class frmPlayer
 		Me.pnlImmagineArtista.Controls.Add(Me.lblNomeImmArtista)
 		Me.pnlImmagineArtista.Location = New System.Drawing.Point(32, 475)
 		Me.pnlImmagineArtista.Name = "pnlImmagineArtista"
-		Me.pnlImmagineArtista.Size = New System.Drawing.Size(436, 100)
+		Me.pnlImmagineArtista.Size = New System.Drawing.Size(248, 100)
 		Me.pnlImmagineArtista.TabIndex = 6
-		'
-		'cmdResetOggetti
-		'
-		Me.cmdResetOggetti.Font = New System.Drawing.Font("Verdana", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-		Me.cmdResetOggetti.Location = New System.Drawing.Point(251, 5)
-		Me.cmdResetOggetti.Name = "cmdResetOggetti"
-		Me.cmdResetOggetti.Size = New System.Drawing.Size(29, 17)
-		Me.cmdResetOggetti.TabIndex = 101
-		Me.cmdResetOggetti.Text = "Res"
-		Me.cmdResetOggetti.UseVisualStyleBackColor = True
-		'
-		'pnlTestoInterno
-		'
-		Me.pnlTestoInterno.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-		Me.pnlTestoInterno.Location = New System.Drawing.Point(160, 35)
-		Me.pnlTestoInterno.Name = "pnlTestoInterno"
-		Me.pnlTestoInterno.Size = New System.Drawing.Size(46, 28)
-		Me.pnlTestoInterno.TabIndex = 15
 		'
 		'cmdRicaricaMembri
 		'
@@ -1409,6 +1389,14 @@ Partial Class frmPlayer
 		Me.pnlMembriInterno.Name = "pnlMembriInterno"
 		Me.pnlMembriInterno.Size = New System.Drawing.Size(46, 28)
 		Me.pnlMembriInterno.TabIndex = 15
+		'
+		'pnlTestoInterno
+		'
+		Me.pnlTestoInterno.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.pnlTestoInterno.Location = New System.Drawing.Point(160, 35)
+		Me.pnlTestoInterno.Name = "pnlTestoInterno"
+		Me.pnlTestoInterno.Size = New System.Drawing.Size(46, 28)
+		Me.pnlTestoInterno.TabIndex = 15
 		'
 		'cmdApreCartella
 		'
@@ -1527,9 +1515,9 @@ Partial Class frmPlayer
 		Me.BackColor = System.Drawing.Color.Black
 		Me.ClientSize = New System.Drawing.Size(868, 670)
 		Me.ControlBox = False
-		Me.Controls.Add(Me.pnlImpostazioni)
 		Me.Controls.Add(Me.pnlTuttoSchermo)
 		Me.Controls.Add(Me.pnlFinestra)
+		Me.Controls.Add(Me.pnlImpostazioni)
 		Me.Controls.Add(Me.pnlStelleInterno)
 		Me.Controls.Add(Me.pnlTasti)
 		Me.Controls.Add(Me.pnlImmagineArtista)
@@ -1722,5 +1710,4 @@ Partial Class frmPlayer
 	Friend WithEvents cmdRicaricaMembri As Button
 	Friend WithEvents cmdCompattaMP3 As Button
 	Friend WithEvents cmdSistemaImmagini As Button
-	Friend WithEvents cmdResetOggetti As Button
 End Class

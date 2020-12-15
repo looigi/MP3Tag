@@ -462,7 +462,7 @@ Public Class frmConTAG
             "Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And " &
             "Canzone='" & r.SistemaTestoPerDB(Canzone) & "' And " &
             "Anno=" & Anno & " And " &
-            "Traccia=" & Traccia
+            "Traccia=" & IIf(Traccia = "", "0", Traccia)
         rec = DB.LeggeQuery(conn, Sql)
         If Not rec.Eof Then
             idCanzone = rec(0).Value
@@ -1228,7 +1228,7 @@ Public Class frmConTAG
             "Artista='" & r.SistemaTestoPerDB(lstArtista.Text) & "' And " &
             "Canzone='" & r.SistemaTestoPerDB(Canzone) & "' And " &
             "Anno = " & Anno & " And " &
-            "Traccia = " & Traccia
+            "Traccia = " & IIf(Traccia = "", "0", Traccia)
         Rec = DB.LeggeQuery(conn, Sql)
         If Not Rec.Eof Then
             idCanzone = Rec(0).Value

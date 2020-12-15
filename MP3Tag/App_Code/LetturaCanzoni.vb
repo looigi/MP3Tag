@@ -138,7 +138,7 @@ Public Class LetturaCanzoni
                                 "Album='" & Album & "' And " &
                                 "Canzone='" & sCanzone & "' And " &
                                 "Anno=" & Anno & " And " &
-                                "Traccia=" & Traccia & " And " &
+                                "Traccia=" & IIf(Traccia = "", "0", Traccia) & " And " &
                                 "Estensione='" & Estens.ToUpper.Replace(".", "") & "'"
                             rec = DB.LeggeQuery(conn, Sql)
                             If rec.Eof Then
@@ -154,7 +154,7 @@ Public Class LetturaCanzoni
                                     "0, " &
                                     "'', " &
                                     "'', " &
-                                    " " & Traccia & ", " &
+                                    " " & IIf(Traccia = "", "0", Traccia) & ", " &
                                     " " & Anno & ", " &
                                     "'" & Estens.ToUpper.Replace(".", "") & "'" &
                                     ")"
@@ -177,8 +177,8 @@ Public Class LetturaCanzoni
                                 s.Data = rec("Datella").Value
                                 s.Ascoltata = rec("Ascoltata").Value
                                 s.Bellezza = rec("Bellezza").Value
-                                s.Testo = rec("Testo").Value
-                                s.TestoTradotto = rec("TestoTradotto").Value
+                                s.Testo = "" & rec("Testo").Value
+                                s.TestoTradotto = "" & rec("TestoTradotto").Value
 
                                 StrutturaDati.DettaglioBrani(i) = s
                             Else
@@ -650,7 +650,7 @@ Public Class LetturaCanzoni
             "Album='" & r.SistemaTestoPerDB(Canzone.Album) & "' And " &
             "Canzone='" & r.SistemaTestoPerDB(Canzone.Canzone) & "' And " &
             "Anno=" & Canzone.Anno & " And " &
-            "Traccia=" & Canzone.Traccia & " And " &
+            "Traccia=" & IIf(Canzone.Traccia = "", "0", Canzone.Traccia) & " And " &
             "Estensione='" & Canzone.Estensione & "'"
         'MsgBox(Sql)
         Rec = DB.LeggeQuery(conn, Sql)
@@ -702,7 +702,7 @@ Public Class LetturaCanzoni
                     "'', " &
                     "'', " &
                     " " & Canzone.Anno & ", " &
-                    " " & Canzone.Traccia & ", " &
+                    " " & IIf(Canzone.Traccia = "", "0", Canzone.Traccia) & ", " &
                     "'" & Canzone.Estensione & "')"
                 idCanzone = Conta
             Else
@@ -751,7 +751,7 @@ Public Class LetturaCanzoni
             "Artista='" & r.SistemaTestoPerDB(sCanzone.Artista) & "' And " &
             "Canzone='" & r.SistemaTestoPerDB(sCanzone.Canzone) & "' And " &
             "Album='" & r.SistemaTestoPerDB(sCanzone.Album) & "' And " &
-            "Traccia=" & sCanzone.Traccia & " And " &
+            "Traccia=" & IIf(sCanzone.Traccia = "", "0", sCanzone.Traccia) & " And " &
             "Anno=" & sCanzone.Anno & " And " &
             "Estensione='" & sCanzone.Estensione & "'"
         rec = DB.LeggeQuery(conn, Sql)

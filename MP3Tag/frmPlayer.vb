@@ -169,7 +169,9 @@ Public Class frmPlayer
         pnlTuttoSchermo.Image = My.Resources.pleaseWait ' Image.FromFile("Immagini/pleaseWait.jpg")
         Application.DoEvents()
 
+        lstTesto.Visible = False
         CaricaTuttoAllInizio(sender, e)
+        lstTesto.Visible = True
     End Sub
 
     Private Sub CaricaTuttoAllInizio(Sender As Object, e As EventArgs)
@@ -320,6 +322,7 @@ Public Class frmPlayer
         tt.SetToolTip(cmdChiudeForm, "Esce dall'applicazione")
         tt.SetToolTip(cmdVisualizzaMembri, "Visualizza i membri del gruppo")
         tt.SetToolTip(cmdRicaricaMembri, "Ricarica i membri del gruppo")
+        tt.SetToolTip(cmdResetOggetti, "Resetta le posizioni delle maschere a video")
 
         'tt.SetToolTip(picAvantiMP, "Visualizza il video successivo")
         'tt.SetToolTip(picIndietroMP, "Visualizza il video precedente")
@@ -1061,7 +1064,7 @@ Public Class frmPlayer
                 piat.ImpostaCampi(tmrCambioImmagine, picImmagineArtista, lstArtista, lblNomeImmArtista, pnlImmagineArtista,
                                   cmdEliminaImmagineArtista, pnlTasti, tmrSpostaScrittaTitolo, tmrEffettoImmagine, pnlSopra, pnlSotto,
                                   lstCanzone, pnlSpectrum2, cmdSalva, cmdTesto, cmdRefreshtestoInterno, pnlStelleInterno, cmdTraduzione,
-                                  cmdApreCartella, lblNomeArtistaImm, lblFiltroImpostato)
+                                  cmdApreCartella, lblNomeArtistaImm, lblFiltroImpostato, cmdResetOggetti)
                 piat.PrendeImmagineArtista(lstArtista.Text)
             End If
 
@@ -1603,6 +1606,9 @@ Public Class frmPlayer
 
         cmdRicaricaMembri.Left = cmdVisualizzaMembri.Width + cmdVisualizzaMembri.Left + 2
         cmdRicaricaMembri.Top = cmdEliminaImmagineArtista.Top
+
+        cmdResetOggetti.Left = cmdRicaricaMembri.Width + cmdRicaricaMembri.Left + 2
+        cmdResetOggetti.Top = cmdEliminaImmagineArtista.Top
     End Sub
 
     Private Sub frmPlayer_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
@@ -1965,7 +1971,7 @@ Public Class frmPlayer
                 piat.ImpostaCampi(tmrCambioImmagine, picImmagineArtista, lstArtista, lblNomeImmArtista, pnlImmagineArtista,
                                   cmdEliminaImmagineArtista, pnlTasti, tmrSpostaScrittaTitolo, tmrEffettoImmagine, pnlSopra, pnlSotto, lstCanzone,
                                   pnlSpectrum2, cmdSalva, cmdTesto, cmdRefreshtestoInterno, pnlStelleInterno, cmdTraduzione, cmdApreCartella,
-                                  lblNomeArtistaImm, lblFiltroImpostato)
+                                  lblNomeArtistaImm, lblFiltroImpostato, cmdResetOggetti)
 
                 tmrVisualizzaImmArtista.Enabled = False
                 tmrCambioImmagine.Enabled = True
@@ -2211,7 +2217,7 @@ Public Class frmPlayer
         pnlImmagine.MouseMove, lstTesto.MouseMove, pnlCanzoni.MouseMove, pnlTasti.MouseMove, picAvanti.MouseMove,
         picIndietro.MouseMove, picSettings.MouseMove, picPlay.MouseMove, lblNomeCanzone.MouseMove, picMP3.MouseMove,
         pnlImmagine.MouseMove, lstTesto.MouseMove, lstAlbum.MouseMove, lstArtista.MouseMove, lstCanzone.MouseMove,
-        lblAlbum.MouseMove, lblArtista.MouseMove, lblCanzone.MouseMove, pnlBarra.MouseMove
+        lblAlbum.MouseMove, lblArtista.MouseMove, lblCanzone.MouseMove, pnlBarra.MouseMove, cmdResetOggetti.MouseMove
 
         Secondi = 0
         SecondiPassatiPerFarScomparireIlPannello = 0
@@ -2247,7 +2253,7 @@ Public Class frmPlayer
             piat.ImpostaCampi(tmrCambioImmagine, picImmagineArtista, lstArtista, lblNomeImmArtista, pnlImmagineArtista,
                               cmdEliminaImmagineArtista, pnlTasti, tmrSpostaScrittaTitolo, tmrEffettoImmagine, pnlSopra, pnlSotto,
                               lstCanzone, pnlSpectrum2, cmdSalva, cmdTesto, cmdRefreshtestoInterno, pnlStelleInterno, cmdTraduzione,
-                              cmdApreCartella, lblNomeArtistaImm, lblFiltroImpostato)
+                              cmdApreCartella, lblNomeArtistaImm, lblFiltroImpostato, cmdResetOggetti)
             ' picImmagineArtista.Image = gi.CaricaImmagineSenzaLockarla("Immagini/Sconosciuto.jpg")
         End If
 
@@ -2277,6 +2283,7 @@ Public Class frmPlayer
                 pnlStelleInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
                 pnlStelleInterno.Left = (Me.Width / 2) - (pnlStelleInterno.Width / 2)
                 cmdRefreshtestoInterno.Visible = True
+                cmdResetOggetti.Visible = True
                 tmrNascondeBarra.Enabled = True
                 picLingua.Visible = False
                 'If chkYouTube.Checked Then
@@ -2307,6 +2314,7 @@ Public Class frmPlayer
         pnlTasti.Visible = False
         tmrNascondeBarra.Enabled = False
         cmdTraduzione.Visible = False
+        cmdResetOggetti.Visible = False
         lblNomeArtistaImm.Visible = False
         Try
             cmdApreCartella.Visible = False
@@ -2324,9 +2332,15 @@ Public Class frmPlayer
 
             'End Try
             Dim filetto As String = lblNomeImmArtista.Text
-            filetto = filetto.Replace(StrutturaDati.PathMP3 & "\", "")
+            ' filetto = filetto.Replace(StrutturaDati.PathMP3 & "\", "")
             Dim este As String = gf.TornaEstensioneFileDaPath(filetto)
-            filetto = filetto.Replace(este, "")
+            'filetto = filetto.Replace(este, "")
+
+            Dim Artista As String = lstArtista.Text
+            Dim Percorso As String = gf.TornaNomeDirectoryDaPath(filetto)
+            Percorso = Percorso.Replace(StrutturaDati.PathMP3 & "\" & lstArtista.Text & "\", "")
+            Dim NomeFile As String = gf.TornaNomeFileDaPath(filetto)
+
             Dim DB As New SQLSERVERCE
             Dim conn As Object = CreateObject("ADODB.Connection")
             Dim rec As Object = CreateObject("ADODB.Recordset")
@@ -2334,7 +2348,7 @@ Public Class frmPlayer
             DB.ImpostaNomeDB(PathDB)
             DB.LeggeImpostazioniDiBase()
             conn = DB.ApreDB()
-            Sql = "Insert Into ImmaginiEliminate Values ('" & filetto.Replace("'", "''") & "')"
+            Sql = "Insert Into ImmaginiEliminate Values ('" & Artista.Replace("'", "''") & "', '" & Percorso.Replace("'", "''") & "', '" & NomeFile.Replace("'", "''") & "')"
             DB.EsegueSql(conn, Sql)
             conn.Close()
             DB = Nothing
@@ -5402,4 +5416,21 @@ Public Class frmPlayer
 		pnlAvanzamento.Visible = False
 
 	End Sub
+
+    Private Sub cmdResetOggetti_Click(sender As Object, e As EventArgs) Handles cmdResetOggetti.Click
+        lblNomeArtistaImm.Left = -4
+        lblNomeArtistaImm.Top = 14
+
+        pnlMembriInterno.Left = 5
+        pnlMembriInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
+
+        pnlStelleInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
+        pnlStelleInterno.Left = (Me.Width / 2) - (pnlStelleInterno.Width / 2)
+
+        pnlTestoInterno.Left = Me.Width - (pnlTestoInterno.Width + 20)
+        pnlTestoInterno.Top = lblNomeArtistaImm.Top + lblNomeArtistaImm.Height + 1
+
+        PosizioneTI = pnlTestoInterno.Top.ToString & ";" & pnlTestoInterno.Left & ";"
+        SaveSetting("MP3Tag", "Impostazioni", "PosTestoInterno", PosizioneTI)
+    End Sub
 End Class

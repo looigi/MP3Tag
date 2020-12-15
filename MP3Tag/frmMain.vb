@@ -410,7 +410,7 @@ Public Class frmMain
                                 "0, " &
                                 "'', " &
                                 "'', " &
-                                " " & traccia & ", " &
+                                " " & s.Traccia & ", " &
                                 " " & anno & ", " &
                                 "'" & s.Estensione & "')"
                             DB.EsegueSql(conn, Sql)

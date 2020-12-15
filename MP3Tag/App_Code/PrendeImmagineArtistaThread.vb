@@ -33,11 +33,12 @@ Public Class PrendeImmagineArtistaThread
     Private StaScaricando As Boolean
     Private EsceDalCiclo As Boolean
     Private cmdTraduzione As Button
+    Private cmdResetOggetti As Button
 
     Public Sub ImpostaCampi(tmr As System.Windows.Forms.Timer, pic As PictureBox, lst As ListBox, lbl As Label, pnl As Panel,
                             but As Button, pnl2 As Panel, tmrSS As System.Windows.Forms.Timer, tmrEI As System.Windows.Forms.Timer, pso As Panel,
                             psot As Panel, lstC As ListBox, pnlss As Panel, cmdS As Button, cmdT As Button, cmdRTI As Button, pnlS As Panel,
-                            cmdTraduz As Button, cmdApre As Button, lblNAI As Label, lblFI As Label)
+                            cmdTraduz As Button, cmdApre As Button, lblNAI As Label, lblFI As Label, cmdResetOgg As Button)
         TimerEsterno = tmr
         picImmagineArtista = pic
         lstArtista = lst
@@ -61,6 +62,7 @@ Public Class PrendeImmagineArtistaThread
         cmdApreCartella = cmdApre
         lblNomeArtistaImm = lblNAI
         lblFiltroImpostato = lblFI
+        cmdResetOggetti = cmdResetOgg
 
         LeggeImmagini(lstArtista.Text)
     End Sub
@@ -112,6 +114,7 @@ Public Class PrendeImmagineArtistaThread
             cmdTraduzione.Visible = False
             cmdApreCartella.Visible = False
             cmdRefreshTestoInterno.Visible = False
+            cmdResetOggetti.Visible = False
         End If
 
         'Dim fs As System.IO.FileStream = Nothing
@@ -928,6 +931,7 @@ Ancora:
             cmdTesto.Visible = False
             pnlTasti.Visible = False
             cmdTraduzione.Visible = False
+            cmdResetOggetti.Visible = False
             Dim Ancora As Boolean = True
 
             Do While Ancora
