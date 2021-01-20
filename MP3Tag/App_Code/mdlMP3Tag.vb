@@ -507,8 +507,8 @@ Module mdlMP3Tag
 		DB.LeggeImpostazioniDiBase()
 
 		Try
-			Dim s As ServiceReference1.looWPlayerSoapClient = New ServiceReference1.looWPlayerSoapClient
-			Dim rit As String = s.RitornaCanzoniDaEliminare()
+            Dim s As wsLooWebPlayer.looWPlayerSoapClient = New wsLooWebPlayer.looWPlayerSoapClient
+            Dim rit As String = s.RitornaCanzoniDaEliminare()
 
 			conn = DB.ApreDB()
 			If rit <> "" Then

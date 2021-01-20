@@ -12,10 +12,10 @@ Option Strict On
 Option Explicit On
 
 
-Namespace ServiceReference1
+Namespace wsLooWebPlayer
     
     <System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0"),  _
-     System.ServiceModel.ServiceContractAttribute([Namespace]:="http://looWebPlayer.org/", ConfigurationName:="ServiceReference1.looWPlayerSoap")>  _
+     System.ServiceModel.ServiceContractAttribute([Namespace]:="http://looWebPlayer.org/", ConfigurationName:="wsLooWebPlayer.looWPlayerSoap")>  _
     Public Interface looWPlayerSoap
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://looWebPlayer.org/RitornaListaBrani", ReplyAction:="*"),  _
@@ -105,14 +105,14 @@ Namespace ServiceReference1
     
     <System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")>  _
     Public Interface looWPlayerSoapChannel
-        Inherits ServiceReference1.looWPlayerSoap, System.ServiceModel.IClientChannel
+        Inherits wsLooWebPlayer.looWPlayerSoap, System.ServiceModel.IClientChannel
     End Interface
     
     <System.Diagnostics.DebuggerStepThroughAttribute(),  _
      System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")>  _
     Partial Public Class looWPlayerSoapClient
-        Inherits System.ServiceModel.ClientBase(Of ServiceReference1.looWPlayerSoap)
-        Implements ServiceReference1.looWPlayerSoap
+        Inherits System.ServiceModel.ClientBase(Of wsLooWebPlayer.looWPlayerSoap)
+        Implements wsLooWebPlayer.looWPlayerSoap
         
         Public Sub New()
             MyBase.New
@@ -134,99 +134,99 @@ Namespace ServiceReference1
             MyBase.New(binding, remoteAddress)
         End Sub
         
-        Public Function RitornaListaBrani(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Filtro As String, ByVal Refresh As String, ByVal Dettagli As String) As String Implements ServiceReference1.looWPlayerSoap.RitornaListaBrani
+        Public Function RitornaListaBrani(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Filtro As String, ByVal Refresh As String, ByVal Dettagli As String) As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaListaBrani
             Return MyBase.Channel.RitornaListaBrani(NomeUtente, Artista, Album, Brano, Filtro, Refresh, Dettagli)
         End Function
         
-        Public Function RitornaListaBraniAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Filtro As String, ByVal Refresh As String, ByVal Dettagli As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaListaBraniAsync
+        Public Function RitornaListaBraniAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Filtro As String, ByVal Refresh As String, ByVal Dettagli As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaListaBraniAsync
             Return MyBase.Channel.RitornaListaBraniAsync(NomeUtente, Artista, Album, Brano, Filtro, Refresh, Dettagli)
         End Function
         
-        Public Function RitornaDettaglioBrano(ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As String Implements ServiceReference1.looWPlayerSoap.RitornaDettaglioBrano
+        Public Function RitornaDettaglioBrano(ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaDettaglioBrano
             Return MyBase.Channel.RitornaDettaglioBrano(Artista, Album, Brano)
         End Function
         
-        Public Function RitornaDettaglioBranoAsync(ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaDettaglioBranoAsync
+        Public Function RitornaDettaglioBranoAsync(ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaDettaglioBranoAsync
             Return MyBase.Channel.RitornaDettaglioBranoAsync(Artista, Album, Brano)
         End Function
         
-        Public Function RitornaMultimediaArtista(ByVal PathBase As String, ByVal Artista As String) As String Implements ServiceReference1.looWPlayerSoap.RitornaMultimediaArtista
+        Public Function RitornaMultimediaArtista(ByVal PathBase As String, ByVal Artista As String) As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaMultimediaArtista
             Return MyBase.Channel.RitornaMultimediaArtista(PathBase, Artista)
         End Function
         
-        Public Function RitornaMultimediaArtistaAsync(ByVal PathBase As String, ByVal Artista As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaMultimediaArtistaAsync
+        Public Function RitornaMultimediaArtistaAsync(ByVal PathBase As String, ByVal Artista As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaMultimediaArtistaAsync
             Return MyBase.Channel.RitornaMultimediaArtistaAsync(PathBase, Artista)
         End Function
         
-        Public Function RitornaBrano(ByVal NomeUtente As String, ByVal DirectBase As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Converte As String, ByVal Qualita As String, ByVal Attendi As Boolean) As String Implements ServiceReference1.looWPlayerSoap.RitornaBrano
+        Public Function RitornaBrano(ByVal NomeUtente As String, ByVal DirectBase As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Converte As String, ByVal Qualita As String, ByVal Attendi As Boolean) As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaBrano
             Return MyBase.Channel.RitornaBrano(NomeUtente, DirectBase, Artista, Album, Brano, Converte, Qualita, Attendi)
         End Function
         
-        Public Function RitornaBranoAsync(ByVal NomeUtente As String, ByVal DirectBase As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Converte As String, ByVal Qualita As String, ByVal Attendi As Boolean) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaBranoAsync
+        Public Function RitornaBranoAsync(ByVal NomeUtente As String, ByVal DirectBase As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Converte As String, ByVal Qualita As String, ByVal Attendi As Boolean) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaBranoAsync
             Return MyBase.Channel.RitornaBranoAsync(NomeUtente, DirectBase, Artista, Album, Brano, Converte, Qualita, Attendi)
         End Function
         
-        Public Function IncrementaAscoltate(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As String Implements ServiceReference1.looWPlayerSoap.IncrementaAscoltate
+        Public Function IncrementaAscoltate(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As String Implements wsLooWebPlayer.looWPlayerSoap.IncrementaAscoltate
             Return MyBase.Channel.IncrementaAscoltate(NomeUtente, Artista, Album, Brano)
         End Function
         
-        Public Function IncrementaAscoltateAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.IncrementaAscoltateAsync
+        Public Function IncrementaAscoltateAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.IncrementaAscoltateAsync
             Return MyBase.Channel.IncrementaAscoltateAsync(NomeUtente, Artista, Album, Brano)
         End Function
         
-        Public Function SettaStelle(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Stelle As String) As String Implements ServiceReference1.looWPlayerSoap.SettaStelle
+        Public Function SettaStelle(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Stelle As String) As String Implements wsLooWebPlayer.looWPlayerSoap.SettaStelle
             Return MyBase.Channel.SettaStelle(NomeUtente, Artista, Album, Brano, Stelle)
         End Function
         
-        Public Function SettaStelleAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Stelle As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.SettaStelleAsync
+        Public Function SettaStelleAsync(ByVal NomeUtente As String, ByVal Artista As String, ByVal Album As String, ByVal Brano As String, ByVal Stelle As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.SettaStelleAsync
             Return MyBase.Channel.SettaStelleAsync(NomeUtente, Artista, Album, Brano, Stelle)
         End Function
         
-        Public Function InserisceNuovoUtente(ByVal NomeUtente As String, ByVal Password As String, ByVal Amministratore As String, ByVal CartellaBase As String) As String Implements ServiceReference1.looWPlayerSoap.InserisceNuovoUtente
+        Public Function InserisceNuovoUtente(ByVal NomeUtente As String, ByVal Password As String, ByVal Amministratore As String, ByVal CartellaBase As String) As String Implements wsLooWebPlayer.looWPlayerSoap.InserisceNuovoUtente
             Return MyBase.Channel.InserisceNuovoUtente(NomeUtente, Password, Amministratore, CartellaBase)
         End Function
         
-        Public Function InserisceNuovoUtenteAsync(ByVal NomeUtente As String, ByVal Password As String, ByVal Amministratore As String, ByVal CartellaBase As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.InserisceNuovoUtenteAsync
+        Public Function InserisceNuovoUtenteAsync(ByVal NomeUtente As String, ByVal Password As String, ByVal Amministratore As String, ByVal CartellaBase As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.InserisceNuovoUtenteAsync
             Return MyBase.Channel.InserisceNuovoUtenteAsync(NomeUtente, Password, Amministratore, CartellaBase)
         End Function
         
-        Public Function RitornaDatiUtente(ByVal NomeUtente As String) As String Implements ServiceReference1.looWPlayerSoap.RitornaDatiUtente
+        Public Function RitornaDatiUtente(ByVal NomeUtente As String) As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaDatiUtente
             Return MyBase.Channel.RitornaDatiUtente(NomeUtente)
         End Function
         
-        Public Function RitornaDatiUtenteAsync(ByVal NomeUtente As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaDatiUtenteAsync
+        Public Function RitornaDatiUtenteAsync(ByVal NomeUtente As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaDatiUtenteAsync
             Return MyBase.Channel.RitornaDatiUtenteAsync(NomeUtente)
         End Function
         
-        Public Function RitornaVersioneApplicazione() As String Implements ServiceReference1.looWPlayerSoap.RitornaVersioneApplicazione
+        Public Function RitornaVersioneApplicazione() As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaVersioneApplicazione
             Return MyBase.Channel.RitornaVersioneApplicazione
         End Function
         
-        Public Function RitornaVersioneApplicazioneAsync() As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaVersioneApplicazioneAsync
+        Public Function RitornaVersioneApplicazioneAsync() As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaVersioneApplicazioneAsync
             Return MyBase.Channel.RitornaVersioneApplicazioneAsync
         End Function
         
-        Public Function EliminaCanzone(ByVal PathBase As String, ByVal Artista As String, ByVal Album As String, ByVal Canzone As String) As String Implements ServiceReference1.looWPlayerSoap.EliminaCanzone
+        Public Function EliminaCanzone(ByVal PathBase As String, ByVal Artista As String, ByVal Album As String, ByVal Canzone As String) As String Implements wsLooWebPlayer.looWPlayerSoap.EliminaCanzone
             Return MyBase.Channel.EliminaCanzone(PathBase, Artista, Album, Canzone)
         End Function
         
-        Public Function EliminaCanzoneAsync(ByVal PathBase As String, ByVal Artista As String, ByVal Album As String, ByVal Canzone As String) As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.EliminaCanzoneAsync
+        Public Function EliminaCanzoneAsync(ByVal PathBase As String, ByVal Artista As String, ByVal Album As String, ByVal Canzone As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.EliminaCanzoneAsync
             Return MyBase.Channel.EliminaCanzoneAsync(PathBase, Artista, Album, Canzone)
         End Function
         
-        Public Function RitornaCanzoniDaEliminare() As String Implements ServiceReference1.looWPlayerSoap.RitornaCanzoniDaEliminare
+        Public Function RitornaCanzoniDaEliminare() As String Implements wsLooWebPlayer.looWPlayerSoap.RitornaCanzoniDaEliminare
             Return MyBase.Channel.RitornaCanzoniDaEliminare
         End Function
         
-        Public Function RitornaCanzoniDaEliminareAsync() As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.RitornaCanzoniDaEliminareAsync
+        Public Function RitornaCanzoniDaEliminareAsync() As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.RitornaCanzoniDaEliminareAsync
             Return MyBase.Channel.RitornaCanzoniDaEliminareAsync
         End Function
         
-        Public Function EliminaListaCanzoniDaEliminare() As String Implements ServiceReference1.looWPlayerSoap.EliminaListaCanzoniDaEliminare
+        Public Function EliminaListaCanzoniDaEliminare() As String Implements wsLooWebPlayer.looWPlayerSoap.EliminaListaCanzoniDaEliminare
             Return MyBase.Channel.EliminaListaCanzoniDaEliminare
         End Function
         
-        Public Function EliminaListaCanzoniDaEliminareAsync() As System.Threading.Tasks.Task(Of String) Implements ServiceReference1.looWPlayerSoap.EliminaListaCanzoniDaEliminareAsync
+        Public Function EliminaListaCanzoniDaEliminareAsync() As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayer.looWPlayerSoap.EliminaListaCanzoniDaEliminareAsync
             Return MyBase.Channel.EliminaListaCanzoniDaEliminareAsync
         End Function
     End Class

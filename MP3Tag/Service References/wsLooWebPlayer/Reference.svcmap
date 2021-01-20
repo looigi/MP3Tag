@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://looigi.no-ip.biz:107/looWPlayer.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="looWPlayer.wsdl" MetadataType="Wsdl" ID="3f57a26d-cb3d-401a-bf4d-1c6bffee706d" SourceId="1" SourceUrl="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx?wsdl" />
-    <MetadataFile FileName="looWPlayer.disco" MetadataType="Disco" ID="cf2967d5-e857-4935-ba32-e2e476933f0e" SourceId="1" SourceUrl="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx?disco" />
+    <MetadataFile FileName="looWPlayer.wsdl" MetadataType="Wsdl" ID="3f57a26d-cb3d-401a-bf4d-1c6bffee706d" SourceId="1" SourceUrl="http://looigi.no-ip.biz:107/looWPlayer.asmx?wsdl" />
+    <MetadataFile FileName="looWPlayer.disco" MetadataType="Disco" ID="cf2967d5-e857-4935-ba32-e2e476933f0e" SourceId="1" SourceUrl="http://looigi.no-ip.biz:107/looWPlayer.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

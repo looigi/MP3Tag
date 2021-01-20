@@ -192,9 +192,9 @@ Public Class frmSettaggi
     End Sub
 
 	Private Sub cmdEliminaRemoti_Click(sender As Object, e As EventArgs) Handles cmdEliminaRemoti.Click
-		Dim s As New ServiceReference1.looWPlayerSoapClient
+        Dim s As New wsLooWebPlayer.looWPlayerSoapClient
 
-		s.EliminaListaCanzoniDaEliminare()
+        s.EliminaListaCanzoniDaEliminare()
 
 		MsgBox("Lista canzoni eliminata", vbInformation)
 	End Sub

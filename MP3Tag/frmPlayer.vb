@@ -141,6 +141,8 @@ Public Class frmPlayer
     Private vecchiaPosDimY As Integer
     Private staFermandoImmagine As Boolean = False
 
+    Private trdYT As Thread
+
     Private Sub SpostaPannello()
         pnlTS.Image = ChangeOpacity(pnlTS.Image, ValoreFadePannello)
         pnlTS.SizeMode = PictureBoxSizeMode.CenterImage
@@ -1828,7 +1830,26 @@ Public Class frmPlayer
 
                 pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
             End If
+
+            AcquisizioneYouTube()
         End If
+    End Sub
+
+    Private Sub AcquisizioneYouTube()
+        ' Acquisizione YouTube
+        If Not trdYT Is Nothing Then
+            trdYT.Abort()
+            trdYT = Nothing
+        End If
+
+        trdYT = New Thread(AddressOf CaricaVideoYouTubeThread)
+        trdYT.IsBackground = True
+        trdYT.Start()
+    End Sub
+
+    Private Sub CaricaVideoYouTubeThread()
+        Dim ws As New wsLooWebPlayerII.wsLWPSoapClient
+        Dim videos As String = ws.RitornaYouTube(StrutturaDati.QualeCanzoneStaSuonando)
     End Sub
 
     Private Sub cmdAvanti_Click(sender As Object, e As EventArgs) Handles picAvanti.Click
@@ -1882,6 +1903,8 @@ Public Class frmPlayer
 
             pnlTestoInterno.Visible = GetSetting("MP3Tag", "Impostazioni", "TestoVisibile", False)
         End If
+
+        AcquisizioneYouTube()
     End Sub
 
     Private Sub cmdIndietro_Click(sender As Object, e As EventArgs) Handles picIndietro.Click

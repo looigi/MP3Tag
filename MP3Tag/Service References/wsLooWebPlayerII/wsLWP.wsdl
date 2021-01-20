@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://wsLWP2.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://wsLWP2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://wsLWP2.org/">
+      <s:element name="RefreshCanzoni">
+        <s:complexType />
+      </s:element>
+      <s:element name="RefreshCanzoniResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RefreshCanzoniResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaYouTube">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="idBrano" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaYouTubeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaYouTubeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScaricaVideoYouTube">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="link" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScaricaVideoYouTubeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ScaricaVideoYouTubeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaProssimoBrano">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Random" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="vecchioBrano" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaProssimoBranoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaProssimoBranoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaBranoDaID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Brano" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaBranoDaIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaBranoDaIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RitornaJSON">
+        <s:complexType />
+      </s:element>
+      <s:element name="RitornaJSONResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RitornaJSONResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreaRitornaUtenza">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Utenza" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreaRitornaUtenzaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreaRitornaUtenzaResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScaricaGIF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Artista" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScaricaGIFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ScaricaGIFResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RefreshCanzoniSoapIn">
+    <wsdl:part name="parameters" element="tns:RefreshCanzoni" />
+  </wsdl:message>
+  <wsdl:message name="RefreshCanzoniSoapOut">
+    <wsdl:part name="parameters" element="tns:RefreshCanzoniResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaYouTube" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaYouTubeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeSoapIn">
+    <wsdl:part name="parameters" element="tns:ScaricaVideoYouTube" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeSoapOut">
+    <wsdl:part name="parameters" element="tns:ScaricaVideoYouTubeResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaProssimoBrano" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaProssimoBranoResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaBranoDaID" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaBranoDaIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="RitornaJSONSoapIn">
+    <wsdl:part name="parameters" element="tns:RitornaJSON" />
+  </wsdl:message>
+  <wsdl:message name="RitornaJSONSoapOut">
+    <wsdl:part name="parameters" element="tns:RitornaJSONResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaSoapIn">
+    <wsdl:part name="parameters" element="tns:CreaRitornaUtenza" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaSoapOut">
+    <wsdl:part name="parameters" element="tns:CreaRitornaUtenzaResponse" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFSoapIn">
+    <wsdl:part name="parameters" element="tns:ScaricaGIF" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFSoapOut">
+    <wsdl:part name="parameters" element="tns:ScaricaGIFResponse" />
+  </wsdl:message>
+  <wsdl:message name="RefreshCanzoniHttpGetIn" />
+  <wsdl:message name="RefreshCanzoniHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeHttpGetIn">
+    <wsdl:part name="idBrano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpGetIn">
+    <wsdl:part name="link" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoHttpGetIn">
+    <wsdl:part name="Random" type="s:string" />
+    <wsdl:part name="vecchioBrano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDHttpGetIn">
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaJSONHttpGetIn" />
+  <wsdl:message name="RitornaJSONHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaHttpGetIn">
+    <wsdl:part name="Utenza" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFHttpGetIn">
+    <wsdl:part name="Artista" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RefreshCanzoniHttpPostIn" />
+  <wsdl:message name="RefreshCanzoniHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeHttpPostIn">
+    <wsdl:part name="idBrano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaYouTubeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpPostIn">
+    <wsdl:part name="link" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoHttpPostIn">
+    <wsdl:part name="Random" type="s:string" />
+    <wsdl:part name="vecchioBrano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaProssimoBranoHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDHttpPostIn">
+    <wsdl:part name="Brano" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaBranoDaIDHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RitornaJSONHttpPostIn" />
+  <wsdl:message name="RitornaJSONHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaHttpPostIn">
+    <wsdl:part name="Utenza" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreaRitornaUtenzaHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFHttpPostIn">
+    <wsdl:part name="Artista" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaGIFHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="wsLWPSoap">
+    <wsdl:operation name="RefreshCanzoni">
+      <wsdl:input message="tns:RefreshCanzoniSoapIn" />
+      <wsdl:output message="tns:RefreshCanzoniSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <wsdl:input message="tns:RitornaYouTubeSoapIn" />
+      <wsdl:output message="tns:RitornaYouTubeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <wsdl:input message="tns:ScaricaVideoYouTubeSoapIn" />
+      <wsdl:output message="tns:ScaricaVideoYouTubeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <wsdl:input message="tns:RitornaProssimoBranoSoapIn" />
+      <wsdl:output message="tns:RitornaProssimoBranoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <wsdl:input message="tns:RitornaBranoDaIDSoapIn" />
+      <wsdl:output message="tns:RitornaBranoDaIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <wsdl:input message="tns:RitornaJSONSoapIn" />
+      <wsdl:output message="tns:RitornaJSONSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <wsdl:input message="tns:CreaRitornaUtenzaSoapIn" />
+      <wsdl:output message="tns:CreaRitornaUtenzaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <wsdl:input message="tns:ScaricaGIFSoapIn" />
+      <wsdl:output message="tns:ScaricaGIFSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="wsLWPHttpGet">
+    <wsdl:operation name="RefreshCanzoni">
+      <wsdl:input message="tns:RefreshCanzoniHttpGetIn" />
+      <wsdl:output message="tns:RefreshCanzoniHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <wsdl:input message="tns:RitornaYouTubeHttpGetIn" />
+      <wsdl:output message="tns:RitornaYouTubeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <wsdl:input message="tns:ScaricaVideoYouTubeHttpGetIn" />
+      <wsdl:output message="tns:ScaricaVideoYouTubeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <wsdl:input message="tns:RitornaProssimoBranoHttpGetIn" />
+      <wsdl:output message="tns:RitornaProssimoBranoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <wsdl:input message="tns:RitornaBranoDaIDHttpGetIn" />
+      <wsdl:output message="tns:RitornaBranoDaIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <wsdl:input message="tns:RitornaJSONHttpGetIn" />
+      <wsdl:output message="tns:RitornaJSONHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <wsdl:input message="tns:CreaRitornaUtenzaHttpGetIn" />
+      <wsdl:output message="tns:CreaRitornaUtenzaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <wsdl:input message="tns:ScaricaGIFHttpGetIn" />
+      <wsdl:output message="tns:ScaricaGIFHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="wsLWPHttpPost">
+    <wsdl:operation name="RefreshCanzoni">
+      <wsdl:input message="tns:RefreshCanzoniHttpPostIn" />
+      <wsdl:output message="tns:RefreshCanzoniHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <wsdl:input message="tns:RitornaYouTubeHttpPostIn" />
+      <wsdl:output message="tns:RitornaYouTubeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <wsdl:input message="tns:ScaricaVideoYouTubeHttpPostIn" />
+      <wsdl:output message="tns:ScaricaVideoYouTubeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <wsdl:input message="tns:RitornaProssimoBranoHttpPostIn" />
+      <wsdl:output message="tns:RitornaProssimoBranoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <wsdl:input message="tns:RitornaBranoDaIDHttpPostIn" />
+      <wsdl:output message="tns:RitornaBranoDaIDHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <wsdl:input message="tns:RitornaJSONHttpPostIn" />
+      <wsdl:output message="tns:RitornaJSONHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <wsdl:input message="tns:CreaRitornaUtenzaHttpPostIn" />
+      <wsdl:output message="tns:CreaRitornaUtenzaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <wsdl:input message="tns:ScaricaGIFHttpPostIn" />
+      <wsdl:output message="tns:ScaricaGIFHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="wsLWPSoap" type="tns:wsLWPSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RefreshCanzoni">
+      <soap:operation soapAction="http://wsLWP2.org/RefreshCanzoni" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <soap:operation soapAction="http://wsLWP2.org/RitornaYouTube" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <soap:operation soapAction="http://wsLWP2.org/ScaricaVideoYouTube" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <soap:operation soapAction="http://wsLWP2.org/RitornaProssimoBrano" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <soap:operation soapAction="http://wsLWP2.org/RitornaBranoDaID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <soap:operation soapAction="http://wsLWP2.org/RitornaJSON" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <soap:operation soapAction="http://wsLWP2.org/CreaRitornaUtenza" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <soap:operation soapAction="http://wsLWP2.org/ScaricaGIF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="wsLWPSoap12" type="tns:wsLWPSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RefreshCanzoni">
+      <soap12:operation soapAction="http://wsLWP2.org/RefreshCanzoni" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <soap12:operation soapAction="http://wsLWP2.org/RitornaYouTube" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <soap12:operation soapAction="http://wsLWP2.org/ScaricaVideoYouTube" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <soap12:operation soapAction="http://wsLWP2.org/RitornaProssimoBrano" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <soap12:operation soapAction="http://wsLWP2.org/RitornaBranoDaID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <soap12:operation soapAction="http://wsLWP2.org/RitornaJSON" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <soap12:operation soapAction="http://wsLWP2.org/CreaRitornaUtenza" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <soap12:operation soapAction="http://wsLWP2.org/ScaricaGIF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="wsLWPHttpGet" type="tns:wsLWPHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="RefreshCanzoni">
+      <http:operation location="/RefreshCanzoni" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <http:operation location="/RitornaYouTube" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <http:operation location="/ScaricaVideoYouTube" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <http:operation location="/RitornaProssimoBrano" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <http:operation location="/RitornaBranoDaID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <http:operation location="/RitornaJSON" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <http:operation location="/CreaRitornaUtenza" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <http:operation location="/ScaricaGIF" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="wsLWPHttpPost" type="tns:wsLWPHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="RefreshCanzoni">
+      <http:operation location="/RefreshCanzoni" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaYouTube">
+      <http:operation location="/RitornaYouTube" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaVideoYouTube">
+      <http:operation location="/ScaricaVideoYouTube" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaProssimoBrano">
+      <http:operation location="/RitornaProssimoBrano" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaBranoDaID">
+      <http:operation location="/RitornaBranoDaID" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RitornaJSON">
+      <http:operation location="/RitornaJSON" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreaRitornaUtenza">
+      <http:operation location="/CreaRitornaUtenza" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ScaricaGIF">
+      <http:operation location="/ScaricaGIF" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="wsLWP">
+    <wsdl:port name="wsLWPSoap" binding="tns:wsLWPSoap">
+      <soap:address location="http://192.168.0.227:97/wsLWP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="wsLWPSoap12" binding="tns:wsLWPSoap12">
+      <soap12:address location="http://192.168.0.227:97/wsLWP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="wsLWPHttpGet" binding="tns:wsLWPHttpGet">
+      <http:address location="http://192.168.0.227:97/wsLWP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="wsLWPHttpPost" binding="tns:wsLWPHttpPost">
+      <http:address location="http://192.168.0.227:97/wsLWP.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

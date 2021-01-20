@@ -1048,16 +1048,16 @@
   </wsdl:binding>
   <wsdl:service name="looWPlayer">
     <wsdl:port name="looWPlayerSoap" binding="tns:looWPlayerSoap">
-      <soap:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+      <soap:address location="http://looigi.no-ip.biz:107/looWPlayer.asmx" />
     </wsdl:port>
     <wsdl:port name="looWPlayerSoap12" binding="tns:looWPlayerSoap12">
-      <soap12:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+      <soap12:address location="http://looigi.no-ip.biz:107/looWPlayer.asmx" />
     </wsdl:port>
     <wsdl:port name="looWPlayerHttpGet" binding="tns:looWPlayerHttpGet">
-      <http:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+      <http:address location="http://looigi.no-ip.biz:107/looWPlayer.asmx" />
     </wsdl:port>
     <wsdl:port name="looWPlayerHttpPost" binding="tns:looWPlayerHttpPost">
-      <http:address location="http://looigi.no-ip.biz:12345/looWebPlayer/looWPlayer.asmx" />
+      <http:address location="http://looigi.no-ip.biz:107/looWPlayer.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

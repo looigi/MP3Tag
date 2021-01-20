@@ -201,7 +201,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Service References\ServiceReference1\Reference.vb">
+    <Compile Include="Service References\wsLooWebPlayer\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -211,6 +211,11 @@
     </Compile>
     <Compile Include="App_Code\DoubleBuffers.vb">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service References\wsLooWebPlayerII\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -261,19 +266,26 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Service References\ServiceReference1\looWPlayer.wsdl" />
+    <None Include="Service References\wsLooWebPlayer\looWPlayer.wsdl" />
+    <None Include="Service References\wsLooWebPlayerII\wsLWP.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\ServiceReference1\Reference.svcmap">
+    <None Include="Service References\wsLooWebPlayerII\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
     </None>
-    <None Include="Service References\ServiceReference1\configuration.svcinfo" />
-    <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
-    <None Include="Service References\ServiceReference1\looWPlayer.disco" />
+    <None Include="Service References\wsLooWebPlayerII\configuration.svcinfo" />
+    <None Include="Service References\wsLooWebPlayerII\configuration91.svcinfo" />
+    <None Include="Service References\wsLooWebPlayer\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+    <None Include="Service References\wsLooWebPlayer\configuration.svcinfo" />
+    <None Include="Service References\wsLooWebPlayer\configuration91.svcinfo" />
+    <None Include="Service References\wsLooWebPlayer\looWPlayer.disco" />
     <None Include="bin\Debug\Immagini\avanti.png" />
     <None Include="bin\Debug\Immagini\avanti_flip.png" />
     <None Include="bin\Debug\Immagini\indietro.png" />
@@ -309,7 +321,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
+    <WCFMetadataStorage Include="Service References\wsLooWebPlayer\" />
+    <WCFMetadataStorage Include="Service References\wsLooWebPlayerII\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
