@@ -27,17 +27,24 @@ Namespace wsLooWebPlayerII
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/RitornaYouTube", ReplyAction:="*"),  _
          System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults:=true)>  _
-        Function RitornaYouTube(ByVal idBrano As String) As String
+        Function RitornaYouTube(ByVal nomeArtista As String, ByVal nomeBrano As String, ByVal refresh As String) As String
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/RitornaYouTube", ReplyAction:="*")>  _
-        Function RitornaYouTubeAsync(ByVal idBrano As String) As System.Threading.Tasks.Task(Of String)
+        Function RitornaYouTubeAsync(ByVal nomeArtista As String, ByVal nomeBrano As String, ByVal refresh As String) As System.Threading.Tasks.Task(Of String)
+        
+        <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/EliminaVideoYouTube", ReplyAction:="*"),  _
+         System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults:=true)>  _
+        Function EliminaVideoYouTube(ByVal link As String, ByVal estensione As String) As String
+        
+        <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/EliminaVideoYouTube", ReplyAction:="*")>  _
+        Function EliminaVideoYouTubeAsync(ByVal link As String, ByVal estensione As String) As System.Threading.Tasks.Task(Of String)
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/ScaricaVideoYouTube", ReplyAction:="*"),  _
          System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults:=true)>  _
-        Function ScaricaVideoYouTube(ByVal link As String) As String
+        Function ScaricaVideoYouTube(ByVal prefisso As String, ByVal link As String, ByVal estensione As String) As String
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/ScaricaVideoYouTube", ReplyAction:="*")>  _
-        Function ScaricaVideoYouTubeAsync(ByVal link As String) As System.Threading.Tasks.Task(Of String)
+        Function ScaricaVideoYouTubeAsync(ByVal prefisso As String, ByVal link As String, ByVal estensione As String) As System.Threading.Tasks.Task(Of String)
         
         <System.ServiceModel.OperationContractAttribute(Action:="http://wsLWP2.org/RitornaProssimoBrano", ReplyAction:="*"),  _
          System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults:=true)>  _
@@ -114,20 +121,28 @@ Namespace wsLooWebPlayerII
             Return MyBase.Channel.RefreshCanzoniAsync
         End Function
         
-        Public Function RitornaYouTube(ByVal idBrano As String) As String Implements wsLooWebPlayerII.wsLWPSoap.RitornaYouTube
-            Return MyBase.Channel.RitornaYouTube(idBrano)
+        Public Function RitornaYouTube(ByVal nomeArtista As String, ByVal nomeBrano As String, ByVal refresh As String) As String Implements wsLooWebPlayerII.wsLWPSoap.RitornaYouTube
+            Return MyBase.Channel.RitornaYouTube(nomeArtista, nomeBrano, refresh)
         End Function
         
-        Public Function RitornaYouTubeAsync(ByVal idBrano As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayerII.wsLWPSoap.RitornaYouTubeAsync
-            Return MyBase.Channel.RitornaYouTubeAsync(idBrano)
+        Public Function RitornaYouTubeAsync(ByVal nomeArtista As String, ByVal nomeBrano As String, ByVal refresh As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayerII.wsLWPSoap.RitornaYouTubeAsync
+            Return MyBase.Channel.RitornaYouTubeAsync(nomeArtista, nomeBrano, refresh)
         End Function
         
-        Public Function ScaricaVideoYouTube(ByVal link As String) As String Implements wsLooWebPlayerII.wsLWPSoap.ScaricaVideoYouTube
-            Return MyBase.Channel.ScaricaVideoYouTube(link)
+        Public Function EliminaVideoYouTube(ByVal link As String, ByVal estensione As String) As String Implements wsLooWebPlayerII.wsLWPSoap.EliminaVideoYouTube
+            Return MyBase.Channel.EliminaVideoYouTube(link, estensione)
         End Function
         
-        Public Function ScaricaVideoYouTubeAsync(ByVal link As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayerII.wsLWPSoap.ScaricaVideoYouTubeAsync
-            Return MyBase.Channel.ScaricaVideoYouTubeAsync(link)
+        Public Function EliminaVideoYouTubeAsync(ByVal link As String, ByVal estensione As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayerII.wsLWPSoap.EliminaVideoYouTubeAsync
+            Return MyBase.Channel.EliminaVideoYouTubeAsync(link, estensione)
+        End Function
+        
+        Public Function ScaricaVideoYouTube(ByVal prefisso As String, ByVal link As String, ByVal estensione As String) As String Implements wsLooWebPlayerII.wsLWPSoap.ScaricaVideoYouTube
+            Return MyBase.Channel.ScaricaVideoYouTube(prefisso, link, estensione)
+        End Function
+        
+        Public Function ScaricaVideoYouTubeAsync(ByVal prefisso As String, ByVal link As String, ByVal estensione As String) As System.Threading.Tasks.Task(Of String) Implements wsLooWebPlayerII.wsLWPSoap.ScaricaVideoYouTubeAsync
+            Return MyBase.Channel.ScaricaVideoYouTubeAsync(prefisso, link, estensione)
         End Function
         
         Public Function RitornaProssimoBrano(ByVal Random As String, ByVal vecchioBrano As String) As String Implements wsLooWebPlayerII.wsLWPSoap.RitornaProssimoBrano

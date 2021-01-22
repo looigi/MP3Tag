@@ -141,7 +141,7 @@ Public Class frmPlayer
     Private vecchiaPosDimY As Integer
     Private staFermandoImmagine As Boolean = False
 
-    Private trdYT As Thread
+    Private youTubeVisibile As Boolean = False
 
     Private Sub SpostaPannello()
         pnlTS.Image = ChangeOpacity(pnlTS.Image, ValoreFadePannello)
@@ -256,6 +256,7 @@ Public Class frmPlayer
         picIndietro.Top = 1
         picIndietro.Left = 2
         picSettings.Top = 1
+        picYouTube.Top = 1
         picAvanti.Top = 1
         picPlay.Top = 1
         pnlImpostazioni.Visible = False
@@ -299,6 +300,7 @@ Public Class frmPlayer
         picAvanti.BackgroundImage = My.Resources.avanti ' Image.FromFile("Immagini/Avanti.png")
         picIndietro.BackgroundImage = My.Resources.indietro ' Image.FromFile("Immagini/indietro.png")
         picSettings.BackgroundImage = My.Resources.impostazioni ' Image.FromFile("Immagini/impostazioni.png")
+        picYouTube.BackgroundImage = My.Resources.youtube ' Image.FromFile("Immagini/impostazioni.png")
 
         tmrSpostaScrittaTitolo.Enabled = False
         picPlay.BackgroundImage = My.Resources.icona_PLAY ' Image.FromFile(Application.StartupPath & "\Immagini\icona_Play.png")
@@ -359,6 +361,7 @@ Public Class frmPlayer
         'YouTubeMostrato = GetSetting("MP3Tag", "Impostazioni", "YouTube", False)
         'PosizioneMP = GetSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", "")
         PosizioneTI = GetSetting("MP3Tag", "Impostazioni", "PosTestoInterno", "")
+        youTubeVisibile = GetSetting("MP3Tag", "Impostazioni", "YouTubeVisibile", False)
         'If YouTubeMostrato Then
         '    chkYouTube.Checked = True
         '    chkScaricaSubito.Visible = True
@@ -491,6 +494,8 @@ Public Class frmPlayer
                         StrutturaDati.QualeCanzoneStaSuonando = 0
                     End If
                     CaricaCanzone()
+
+                    AcquisizioneYouTube()
                 End If
             End If
         End If
@@ -552,6 +557,10 @@ Public Class frmPlayer
         tmrFadePanel = New System.Timers.Timer(100)
         AddHandler tmrFadePanel.Elapsed, AddressOf SfumaPannello
         tmrFadePanel.Start()
+
+        If youTubeVisibile Then
+            gestisceMascheraYouTube
+        End If
     End Sub
 
     Private Function ChangeOpacity(ByVal img As Image, ByVal opacityvalue As Single) As Bitmap
@@ -1462,6 +1471,11 @@ Public Class frmPlayer
         picSettings.Top = picIndietro.Top
         picSettings.Left = picPlay.Left + picPlay.Width + 5
 
+        picYouTube.Height = picIndietro.Height
+        picYouTube.Width = picIndietro.Width
+        picYouTube.Top = picIndietro.Top
+        picYouTube.Left = picSettings.Left + picSettings.Width + 5
+
         picAvanti.Height = picIndietro.Height
         picAvanti.Width = picIndietro.Width
         picAvanti.Top = picIndietro.Top
@@ -1494,7 +1508,7 @@ Public Class frmPlayer
         picImmagineArtista.Top = (pnlImmagineArtista.Height / 2) - (picImmagineArtista.Height / 2)
         picImmagineArtista.Left = (pnlImmagineArtista.Width / 2) - (picImmagineArtista.Width / 2)
 
-        lblNomeCanzone.Left = picSettings.Left + picSettings.Width + 5
+        lblNomeCanzone.Left = picYouTube.Left + picYouTube.Width + 5
         lblNomeCanzone.Width = (picAvanti.Left - lblNomeCanzone.Left) - 10
         'lblNomeCanzone.Height = picIndietro.Height
         lblNomeCanzone.Top = 1
@@ -1565,8 +1579,8 @@ Public Class frmPlayer
                 lblTempoTotaleInterno.Visible = True
             End If
 
-            lblTempoPassatoInterno.Left = picSettings.Left + picSettings.Width + 10
-            lblTempoPassatoInterno.Top = (picSettings.Top + picSettings.Height) - lblTempoPassatoInterno.Height '- 10
+            lblTempoPassatoInterno.Left = picYouTube.Left + picYouTube.Width + 10
+            lblTempoPassatoInterno.Top = (picYouTube.Top + picYouTube.Height) - lblTempoPassatoInterno.Height '- 10
 
             lblTempoTotaleInterno.Left = picAvanti.Left - lblTempoTotaleInterno.Width - 10
             lblTempoTotaleInterno.Top = lblTempoPassatoInterno.Top
@@ -1836,20 +1850,8 @@ Public Class frmPlayer
     End Sub
 
     Private Sub AcquisizioneYouTube()
-        ' Acquisizione YouTube
-        If Not trdYT Is Nothing Then
-            trdYT.Abort()
-            trdYT = Nothing
-        End If
-
-        trdYT = New Thread(AddressOf CaricaVideoYouTubeThread)
-        trdYT.IsBackground = True
-        trdYT.Start()
-    End Sub
-
-    Private Sub CaricaVideoYouTubeThread()
-        Dim ws As New wsLooWebPlayerII.wsLWPSoapClient
-        Dim videos As String = ws.RitornaYouTube(StrutturaDati.QualeCanzoneStaSuonando)
+        frmYouTube.ImpostaStaSuonando(StaSuonando())
+        frmYouTube.RitornaVideo()
     End Sub
 
     Private Sub cmdAvanti_Click(sender As Object, e As EventArgs) Handles picAvanti.Click
@@ -1940,6 +1942,8 @@ Public Class frmPlayer
                 inPausa = False
                 'StaSuonando = True
             End If
+
+            frmYouTube.ImpostaStaSuonando(True)
         Else
             menuItem1.ImpostaImmagineDaImage(My.Resources.icona_PLAY, 24)
             ' menuItem1.ImpostaImmagine("Immagini\Icone\icona_play.png", 24)
@@ -1957,6 +1961,8 @@ Public Class frmPlayer
             inPausa = True
 
             'YouTubeClass.PauseButton()
+
+            frmYouTube.ImpostaStaSuonando(False)
         End If
     End Sub
 
@@ -2208,8 +2214,16 @@ Public Class frmPlayer
         picSettings.BackgroundImage = My.Resources.impostazioni_flip ' Image.FromFile("Immagini/impostazioni_flip.png")
     End Sub
 
+    Private Sub picYouTube_MouseEnter(sender As Object, e As EventArgs) Handles picYouTube.MouseEnter
+        picYouTube.BackgroundImage = My.Resources.youtube_flip ' Image.FromFile("Immagini/impostazioni_flip.png")
+    End Sub
+
     Private Sub picSettings_MouseLeave(sender As Object, e As EventArgs) Handles picSettings.MouseLeave
         picSettings.BackgroundImage = My.Resources.impostazioni ' Image.FromFile("Immagini/impostazioni.png")
+    End Sub
+
+    Private Sub picYouTube_MouseLeave(sender As Object, e As EventArgs) Handles picYouTube.MouseLeave
+        picYouTube.BackgroundImage = My.Resources.youtube ' Image.FromFile("Immagini/impostazioni_flip.png")
     End Sub
 
     Private Sub picIndietro_MouseEnter(sender As Object, e As EventArgs) Handles picIndietro.MouseEnter
@@ -2481,17 +2495,17 @@ Public Class frmPlayer
                 Dim c As StrutturaCanzone.StrutturaBrano = sCanzoni(i)
                 'If c.Artista = Selezione Then
                 Ok = True
-                    'art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\", "")
-                    'art = Mid(art, 1, art.IndexOf("\"))
-                    For k As Integer = 0 To lstArtista.Items.Count - 1
-                        If lstArtista.Items(k) = c.Artista Then
-                            Ok = False
-                            Exit For
-                        End If
-                    Next
-                    If Ok = True Then
-                        lstArtista.Items.Add(c.Artista)
+                'art = sCanzoni(i).Replace(StrutturaDati.PathMP3 & "\", "")
+                'art = Mid(art, 1, art.IndexOf("\"))
+                For k As Integer = 0 To lstArtista.Items.Count - 1
+                    If lstArtista.Items(k) = c.Artista Then
+                        Ok = False
+                        Exit For
                     End If
+                Next
+                If Ok = True Then
+                    lstArtista.Items.Add(c.Artista)
+                End If
                 ' End If
             Next
 
@@ -2564,6 +2578,8 @@ Public Class frmPlayer
                 Exit For
             End If
         Next
+
+        AcquisizioneYouTube()
 
         'Me.Cursor = Cursors.Default
     End Sub
@@ -2931,7 +2947,7 @@ Public Class frmPlayer
             Try
                 Rename(NomeDaModificare & "." & s.Estensione.ToLower, NomeModificato)
 
-                ' LettCanzoni.LeggeCanzoniThread(lblAggiornamentoCanzoni, "RINFRESCALISTA", sender, e)
+                ' LettCanzoni.CanzoniThread(lblAggiornamentoCanzoni, "RINFRESCALISTA", sender, e)
             Catch ex As Exception
                 errore = True
             End Try
@@ -4653,473 +4669,473 @@ Public Class frmPlayer
         End If
     End Sub
 
-	'Private Sub MetteTogliePannelloYouTube()
-	'    If YouTubeMostrato Then
-	'        'If pnlMediaPlayer.Visible = False Then
-	'        '    pnlMediaPlayer.Visible = True
-	'        'End If
-
-	'        If pnlImmagineArtista.Visible Then
-	'            picPiu.Visible = True
-	'            picMeno.Visible = True
-
-	'            picIndietroMP.Height = pnlMediaPlayer.Height - 6
-	'            picIndietroMP.Width = picIndietroMP.Height
-	'            picIndietroMP.Left = 2
-	'            picIndietroMP.Top = 2
-
-	'            picMeno.Height = pnlMediaPlayer.Height - 6
-	'            picMeno.Width = picMeno.Height
-	'            picMeno.Left = picIndietroMP.Left + picIndietroMP.Width + 3
-	'            picMeno.Top = 2
-
-	'            picApreChiudeBarraMP.Height = pnlMediaPlayer.Height - 6
-	'            picApreChiudeBarraMP.Width = picMeno.Height
-	'            picApreChiudeBarraMP.Left = picMeno.Left + picMeno.Width + 3
-	'            picApreChiudeBarraMP.Top = 2
-
-	'            picNonCercareVideo.Height = pnlMediaPlayer.Height - 6
-	'            picNonCercareVideo.Width = picMeno.Height
-	'            picNonCercareVideo.Left = picApreChiudeBarraMP.Left + picApreChiudeBarraMP.Width + 3
-	'            picNonCercareVideo.Top = 2
-
-	'            picSalvaVideo.Height = pnlMediaPlayer.Height - 6
-	'            picSalvaVideo.Width = picMeno.Height
-	'            picSalvaVideo.Left = picNonCercareVideo.Left + picNonCercareVideo.Width + 3
-	'            picSalvaVideo.Top = 2
-
-	'            '----------------------------
-
-	'            picAvantiMP.Height = pnlMediaPlayer.Height - 6
-	'            picAvantiMP.Width = picAvantiMP.Height
-	'            picAvantiMP.Left = pnlMediaPlayer.Width - picAvantiMP.Width - 3
-	'            picAvantiMP.Top = 2
-
-	'            picPiu.Height = pnlMediaPlayer.Height - 6
-	'            picPiu.Width = picAvantiMP.Height
-	'            picPiu.Left = picAvantiMP.Left - picPiu.Width - 3
-	'            picPiu.Top = 2
-
-	'            picElimina.Height = pnlMediaPlayer.Height - 6
-	'            picElimina.Width = picAvantiMP.Height
-	'            picElimina.Left = picPiu.Left - picElimina.Width - 3
-	'            picElimina.Top = 2
-	'        Else
-	'            picPiu.Visible = False
-	'            picMeno.Visible = False
-
-	'            picIndietroMP.Left = 2
-	'            picIndietroMP.Top = 2
-	'            picIndietroMP.Height = pnlMediaPlayer.Height - 6
-	'            picIndietroMP.Width = picIndietroMP.Height
-
-	'            picApreChiudeBarraMP.Height = pnlMediaPlayer.Height - 6
-	'            picApreChiudeBarraMP.Width = pnlMediaPlayer.Height - 6
-	'            picApreChiudeBarraMP.Left = picIndietroMP.Left + picApreChiudeBarraMP.Width + 3
-	'            picApreChiudeBarraMP.Top = 2
-
-	'            picSalvaVideo.Height = pnlMediaPlayer.Height - 6
-	'            picSalvaVideo.Width = pnlMediaPlayer.Height - 6
-	'            picSalvaVideo.Left = picApreChiudeBarraMP.Left + picApreChiudeBarraMP.Width + 3
-	'            picSalvaVideo.Top = 2
-
-	'            picNonCercareVideo.Left = picSalvaVideo.Left + picSalvaVideo.Width + 3
-	'            picNonCercareVideo.Top = 2
-	'            picNonCercareVideo.Height = pnlMediaPlayer.Height - 6
-	'            picNonCercareVideo.Width = picIndietroMP.Height
-
-	'            picAvantiMP.Height = pnlMediaPlayer.Height - 6
-	'            picAvantiMP.Width = picAvantiMP.Height
-	'            picAvantiMP.Left = pnlMediaPlayer.Width - picAvantiMP.Width - 3
-	'            picAvantiMP.Top = 2
-
-	'            picElimina.Height = pnlMediaPlayer.Height - 6
-	'            picElimina.Width = picAvantiMP.Height
-	'            picElimina.Left = picAvantiMP.Left - picElimina.Width - 3
-	'            picElimina.Top = 2
-	'        End If
-
-	'        lblNomeVideo.Width = picElimina.Left - (picSalvaVideo.Left + picSalvaVideo.Width)
-	'        lblNomeVideo.Left = (picSalvaVideo.Left + picSalvaVideo.Width)
-	'        lblNomeVideo.Top = (pnlMediaPlayer.Height / 2) - (lblNomeVideo.Height / 2)
-
-	'        pnlMediaPlayer.BackColor = Color.FromArgb(25, 64, 64, 64)
-	'        'picAvantiMP.Visible = False
-	'        'picIndietroMP.Visible = False
-	'        'picMeno.Visible = False
-	'        'picPiu.Visible = False
-	'        'picElimina.Visible = False
-	'        'picSalvaVideo.Visible = False
-	'        'picNonCercareVideo.Visible = False
-	'        'picApreChiudeBarraMP.Visible = False
-	'    Else
-	'        'If pnlMediaPlayer.Visible = True Then
-	'        '    pnlMediaPlayer.Visible = False
-	'        'End If
-	'    End If
-
-	'    VisualizzatoPannelloMP = False
-	'End Sub
-
-	'Private Sub AccendeSpegnePannelloVideo()
-	'       AxWindowsMediaPlayer1.Visible = YouTubeMostrato
-
-	'       If AxWindowsMediaPlayer1.Visible = True Then
-	'           If Not pnlImmagineArtista.Visible Then
-	'               pnlContMP.Left = pnlImmagine.Left + 6
-	'               pnlContMP.Top = pnlStelle.Top + pnlStelle.Height + 5
-	'               pnlContMP.Width = pnlImmagine.Width - 7
-	'               pnlContMP.Height = pnlBarra.Top - pnlContMP.Top - 5
-
-	'               pnlMediaPlayer.Left = pnlContMP.Left + 2
-	'               pnlMediaPlayer.Height = 36
-	'               pnlMediaPlayer.Width = pnlContMP.Width - 4
-	'               pnlMediaPlayer.Top = pnlContMP.Top + 1
-
-	'               AxWindowsMediaPlayer1.Left = pnlContMP.Left + 2
-	'               AxWindowsMediaPlayer1.Top = 38
-	'               AxWindowsMediaPlayer1.Width = pnlContMP.Width - 4
-	'               AxWindowsMediaPlayer1.Height = pnlContMP.Height '- 37
-	'           Else
-	'               pnlContMP.Width = (pnlImmagineArtista.Width / DimeWMP)
-	'               pnlContMP.Height = (pnlImmagineArtista.Height / DimeWMP)
-
-	'               If PosizioneMP = "" Then
-	'                   pnlContMP.Left = ((pnlImmagineArtista.Width / 2) - (pnlContMP.Width / 2))
-	'                   pnlContMP.Top = ((pnlImmagineArtista.Height / 2) - (pnlContMP.Height / 2))
-
-	'                   PosizioneMP = pnlContMP.Top.ToString & ";" & pnlContMP.Left & ";"
-	'                   SaveSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", PosizioneMP)
-	'               Else
-	'                   Dim p() As String = PosizioneMP.Split(";")
-
-	'                   pnlContMP.Left = p(1) '  ((pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2))
-	'                   pnlContMP.Top = p(0) ' ((pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2))
-	'               End If
-
-	'               AxWindowsMediaPlayer1.Left = pnlContMP.Left + 2
-	'               AxWindowsMediaPlayer1.Top = pnlContMP.Top + 2
-	'               AxWindowsMediaPlayer1.Width = pnlContMP.Width - 5
-	'               AxWindowsMediaPlayer1.Height = pnlContMP.Height - 4
-
-	'               'AxWindowsMediaPlayer1.Left = 100
-	'               'AxWindowsMediaPlayer1.Top = 100
-	'               'AxWindowsMediaPlayer1.Width = 100
-	'               'AxWindowsMediaPlayer1.Height = 100
-
-	'               If AxWindowsMediaPlayer1.Width > pnlImmagineArtista.Width - 40 Or AxWindowsMediaPlayer1.Height > pnlImmagineArtista.Height - 40 Then
-	'                   AxWindowsMediaPlayer1.Left = 0
-	'                   AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width - 15
-	'                   AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height - 55
-	'                   AxWindowsMediaPlayer1.Top = 26
-
-	'                   pnlMediaPlayer.Left = AxWindowsMediaPlayer1.Left
-	'                   pnlMediaPlayer.Height = 25
-	'                   pnlMediaPlayer.Width = AxWindowsMediaPlayer1.Width
-	'                   pnlMediaPlayer.Top = 0
-	'               Else
-	'                   pnlMediaPlayer.Width = (pnlImmagineArtista.Width / DimeWMP)
-	'                   pnlMediaPlayer.Left = pnlContMP.Left
-
-	'                   pnlMediaPlayer.Top = pnlContMP.Top - 40
-	'                   pnlMediaPlayer.Height = 35
-	'               End If
-	'           End If
-
-	'           AxWindowsMediaPlayer1.stretchToFit = stf
-
-	'           MetteTogliePannelloYouTube()
-
-	'           AdattaPictureBox()
-	'       End If
-	'   End Sub
-
-	'Private Sub picYoutTube_Click(sender As Object, e As EventArgs)
-	'	If YouTubeMostrato Then
-	'		YouTubeMostrato = False
-	'		pnlContMP.Visible = False
-	'		VecchiaVisibilitaPicSost = pnlMediaPlayer.Visible
-	'		pnlMediaPlayer.Visible = False
-	'		chkYouTube.Checked = False
-	'		chkScaricaSubito.Checked = False
-	'		chkScaricaSubito.Visible = False
-	'		If Not YouTubeClass Is Nothing Then
-	'			YouTubeClass.StopButton()
-	'		End If
-	'	Else
-	'		YouTubeMostrato = True
-	'		instance = Me
-	'		lblNomeVideo.Text = ""
-	'		pnlMediaPlayer.Visible = VecchiaVisibilitaPicSost
-	'		pnlContMP.Visible = True
-	'		chkYouTube.Checked = True
-	'		chkScaricaSubito.Visible = True
-
-	'		If AxWindowsMediaPlayer1.URL = "" And StrutturaDati.NomeVideo = "" Then
-	'			Dim artista As String = lstArtista.Text
-	'			Dim album As String = lstAlbum.Text
-	'			If Mid(album, 5, 1) <> "-" Then
-	'				album = "0000-" & album
-	'			End If
-	'			Dim canzone As String = lstCanzone.Text
-	'			If Mid(canzone, 3, 1) <> "-" Then
-	'				canzone = "00-" & canzone
-	'			End If
-
-	'			PrendeVideo(AxWindowsMediaPlayer1, artista, album, canzone)
-	'		End If
-	'	End If
-
-	'	AccendeSpegnePannelloVideo()
-
-	'	SaveSetting("MP3Tag", "Impostazioni", "YouTube", YouTubeMostrato)
-	'End Sub
-
-	'Private Sub chkYouTube_Click(sender As Object, e As EventArgs) Handles chkYouTube.Click
-	'       SaveSetting("MP3Tag", "Impostazioni", "VisualizzaYouTube", chkYouTube.Checked)
-
-	'       If chkYouTube.Checked Then
-	'           AxWindowsMediaPlayer1.uiMode = "none"
-	'           AxWindowsMediaPlayer1.stretchToFit = stf
-	'           AxWindowsMediaPlayer1.settings.volume = 0
-	'           YouTubeMostrato = GetSetting("MP3Tag", "Impostazioni", "YouTube", False)
-	'           Call picYoutTube_Click(sender, e)
-	'           YouTubeClass = New YouTube(instance, AxWindowsMediaPlayer1, chkYouTube, lblNomeVideo, picAvantiMP, picIndietroMP, picSalvaVideo, picApreChiudeBarraMP, picElimina)
-	'           picYouTube.Visible = True
-
-	'           If Not pPicSost Is Nothing Then
-	'               pPicSost.Visible = True
-	'           End If
-
-	'           If pnlMediaPlayer.Visible = False Then
-	'               pnlMediaPlayer.Visible = True
-	'           End If
-
-	'           chkScaricaSubito.Visible = True
-	'       Else
-	'           YouTubeMostrato = False
-	'           'Call picYoutTube_Click(sender, e)
-	'           YouTubeClass = Nothing
-	'           AxWindowsMediaPlayer1.Visible = False
-	'           picYouTube.Visible = False
-	'           pnlMediaPlayer.Visible = False
-	'           picYouTube.Visible = False
-	'           pPicSost.Visible = False
-	'           picMP3.Visible = True
-
-	'           chkScaricaSubito.Visible = False
-	'           ScaricaVideoSubito = "N"
-	'           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "N")
-	'       End If
-
-	'       ImpostaSchermata()
-	'       'MetteTogliePannelloYouTube()
-	'   End Sub
-
-	'   Private Sub chkScaricaSubito_Click(sender As Object, e As EventArgs) Handles chkScaricaSubito.Click
-	'       If chkScaricaSubito.Checked Then
-	'           ScaricaVideoSubito = "S"
-	'           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "S")
-	'       Else
-	'           ScaricaVideoSubito = "N"
-	'           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "N")
-	'       End If
-	'   End Sub
-
-	'Private Sub tmrSpostaYouTube_Tick(sender As Object, e As EventArgs) Handles tmrSpostaYouTube.Tick
-	'    SpostaYouTube()
-	'End Sub
-
-	'Private Sub picIndietroMP_Click(sender As Object, e As EventArgs) Handles picIndietroMP.Click
-	'       YouTubeClass.IndietreggiaVideo()
-	'   End Sub
-
-	'Private Sub picAvantiMP_Click(sender As Object, e As EventArgs) Handles picAvantiMP.Click
-	'       YouTubeClass.AvanzaVideo()
-	'   End Sub
-
-	'Private Sub picMeno_Click(sender As Object, e As EventArgs) Handles picMeno.Click
-	'       DimeWMP += 0.5
-
-	'       AccendeSpegnePannelloVideo()
-
-	'       SaveSetting("MP3Tag", "Impostazioni", "DimensioniYT", DimeWMP)
-	'   End Sub
-
-	'Private Sub picPiu_Click(sender As Object, e As EventArgs) Handles picPiu.Click
-	'       If DimeWMP > 0.5 Then
-	'           DimeWMP -= 0.5
-
-	'           AccendeSpegnePannelloVideo()
-
-	'           SaveSetting("MP3Tag", "Impostazioni", "DimensioniYT", DimeWMP)
-	'       End If
-	'   End Sub
-
-	'Private Sub picElimina_Click(sender As Object, e As EventArgs) Handles picElimina.Click
-	'       If MsgBox("Si vuole eliminare il video corrente ?", vbYesNo + vbInformation) = vbYes Then
-	'           Dim NomeFile As String = StrutturaDati.NomeVideo
-	'           If NomeFile <> "" Then
-	'               NomeFileDaCancellare = NomeFile & ".del"
-
-	'               YouTubeClass.PauseButton()
-
-	'               YouTubeClass.StopButton()
-
-	'               AggiungePictureBox(AxWindowsMediaPlayer1, "Immagini/noVideo.png")
-
-	'               Try
-	'                   File.Delete(NomeFile)
-	'               Catch ex As Exception
-
-	'               End Try
-
-	'               'D:\Looigi\MP3\Xandria\2014-Sacrificium  (limited Edition) Cd 2\VideoYouTube\OTTEGBCG188.mp4
-	'               Dim gf As New GestioneFilesDirectory
-	'               Dim Percorso As String = gf.TornaNomeDirectoryDaPath(NomeFile).Replace(StrutturaDati.PathMP3, "") ' Xandria\2014-Sacrificium  (limited Edition) Cd 2\VideoYouTube
-	'               Dim NomeVideo As String = gf.TornaNomeFileDaPath(NomeFile).Replace(gf.TornaEstensioneFileDaPath(NomeFile), "") ' OTTEGBCG188
-	'               Dim Campi() As String = Percorso.Split("\")
-	'               Dim PercorsoImmagini As String = StrutturaDati.PathMP3 & Campi(0) & "\" & Campi(1) & "\ZZZ-ImmaginiArtista"
-
-	'               Dim di As New IO.DirectoryInfo(PercorsoImmagini)
-	'               Dim diar1 As IO.FileInfo() = di.GetFiles()
-	'               Dim dra As IO.FileInfo
-
-	'               For Each dra In diar1
-	'                   If dra.FullName.Contains(NomeVideo) Then
-	'                       File.Delete(dra.FullName)
-	'                   End If
-	'               Next
-
-	'               tmrCreaFileVideoVuoto = New System.Timers.Timer(2000)
-	'               AddHandler tmrCreaFileVideoVuoto.Elapsed, AddressOf CreaFileVideoVuoto
-	'               tmrCreaFileVideoVuoto.Start()
-
-	'               lblNomeVideo.Text = ""
-
-	'               StrutturaDati.NomeVideo = ""
-	'               AxWindowsMediaPlayer1.URL = ""
-	'               picElimina.Visible = False
-	'               picSalvaVideo.Visible = False
-	'               picApreChiudeBarraMP.Visible = False
-	'           End If
-	'       End If
-	'   End Sub
-
-	'Private Sub CreaFileVideoVuoto()
-	'       tmrCreaFileVideoVuoto.Enabled = False
-
-	'       Dim gf As New GestioneFilesDirectory
-	'       gf.CreaAggiornaFile(NomeFileDaCancellare, "")
-	'       gf = Nothing
-
-	'       If Not File.Exists(NomeFileDaCancellare) Then
-	'           tmrCreaFileVideoVuoto.Enabled = True
-	'       Else
-	'           tmrCreaFileVideoVuoto = Nothing
-	'       End If
-	'   End Sub
-
-	'Private Sub picSalvaVideo_Click(sender As Object, e As EventArgs) Handles picSalvaVideo.Click
-	'	Dim Nome As String = lstArtista.Text & "-" & lstCanzone.Text ' Mid(lblNomeVideo.Text, 1, lblNomeVideo.Text.IndexOf(" "))
-	'	Nome = Nome.Replace(gf.TornaEstensioneFileDaPath(Nome), "")
-
-	'	Try
-	'		MkDir(Application.StartupPath & "\ImmaginiSalvate")
-	'	Catch ex As Exception
-
-	'	End Try
-
-	'	Try
-	'		MkDir(Application.StartupPath & "\ImmaginiSalvate\Video")
-	'	Catch ex As Exception
-
-	'	End Try
-
-	'	'Nome = gf.NomeFileEsistente(Nome)
-
-	'	If ControllaSeEStataSalvataUnaImmagine(Nome) Then
-	'		MsgBox("Video già salvato")
-	'		Exit Sub
-	'	End If
-
-	'	'If File.Exists(Application.StartupPath & "\ImmaginiSalvate.Txt") Then
-	'	'    Dim Salvate As String = gf.LeggeFileIntero(Application.StartupPath & "\ImmaginiSalvate.Txt")
-	'	'    If Salvate.IndexOf(lblNomeImmArtista.Text & "\" & Nome) > -1 Then
-	'	'        MsgBox("Immagine già salvata")
-	'	'        Exit Sub
-	'	'    End If
-	'	'End If
-
-	'	Dim Estensione As String = gf.TornaEstensioneFileDaPath(AxWindowsMediaPlayer1.URL)
-	'	FileCopy(AxWindowsMediaPlayer1.URL, Application.StartupPath & "\ImmaginiSalvate\Video\" & Nome & Estensione)
-
-	'	'gf.ApreFileDiTestoPerScrittura(Application.StartupPath & "\ImmaginiSalvate.Txt")
-	'	'gf.ScriveTestoSuFileAperto(lblNomeImmArtista.Text & "\" & Nome)
-	'	'gf.ChiudeFileDiTestoDopoScrittura()
-
-	'	ScriveImmagineSalvataSuDB(Nome)
-
-	'	MsgBox("Video salvato")
-	'End Sub
-
-	'Private Sub picNonCercareVideo_Click(sender As Object, e As EventArgs) Handles picNonCercareVideo.Click
-	'       If StrutturaDati.VideoLockati Then
-	'           YouTubeClass.AbilitaVideo()
-	'       Else
-	'           YouTubeClass.DisabilitaVideo()
-	'       End If
-	'   End Sub
-
-	'   Private Sub picApreChiudeBarraMP_Click(sender As Object, e As EventArgs) Handles picApreChiudeBarraMP.Click
-	'       If AxWindowsMediaPlayer1.uiMode = "none" Then
-	'           AxWindowsMediaPlayer1.uiMode = "full"
-	'       Else
-	'           AxWindowsMediaPlayer1.uiMode = "none"
-	'       End If
-	'   End Sub
-
-	'   Private Sub tmrPrendeThumbs_Tick(sender As Object, e As EventArgs) Handles tmrPrendeThumbs.Tick
-	'       tmrPrendeThumbs.Enabled = False
-
-	'       YouTubeClass.PrendeThumb()
-	'   End Sub
-
-	'   Private Sub pnlMediaPlayer_Move(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseDown
-	'       If pnlImmagineArtista.Visible Then
-	'           _mousedownWMP = True
-	'           _mouseposWMP = New Point(e.X, e.Y)
-	'       End If
-	'   End Sub
-
-	'   Private Sub pnlMediaPlayer_MouseMove(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseMove
-	'       If pnlImmagineArtista.Visible Then
-	'           If _mousedownWMP Then
-	'               pnlMediaPlayer.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
-	'               _mouseposWMP.X, e.Y - _mouseposWMP.Y)))
-	'               pnlContMP.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
-	'               _mouseposWMP.X, (e.Y - _mouseposWMP.Y) + 40)))
-	'               AxWindowsMediaPlayer1.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
-	'               _mouseposWMP.X + 1, (e.Y - _mouseposWMP.Y) + 41)))
-	'           End If
-	'       End If
-	'   End Sub
-
-	'   Private Sub pnlMediaPlayer_MouseUp(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseUp
-	'       If pnlImmagineArtista.Visible Then
-	'           Dim Pos As String = (pnlMediaPlayer.Top + 40).ToString & ";" & pnlMediaPlayer.Left.ToString & ";"
-	'           PosizioneMP = Pos
-	'           SaveSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", Pos)
-	'           _mousedownWMP = False
-
-	'           pnlTestoInterno.Left = 100
-	'           pnlTestoInterno.Top = 100
-	'           pnlTestoInterno.Height = 100
-	'           pnlTestoInterno.Width = 100
-	'       End If
-	'   End Sub
-
-	Private Sub cmdStatistiche_Click(sender As Object, e As EventArgs) Handles cmdStatistiche.Click
+    'Private Sub MetteTogliePannelloYouTube()
+    '    If YouTubeMostrato Then
+    '        'If pnlMediaPlayer.Visible = False Then
+    '        '    pnlMediaPlayer.Visible = True
+    '        'End If
+
+    '        If pnlImmagineArtista.Visible Then
+    '            picPiu.Visible = True
+    '            picMeno.Visible = True
+
+    '            picIndietroMP.Height = pnlMediaPlayer.Height - 6
+    '            picIndietroMP.Width = picIndietroMP.Height
+    '            picIndietroMP.Left = 2
+    '            picIndietroMP.Top = 2
+
+    '            picMeno.Height = pnlMediaPlayer.Height - 6
+    '            picMeno.Width = picMeno.Height
+    '            picMeno.Left = picIndietroMP.Left + picIndietroMP.Width + 3
+    '            picMeno.Top = 2
+
+    '            picApreChiudeBarraMP.Height = pnlMediaPlayer.Height - 6
+    '            picApreChiudeBarraMP.Width = picMeno.Height
+    '            picApreChiudeBarraMP.Left = picMeno.Left + picMeno.Width + 3
+    '            picApreChiudeBarraMP.Top = 2
+
+    '            picNonCercareVideo.Height = pnlMediaPlayer.Height - 6
+    '            picNonCercareVideo.Width = picMeno.Height
+    '            picNonCercareVideo.Left = picApreChiudeBarraMP.Left + picApreChiudeBarraMP.Width + 3
+    '            picNonCercareVideo.Top = 2
+
+    '            picSalvaVideo.Height = pnlMediaPlayer.Height - 6
+    '            picSalvaVideo.Width = picMeno.Height
+    '            picSalvaVideo.Left = picNonCercareVideo.Left + picNonCercareVideo.Width + 3
+    '            picSalvaVideo.Top = 2
+
+    '            '----------------------------
+
+    '            picAvantiMP.Height = pnlMediaPlayer.Height - 6
+    '            picAvantiMP.Width = picAvantiMP.Height
+    '            picAvantiMP.Left = pnlMediaPlayer.Width - picAvantiMP.Width - 3
+    '            picAvantiMP.Top = 2
+
+    '            picPiu.Height = pnlMediaPlayer.Height - 6
+    '            picPiu.Width = picAvantiMP.Height
+    '            picPiu.Left = picAvantiMP.Left - picPiu.Width - 3
+    '            picPiu.Top = 2
+
+    '            picElimina.Height = pnlMediaPlayer.Height - 6
+    '            picElimina.Width = picAvantiMP.Height
+    '            picElimina.Left = picPiu.Left - picElimina.Width - 3
+    '            picElimina.Top = 2
+    '        Else
+    '            picPiu.Visible = False
+    '            picMeno.Visible = False
+
+    '            picIndietroMP.Left = 2
+    '            picIndietroMP.Top = 2
+    '            picIndietroMP.Height = pnlMediaPlayer.Height - 6
+    '            picIndietroMP.Width = picIndietroMP.Height
+
+    '            picApreChiudeBarraMP.Height = pnlMediaPlayer.Height - 6
+    '            picApreChiudeBarraMP.Width = pnlMediaPlayer.Height - 6
+    '            picApreChiudeBarraMP.Left = picIndietroMP.Left + picApreChiudeBarraMP.Width + 3
+    '            picApreChiudeBarraMP.Top = 2
+
+    '            picSalvaVideo.Height = pnlMediaPlayer.Height - 6
+    '            picSalvaVideo.Width = pnlMediaPlayer.Height - 6
+    '            picSalvaVideo.Left = picApreChiudeBarraMP.Left + picApreChiudeBarraMP.Width + 3
+    '            picSalvaVideo.Top = 2
+
+    '            picNonCercareVideo.Left = picSalvaVideo.Left + picSalvaVideo.Width + 3
+    '            picNonCercareVideo.Top = 2
+    '            picNonCercareVideo.Height = pnlMediaPlayer.Height - 6
+    '            picNonCercareVideo.Width = picIndietroMP.Height
+
+    '            picAvantiMP.Height = pnlMediaPlayer.Height - 6
+    '            picAvantiMP.Width = picAvantiMP.Height
+    '            picAvantiMP.Left = pnlMediaPlayer.Width - picAvantiMP.Width - 3
+    '            picAvantiMP.Top = 2
+
+    '            picElimina.Height = pnlMediaPlayer.Height - 6
+    '            picElimina.Width = picAvantiMP.Height
+    '            picElimina.Left = picAvantiMP.Left - picElimina.Width - 3
+    '            picElimina.Top = 2
+    '        End If
+
+    '        lblNomeVideo.Width = picElimina.Left - (picSalvaVideo.Left + picSalvaVideo.Width)
+    '        lblNomeVideo.Left = (picSalvaVideo.Left + picSalvaVideo.Width)
+    '        lblNomeVideo.Top = (pnlMediaPlayer.Height / 2) - (lblNomeVideo.Height / 2)
+
+    '        pnlMediaPlayer.BackColor = Color.FromArgb(25, 64, 64, 64)
+    '        'picAvantiMP.Visible = False
+    '        'picIndietroMP.Visible = False
+    '        'picMeno.Visible = False
+    '        'picPiu.Visible = False
+    '        'picElimina.Visible = False
+    '        'picSalvaVideo.Visible = False
+    '        'picNonCercareVideo.Visible = False
+    '        'picApreChiudeBarraMP.Visible = False
+    '    Else
+    '        'If pnlMediaPlayer.Visible = True Then
+    '        '    pnlMediaPlayer.Visible = False
+    '        'End If
+    '    End If
+
+    '    VisualizzatoPannelloMP = False
+    'End Sub
+
+    'Private Sub AccendeSpegnePannelloVideo()
+    '       AxWindowsMediaPlayer1.Visible = YouTubeMostrato
+
+    '       If AxWindowsMediaPlayer1.Visible = True Then
+    '           If Not pnlImmagineArtista.Visible Then
+    '               pnlContMP.Left = pnlImmagine.Left + 6
+    '               pnlContMP.Top = pnlStelle.Top + pnlStelle.Height + 5
+    '               pnlContMP.Width = pnlImmagine.Width - 7
+    '               pnlContMP.Height = pnlBarra.Top - pnlContMP.Top - 5
+
+    '               pnlMediaPlayer.Left = pnlContMP.Left + 2
+    '               pnlMediaPlayer.Height = 36
+    '               pnlMediaPlayer.Width = pnlContMP.Width - 4
+    '               pnlMediaPlayer.Top = pnlContMP.Top + 1
+
+    '               AxWindowsMediaPlayer1.Left = pnlContMP.Left + 2
+    '               AxWindowsMediaPlayer1.Top = 38
+    '               AxWindowsMediaPlayer1.Width = pnlContMP.Width - 4
+    '               AxWindowsMediaPlayer1.Height = pnlContMP.Height '- 37
+    '           Else
+    '               pnlContMP.Width = (pnlImmagineArtista.Width / DimeWMP)
+    '               pnlContMP.Height = (pnlImmagineArtista.Height / DimeWMP)
+
+    '               If PosizioneMP = "" Then
+    '                   pnlContMP.Left = ((pnlImmagineArtista.Width / 2) - (pnlContMP.Width / 2))
+    '                   pnlContMP.Top = ((pnlImmagineArtista.Height / 2) - (pnlContMP.Height / 2))
+
+    '                   PosizioneMP = pnlContMP.Top.ToString & ";" & pnlContMP.Left & ";"
+    '                   SaveSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", PosizioneMP)
+    '               Else
+    '                   Dim p() As String = PosizioneMP.Split(";")
+
+    '                   pnlContMP.Left = p(1) '  ((pnlImmagineArtista.Width / 2) - (AxWindowsMediaPlayer1.Width / 2))
+    '                   pnlContMP.Top = p(0) ' ((pnlImmagineArtista.Height / 2) - (AxWindowsMediaPlayer1.Height / 2))
+    '               End If
+
+    '               AxWindowsMediaPlayer1.Left = pnlContMP.Left + 2
+    '               AxWindowsMediaPlayer1.Top = pnlContMP.Top + 2
+    '               AxWindowsMediaPlayer1.Width = pnlContMP.Width - 5
+    '               AxWindowsMediaPlayer1.Height = pnlContMP.Height - 4
+
+    '               'AxWindowsMediaPlayer1.Left = 100
+    '               'AxWindowsMediaPlayer1.Top = 100
+    '               'AxWindowsMediaPlayer1.Width = 100
+    '               'AxWindowsMediaPlayer1.Height = 100
+
+    '               If AxWindowsMediaPlayer1.Width > pnlImmagineArtista.Width - 40 Or AxWindowsMediaPlayer1.Height > pnlImmagineArtista.Height - 40 Then
+    '                   AxWindowsMediaPlayer1.Left = 0
+    '                   AxWindowsMediaPlayer1.Width = pnlImmagineArtista.Width - 15
+    '                   AxWindowsMediaPlayer1.Height = pnlImmagineArtista.Height - 55
+    '                   AxWindowsMediaPlayer1.Top = 26
+
+    '                   pnlMediaPlayer.Left = AxWindowsMediaPlayer1.Left
+    '                   pnlMediaPlayer.Height = 25
+    '                   pnlMediaPlayer.Width = AxWindowsMediaPlayer1.Width
+    '                   pnlMediaPlayer.Top = 0
+    '               Else
+    '                   pnlMediaPlayer.Width = (pnlImmagineArtista.Width / DimeWMP)
+    '                   pnlMediaPlayer.Left = pnlContMP.Left
+
+    '                   pnlMediaPlayer.Top = pnlContMP.Top - 40
+    '                   pnlMediaPlayer.Height = 35
+    '               End If
+    '           End If
+
+    '           AxWindowsMediaPlayer1.stretchToFit = stf
+
+    '           MetteTogliePannelloYouTube()
+
+    '           AdattaPictureBox()
+    '       End If
+    '   End Sub
+
+    'Private Sub picYoutTube_Click(sender As Object, e As EventArgs)
+    '	If YouTubeMostrato Then
+    '		YouTubeMostrato = False
+    '		pnlContMP.Visible = False
+    '		VecchiaVisibilitaPicSost = pnlMediaPlayer.Visible
+    '		pnlMediaPlayer.Visible = False
+    '		chkYouTube.Checked = False
+    '		chkScaricaSubito.Checked = False
+    '		chkScaricaSubito.Visible = False
+    '		If Not YouTubeClass Is Nothing Then
+    '			YouTubeClass.StopButton()
+    '		End If
+    '	Else
+    '		YouTubeMostrato = True
+    '		instance = Me
+    '		lblNomeVideo.Text = ""
+    '		pnlMediaPlayer.Visible = VecchiaVisibilitaPicSost
+    '		pnlContMP.Visible = True
+    '		chkYouTube.Checked = True
+    '		chkScaricaSubito.Visible = True
+
+    '		If AxWindowsMediaPlayer1.URL = "" And StrutturaDati.NomeVideo = "" Then
+    '			Dim artista As String = lstArtista.Text
+    '			Dim album As String = lstAlbum.Text
+    '			If Mid(album, 5, 1) <> "-" Then
+    '				album = "0000-" & album
+    '			End If
+    '			Dim canzone As String = lstCanzone.Text
+    '			If Mid(canzone, 3, 1) <> "-" Then
+    '				canzone = "00-" & canzone
+    '			End If
+
+    '			PrendeVideo(AxWindowsMediaPlayer1, artista, album, canzone)
+    '		End If
+    '	End If
+
+    '	AccendeSpegnePannelloVideo()
+
+    '	SaveSetting("MP3Tag", "Impostazioni", "YouTube", YouTubeMostrato)
+    'End Sub
+
+    'Private Sub chkYouTube_Click(sender As Object, e As EventArgs) Handles chkYouTube.Click
+    '       SaveSetting("MP3Tag", "Impostazioni", "VisualizzaYouTube", chkYouTube.Checked)
+
+    '       If chkYouTube.Checked Then
+    '           AxWindowsMediaPlayer1.uiMode = "none"
+    '           AxWindowsMediaPlayer1.stretchToFit = stf
+    '           AxWindowsMediaPlayer1.settings.volume = 0
+    '           YouTubeMostrato = GetSetting("MP3Tag", "Impostazioni", "YouTube", False)
+    '           Call picYoutTube_Click(sender, e)
+    '           YouTubeClass = New YouTube(instance, AxWindowsMediaPlayer1, chkYouTube, lblNomeVideo, picAvantiMP, picIndietroMP, picSalvaVideo, picApreChiudeBarraMP, picElimina)
+    '           picYouTube.Visible = True
+
+    '           If Not pPicSost Is Nothing Then
+    '               pPicSost.Visible = True
+    '           End If
+
+    '           If pnlMediaPlayer.Visible = False Then
+    '               pnlMediaPlayer.Visible = True
+    '           End If
+
+    '           chkScaricaSubito.Visible = True
+    '       Else
+    '           YouTubeMostrato = False
+    '           'Call picYoutTube_Click(sender, e)
+    '           YouTubeClass = Nothing
+    '           AxWindowsMediaPlayer1.Visible = False
+    '           picYouTube.Visible = False
+    '           pnlMediaPlayer.Visible = False
+    '           picYouTube.Visible = False
+    '           pPicSost.Visible = False
+    '           picMP3.Visible = True
+
+    '           chkScaricaSubito.Visible = False
+    '           ScaricaVideoSubito = "N"
+    '           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "N")
+    '       End If
+
+    '       ImpostaSchermata()
+    '       'MetteTogliePannelloYouTube()
+    '   End Sub
+
+    '   Private Sub chkScaricaSubito_Click(sender As Object, e As EventArgs) Handles chkScaricaSubito.Click
+    '       If chkScaricaSubito.Checked Then
+    '           ScaricaVideoSubito = "S"
+    '           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "S")
+    '       Else
+    '           ScaricaVideoSubito = "N"
+    '           SaveSetting("MP3Tag", "Impostazioni", "ScaricaSubitoVideo", "N")
+    '       End If
+    '   End Sub
+
+    'Private Sub tmrSpostaYouTube_Tick(sender As Object, e As EventArgs) Handles tmrSpostaYouTube.Tick
+    '    SpostaYouTube()
+    'End Sub
+
+    'Private Sub picIndietroMP_Click(sender As Object, e As EventArgs) Handles picIndietroMP.Click
+    '       YouTubeClass.IndietreggiaVideo()
+    '   End Sub
+
+    'Private Sub picAvantiMP_Click(sender As Object, e As EventArgs) Handles picAvantiMP.Click
+    '       YouTubeClass.AvanzaVideo()
+    '   End Sub
+
+    'Private Sub picMeno_Click(sender As Object, e As EventArgs) Handles picMeno.Click
+    '       DimeWMP += 0.5
+
+    '       AccendeSpegnePannelloVideo()
+
+    '       SaveSetting("MP3Tag", "Impostazioni", "DimensioniYT", DimeWMP)
+    '   End Sub
+
+    'Private Sub picPiu_Click(sender As Object, e As EventArgs) Handles picPiu.Click
+    '       If DimeWMP > 0.5 Then
+    '           DimeWMP -= 0.5
+
+    '           AccendeSpegnePannelloVideo()
+
+    '           SaveSetting("MP3Tag", "Impostazioni", "DimensioniYT", DimeWMP)
+    '       End If
+    '   End Sub
+
+    'Private Sub picElimina_Click(sender As Object, e As EventArgs) Handles picElimina.Click
+    '       If MsgBox("Si vuole eliminare il video corrente ?", vbYesNo + vbInformation) = vbYes Then
+    '           Dim NomeFile As String = StrutturaDati.NomeVideo
+    '           If NomeFile <> "" Then
+    '               NomeFileDaCancellare = NomeFile & ".del"
+
+    '               YouTubeClass.PauseButton()
+
+    '               YouTubeClass.StopButton()
+
+    '               AggiungePictureBox(AxWindowsMediaPlayer1, "Immagini/noVideo.png")
+
+    '               Try
+    '                   File.Delete(NomeFile)
+    '               Catch ex As Exception
+
+    '               End Try
+
+    '               'D:\Looigi\MP3\Xandria\2014-Sacrificium  (limited Edition) Cd 2\VideoYouTube\OTTEGBCG188.mp4
+    '               Dim gf As New GestioneFilesDirectory
+    '               Dim Percorso As String = gf.TornaNomeDirectoryDaPath(NomeFile).Replace(StrutturaDati.PathMP3, "") ' Xandria\2014-Sacrificium  (limited Edition) Cd 2\VideoYouTube
+    '               Dim NomeVideo As String = gf.TornaNomeFileDaPath(NomeFile).Replace(gf.TornaEstensioneFileDaPath(NomeFile), "") ' OTTEGBCG188
+    '               Dim Campi() As String = Percorso.Split("\")
+    '               Dim PercorsoImmagini As String = StrutturaDati.PathMP3 & Campi(0) & "\" & Campi(1) & "\ZZZ-ImmaginiArtista"
+
+    '               Dim di As New IO.DirectoryInfo(PercorsoImmagini)
+    '               Dim diar1 As IO.FileInfo() = di.GetFiles()
+    '               Dim dra As IO.FileInfo
+
+    '               For Each dra In diar1
+    '                   If dra.FullName.Contains(NomeVideo) Then
+    '                       File.Delete(dra.FullName)
+    '                   End If
+    '               Next
+
+    '               tmrCreaFileVideoVuoto = New System.Timers.Timer(2000)
+    '               AddHandler tmrCreaFileVideoVuoto.Elapsed, AddressOf CreaFileVideoVuoto
+    '               tmrCreaFileVideoVuoto.Start()
+
+    '               lblNomeVideo.Text = ""
+
+    '               StrutturaDati.NomeVideo = ""
+    '               AxWindowsMediaPlayer1.URL = ""
+    '               picElimina.Visible = False
+    '               picSalvaVideo.Visible = False
+    '               picApreChiudeBarraMP.Visible = False
+    '           End If
+    '       End If
+    '   End Sub
+
+    'Private Sub CreaFileVideoVuoto()
+    '       tmrCreaFileVideoVuoto.Enabled = False
+
+    '       Dim gf As New GestioneFilesDirectory
+    '       gf.CreaAggiornaFile(NomeFileDaCancellare, "")
+    '       gf = Nothing
+
+    '       If Not File.Exists(NomeFileDaCancellare) Then
+    '           tmrCreaFileVideoVuoto.Enabled = True
+    '       Else
+    '           tmrCreaFileVideoVuoto = Nothing
+    '       End If
+    '   End Sub
+
+    'Private Sub picSalvaVideo_Click(sender As Object, e As EventArgs) Handles picSalvaVideo.Click
+    '	Dim Nome As String = lstArtista.Text & "-" & lstCanzone.Text ' Mid(lblNomeVideo.Text, 1, lblNomeVideo.Text.IndexOf(" "))
+    '	Nome = Nome.Replace(gf.TornaEstensioneFileDaPath(Nome), "")
+
+    '	Try
+    '		MkDir(Application.StartupPath & "\ImmaginiSalvate")
+    '	Catch ex As Exception
+
+    '	End Try
+
+    '	Try
+    '		MkDir(Application.StartupPath & "\ImmaginiSalvate\Video")
+    '	Catch ex As Exception
+
+    '	End Try
+
+    '	'Nome = gf.NomeFileEsistente(Nome)
+
+    '	If ControllaSeEStataSalvataUnaImmagine(Nome) Then
+    '		MsgBox("Video già salvato")
+    '		Exit Sub
+    '	End If
+
+    '	'If File.Exists(Application.StartupPath & "\ImmaginiSalvate.Txt") Then
+    '	'    Dim Salvate As String = gf.LeggeFileIntero(Application.StartupPath & "\ImmaginiSalvate.Txt")
+    '	'    If Salvate.IndexOf(lblNomeImmArtista.Text & "\" & Nome) > -1 Then
+    '	'        MsgBox("Immagine già salvata")
+    '	'        Exit Sub
+    '	'    End If
+    '	'End If
+
+    '	Dim Estensione As String = gf.TornaEstensioneFileDaPath(AxWindowsMediaPlayer1.URL)
+    '	FileCopy(AxWindowsMediaPlayer1.URL, Application.StartupPath & "\ImmaginiSalvate\Video\" & Nome & Estensione)
+
+    '	'gf.ApreFileDiTestoPerScrittura(Application.StartupPath & "\ImmaginiSalvate.Txt")
+    '	'gf.ScriveTestoSuFileAperto(lblNomeImmArtista.Text & "\" & Nome)
+    '	'gf.ChiudeFileDiTestoDopoScrittura()
+
+    '	ScriveImmagineSalvataSuDB(Nome)
+
+    '	MsgBox("Video salvato")
+    'End Sub
+
+    'Private Sub picNonCercareVideo_Click(sender As Object, e As EventArgs) Handles picNonCercareVideo.Click
+    '       If StrutturaDati.VideoLockati Then
+    '           YouTubeClass.AbilitaVideo()
+    '       Else
+    '           YouTubeClass.DisabilitaVideo()
+    '       End If
+    '   End Sub
+
+    '   Private Sub picApreChiudeBarraMP_Click(sender As Object, e As EventArgs) Handles picApreChiudeBarraMP.Click
+    '       If AxWindowsMediaPlayer1.uiMode = "none" Then
+    '           AxWindowsMediaPlayer1.uiMode = "full"
+    '       Else
+    '           AxWindowsMediaPlayer1.uiMode = "none"
+    '       End If
+    '   End Sub
+
+    '   Private Sub tmrPrendeThumbs_Tick(sender As Object, e As EventArgs) Handles tmrPrendeThumbs.Tick
+    '       tmrPrendeThumbs.Enabled = False
+
+    '       YouTubeClass.PrendeThumb()
+    '   End Sub
+
+    '   Private Sub pnlMediaPlayer_Move(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseDown
+    '       If pnlImmagineArtista.Visible Then
+    '           _mousedownWMP = True
+    '           _mouseposWMP = New Point(e.X, e.Y)
+    '       End If
+    '   End Sub
+
+    '   Private Sub pnlMediaPlayer_MouseMove(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseMove
+    '       If pnlImmagineArtista.Visible Then
+    '           If _mousedownWMP Then
+    '               pnlMediaPlayer.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
+    '               _mouseposWMP.X, e.Y - _mouseposWMP.Y)))
+    '               pnlContMP.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
+    '               _mouseposWMP.X, (e.Y - _mouseposWMP.Y) + 40)))
+    '               AxWindowsMediaPlayer1.Location = PointToClient(pnlMediaPlayer.PointToScreen(New Point(e.X -
+    '               _mouseposWMP.X + 1, (e.Y - _mouseposWMP.Y) + 41)))
+    '           End If
+    '       End If
+    '   End Sub
+
+    '   Private Sub pnlMediaPlayer_MouseUp(sender As Object, e As MouseEventArgs) Handles pnlMediaPlayer.MouseUp
+    '       If pnlImmagineArtista.Visible Then
+    '           Dim Pos As String = (pnlMediaPlayer.Top + 40).ToString & ";" & pnlMediaPlayer.Left.ToString & ";"
+    '           PosizioneMP = Pos
+    '           SaveSetting("MP3Tag", "Impostazioni", "PosMediaPlayer", Pos)
+    '           _mousedownWMP = False
+
+    '           pnlTestoInterno.Left = 100
+    '           pnlTestoInterno.Top = 100
+    '           pnlTestoInterno.Height = 100
+    '           pnlTestoInterno.Width = 100
+    '       End If
+    '   End Sub
+
+    Private Sub cmdStatistiche_Click(sender As Object, e As EventArgs) Handles cmdStatistiche.Click
         frmStatistiche.Show()
     End Sub
 
@@ -5308,137 +5324,137 @@ Public Class frmPlayer
         End If
     End Sub
 
-	Private Sub CmdSistemaImmagini_Click(sender As Object, e As EventArgs) Handles cmdSistemaImmagini.Click
-		Dim gf As New GestioneFilesDirectory
+    Private Sub CmdSistemaImmagini_Click(sender As Object, e As EventArgs) Handles cmdSistemaImmagini.Click
+        Dim gf As New GestioneFilesDirectory
 
-		pnlAvanzamento.Visible = True
+        pnlAvanzamento.Visible = True
 
-		lblAvanzamento.Text = "Ridimensionamento immagini"
-		lblAvanzamentoFile.Text = "Scansione directory"
-		Application.DoEvents()
+        lblAvanzamento.Text = "Ridimensionamento immagini"
+        lblAvanzamentoFile.Text = "Scansione directory"
+        Application.DoEvents()
 
-		gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
-		Dim filetti() As String = gf.RitornaFilesRilevati
-		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
-		Dim gi As New GestioneImmagini
-		Dim Ridim As Integer = 0
-		Dim Errori As Integer = 0
+        gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
+        Dim filetti() As String = gf.RitornaFilesRilevati
+        Dim qf As Integer = gf.RitornaQuantiFilesRilevati
+        Dim gi As New GestioneImmagini
+        Dim Ridim As Integer = 0
+        Dim Errori As Integer = 0
 
-		For i As Integer = 1 To qf
-			Dim filetto As String = filetti(i)
-			If filetto.ToUpper.EndsWith(".JPG") Then
-				If filetto.ToUpper.Contains("ALBUMART") Then
-					File.Delete(filetto)
-					Errori += 1
-				Else
-					Dim ret As String = gi.RidimensionaMantenendoProporzioni(filetto, filetto & ".rsz", 1024)
-					If ret.Contains("ERROR") Then
-						Errori += 1
-					End If
+        For i As Integer = 1 To qf
+            Dim filetto As String = filetti(i)
+            If filetto.ToUpper.EndsWith(".JPG") Then
+                If filetto.ToUpper.Contains("ALBUMART") Then
+                    File.Delete(filetto)
+                    Errori += 1
+                Else
+                    Dim ret As String = gi.RidimensionaMantenendoProporzioni(filetto, filetto & ".rsz", 1024)
+                    If ret.Contains("ERROR") Then
+                        Errori += 1
+                    End If
 
-					If File.Exists(filetto & ".rsz") Then
-						Ridim += 1
-						File.Delete(filetto)
-						File.Move(filetto & ".rsz", filetto)
+                    If File.Exists(filetto & ".rsz") Then
+                        Ridim += 1
+                        File.Delete(filetto)
+                        File.Move(filetto & ".rsz", filetto)
 
-						lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim
-					End If
-				End If
+                        lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim
+                    End If
+                End If
 
-				lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim & " - Eliminate: " & Errori
-				Application.DoEvents()
-			End If
-		Next
-		MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
+                lblAvanzamentoFile.Text = "Ridimensionate: " & Ridim & " - Eliminate: " & Errori
+                Application.DoEvents()
+            End If
+        Next
+        MsgBox("Immagini ridimensionate ed eliminate le non valide", vbInformation)
 
-		pnlAvanzamento.Visible = False
-	End Sub
+        pnlAvanzamento.Visible = False
+    End Sub
 
-	Private Sub CmdCompattaMP3_Click(sender As Object, e As EventArgs) Handles cmdCompattaMP3.Click
-		Dim gf As New GestioneFilesDirectory
+    Private Sub CmdCompattaMP3_Click(sender As Object, e As EventArgs) Handles cmdCompattaMP3.Click
+        Dim gf As New GestioneFilesDirectory
 
-		pnlAvanzamento.Visible = True
+        pnlAvanzamento.Visible = True
 
-		lblAvanzamento.Text = "Compressione MP3"
-		lblAvanzamentoFile.Text = "Scansione directory"
-		Application.DoEvents()
+        lblAvanzamento.Text = "Compressione MP3"
+        lblAvanzamentoFile.Text = "Scansione directory"
+        Application.DoEvents()
 
-		gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
-		Dim filetti() As String = gf.RitornaFilesRilevati
-		Dim qf As Integer = gf.RitornaQuantiFilesRilevati
-		Dim gi As New GestioneImmagini
-		Dim Compressi As Integer = 0
-		Dim Errori As Integer = 0
+        gf.ScansionaDirectorySingola(StrutturaDati.PathMP3 & "\")
+        Dim filetti() As String = gf.RitornaFilesRilevati
+        Dim qf As Integer = gf.RitornaQuantiFilesRilevati
+        Dim gi As New GestioneImmagini
+        Dim Compressi As Integer = 0
+        Dim Errori As Integer = 0
 
-		Dim DB As New SQLSERVERCE
-		Dim conn As Object = CreateObject("ADODB.Connection")
-		Dim rec As Object = CreateObject("ADODB.Recordset")
-		Dim Sql As String = ""
-		DB.ImpostaNomeDB(PathDB)
-		DB.LeggeImpostazioniDiBase()
-		conn = DB.ApreDB()
+        Dim DB As New SQLSERVERCE
+        Dim conn As Object = CreateObject("ADODB.Connection")
+        Dim rec As Object = CreateObject("ADODB.Recordset")
+        Dim Sql As String = ""
+        DB.ImpostaNomeDB(PathDB)
+        DB.LeggeImpostazioniDiBase()
+        conn = DB.ApreDB()
 
-		For i As Integer = 1 To qf
-			Dim filetto As String = filetti(i)
-			If filetto.ToUpper.EndsWith(".MP3") Then
-				Dim dimeFile As Integer = gf.TornaDimensioneFile(filetto)
-				If dimeFile > 10000000 Then
-					Dim Campi() As String = filetto.Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
-					Dim id As Integer = -1
+        For i As Integer = 1 To qf
+            Dim filetto As String = filetti(i)
+            If filetto.ToUpper.EndsWith(".MP3") Then
+                Dim dimeFile As Integer = gf.TornaDimensioneFile(filetto)
+                If dimeFile > 10000000 Then
+                    Dim Campi() As String = filetto.Replace(StrutturaDati.PathMP3 & "\", "").Split("\")
+                    Dim id As Integer = -1
                     Sql = "Select * From ListaCanzone2 Where " &
                         "Artista='" & Campi(0).Replace("'", "''") & "' And " &
                         "Album='" & Campi(1).Replace("'", "''") & "' And " &
                         "Canzone='" & Campi(2).Replace("'", "''") & "'"
                     rec = DB.LeggeQuery(conn, Sql)
-					If Not rec.eof Then
-						id = rec("idCanzone").Value
-					End If
-					rec.Close
-					If id > -1 Then
-						Sql = "Select * From Compressi Where idCanzone=" & id
-						rec = DB.LeggeQuery(conn, Sql)
-						If rec.eof Then
-							gf.EliminaFileFisico(filetto & ".mp3")
+                    If Not rec.eof Then
+                        id = rec("idCanzone").Value
+                    End If
+                    rec.Close
+                    If id > -1 Then
+                        Sql = "Select * From Compressi Where idCanzone=" & id
+                        rec = DB.LeggeQuery(conn, Sql)
+                        If rec.eof Then
+                            gf.EliminaFileFisico(filetto & ".mp3")
 
-							Dim processoFFMpeg As Process = New Process()
-							Dim pi As ProcessStartInfo = New ProcessStartInfo()
-							pi.Arguments = "-i " & Chr(34) & filetto & Chr(34) & " -map 0:a:0 -b:a 128k " & Chr(34) & filetto & ".mp3" & Chr(34)
-							pi.FileName = Application.StartupPath & "\ffmpeg.exe"
-							pi.WindowStyle = ProcessWindowStyle.Hidden 
-							'D:\Sorgenti\VB.Net\Miei\Form\MP3Tag\MP3Tag\bin\Debug\ffmpeg.exe -i "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3" -map 0:a:0 -b:a 96k "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3.mp3"
-							processoFFMpeg.StartInfo = pi
-							'pi.UseShellExecute = False
-							processoFFMpeg.Start()
-							processoFFMpeg.WaitForExit()
+                            Dim processoFFMpeg As Process = New Process()
+                            Dim pi As ProcessStartInfo = New ProcessStartInfo()
+                            pi.Arguments = "-i " & Chr(34) & filetto & Chr(34) & " -map 0:a:0 -b:a 128k " & Chr(34) & filetto & ".mp3" & Chr(34)
+                            pi.FileName = Application.StartupPath & "\ffmpeg.exe"
+                            pi.WindowStyle = ProcessWindowStyle.Hidden
+                            'D:\Sorgenti\VB.Net\Miei\Form\MP3Tag\MP3Tag\bin\Debug\ffmpeg.exe -i "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3" -map 0:a:0 -b:a 96k "D:\MP3\Against Myself\2015-Odyssey To Reflexion\03-Through the End of Times.mp3.mp3"
+                            processoFFMpeg.StartInfo = pi
+                            'pi.UseShellExecute = False
+                            processoFFMpeg.Start()
+                            processoFFMpeg.WaitForExit()
 
-							If File.Exists(filetto & ".mp3") Then
-								gf.EliminaFileFisico(filetto)
-								File.Move(filetto & ".mp3", filetto)
+                            If File.Exists(filetto & ".mp3") Then
+                                gf.EliminaFileFisico(filetto)
+                                File.Move(filetto & ".mp3", filetto)
 
-								Sql = "Insert Into Compressi Values (" & id & ")"
-								DB.EsegueSql(conn, Sql)
+                                Sql = "Insert Into Compressi Values (" & id & ")"
+                                DB.EsegueSql(conn, Sql)
 
-								Compressi += 1
-							Else
-								Errori += 1
-							End If
-						End If
-						rec.Close
-					End If
-				End If
+                                Compressi += 1
+                            Else
+                                Errori += 1
+                            End If
+                        End If
+                        rec.Close
+                    End If
+                End If
 
-				lblAvanzamentoFile.Text = "Compressione in corso: " & i & "/" & qf & " - Compressi: " & Compressi & " - Errori: " & Errori
-				Application.DoEvents()
-			End If
-		Next
-		conn.Close()
-		DB = Nothing
+                lblAvanzamentoFile.Text = "Compressione in corso: " & i & "/" & qf & " - Compressi: " & Compressi & " - Errori: " & Errori
+                Application.DoEvents()
+            End If
+        Next
+        conn.Close()
+        DB = Nothing
 
-		MsgBox("MP3 compressi", vbInformation)
+        MsgBox("MP3 compressi", vbInformation)
 
-		pnlAvanzamento.Visible = False
+        pnlAvanzamento.Visible = False
 
-	End Sub
+    End Sub
 
     Private Sub cmdResetOggetti_Click(sender As Object, e As EventArgs) Handles cmdResetOggetti.Click
         lblNomeArtistaImm.Left = -4
@@ -5455,5 +5471,33 @@ Public Class frmPlayer
 
         PosizioneTI = pnlTestoInterno.Top.ToString & ";" & pnlTestoInterno.Left & ";"
         SaveSetting("MP3Tag", "Impostazioni", "PosTestoInterno", PosizioneTI)
+    End Sub
+
+    Private Sub picYouTube_Click(sender As Object, e As EventArgs) Handles picYouTube.Click
+        youTubeVisibile = Not youTubeVisibile
+        SaveSetting("MP3Tag", "Impostazioni", "YouTubeVisibile", youTubeVisibile)
+
+        GestisceMascheraYouTube()
+    End Sub
+
+    Private Sub GestisceMascheraYouTube()
+        If youTubeVisibile Then
+            frmYouTube.Show()
+            Dim posX As Integer = GetSetting("MP3Tag", "Impostazioni", "PosXYouTube", 10)
+            Dim posY As Integer = GetSetting("MP3Tag", "Impostazioni", "PosYYouTube", 10)
+            Dim widthX As Integer = GetSetting("MP3Tag", "Impostazioni", "WidthXYouTube", 150)
+            Dim widthY As Integer = GetSetting("MP3Tag", "Impostazioni", "WidthYYouTube", 150)
+            frmYouTube.Left = posX
+            frmYouTube.Top = posY
+            frmYouTube.Width = widthX
+            frmYouTube.Height = widthY
+        Else
+            frmYouTube.Hide()
+        End If
+    End Sub
+
+    Public Sub ImpostaYouTubeVisibile(Come As Boolean)
+        youTubeVisibile = Come
+        SaveSetting("MP3Tag", "Impostazioni", "YouTubeVisibile", Come)
     End Sub
 End Class

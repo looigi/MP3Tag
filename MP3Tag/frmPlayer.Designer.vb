@@ -26,6 +26,7 @@ Partial Class frmPlayer
 		Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmPlayer))
 		Me.lstTesto = New System.Windows.Forms.ListBox()
 		Me.pnlTasti = New System.Windows.Forms.Panel()
+		Me.picYouTube = New System.Windows.Forms.PictureBox()
 		Me.lblTempoTotaleInterno = New System.Windows.Forms.Label()
 		Me.lblTempoPassatoInterno = New System.Windows.Forms.Label()
 		Me.BarraAvanzamentoInterna = New System.Windows.Forms.TrackBar()
@@ -152,6 +153,7 @@ Partial Class frmPlayer
 		Me.pnlSotto = New System.Windows.Forms.Panel()
 		Me.lblNomeImmArtista = New System.Windows.Forms.Label()
 		Me.pnlTasti.SuspendLayout()
+		CType(Me.picYouTube, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.BarraAvanzamentoInterna, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.picSettings, System.ComponentModel.ISupportInitialize).BeginInit()
 		CType(Me.picPlay, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -204,6 +206,7 @@ Partial Class frmPlayer
 		'pnlTasti
 		'
 		Me.pnlTasti.BackColor = System.Drawing.Color.FromArgb(CType(CType(34, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(0, Byte), Integer))
+		Me.pnlTasti.Controls.Add(Me.picYouTube)
 		Me.pnlTasti.Controls.Add(Me.lblTempoTotaleInterno)
 		Me.pnlTasti.Controls.Add(Me.lblTempoPassatoInterno)
 		Me.pnlTasti.Controls.Add(Me.BarraAvanzamentoInterna)
@@ -216,6 +219,17 @@ Partial Class frmPlayer
 		Me.pnlTasti.Name = "pnlTasti"
 		Me.pnlTasti.Size = New System.Drawing.Size(588, 100)
 		Me.pnlTasti.TabIndex = 2
+		'
+		'picYouTube
+		'
+		Me.picYouTube.BackColor = System.Drawing.Color.Transparent
+		Me.picYouTube.BackgroundImage = CType(resources.GetObject("picYouTube.BackgroundImage"), System.Drawing.Image)
+		Me.picYouTube.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+		Me.picYouTube.Location = New System.Drawing.Point(536, 39)
+		Me.picYouTube.Name = "picYouTube"
+		Me.picYouTube.Size = New System.Drawing.Size(41, 50)
+		Me.picYouTube.TabIndex = 12
+		Me.picYouTube.TabStop = False
 		'
 		'lblTempoTotaleInterno
 		'
@@ -1550,6 +1564,7 @@ Partial Class frmPlayer
 		Me.Name = "frmPlayer"
 		Me.pnlTasti.ResumeLayout(False)
 		Me.pnlTasti.PerformLayout()
+		CType(Me.picYouTube, System.ComponentModel.ISupportInitialize).EndInit()
 		CType(Me.BarraAvanzamentoInterna, System.ComponentModel.ISupportInitialize).EndInit()
 		CType(Me.picSettings, System.ComponentModel.ISupportInitialize).EndInit()
 		CType(Me.picPlay, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1723,4 +1738,5 @@ Partial Class frmPlayer
 	Friend WithEvents cmdCompattaMP3 As Button
 	Friend WithEvents cmdSistemaImmagini As Button
 	Friend WithEvents cmdResetOggetti As Button
+	Friend WithEvents picYouTube As PictureBox
 End Class

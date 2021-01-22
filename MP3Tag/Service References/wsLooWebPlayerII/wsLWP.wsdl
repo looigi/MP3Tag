@@ -15,7 +15,9 @@
       <s:element name="RitornaYouTube">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="idBrano" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nomeArtista" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nomeBrano" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="refresh" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -26,10 +28,27 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="ScaricaVideoYouTube">
+      <s:element name="EliminaVideoYouTube">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="link" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estensione" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EliminaVideoYouTubeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EliminaVideoYouTubeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ScaricaVideoYouTube">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="prefisso" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="link" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estensione" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -122,6 +141,12 @@
   <wsdl:message name="RitornaYouTubeSoapOut">
     <wsdl:part name="parameters" element="tns:RitornaYouTubeResponse" />
   </wsdl:message>
+  <wsdl:message name="EliminaVideoYouTubeSoapIn">
+    <wsdl:part name="parameters" element="tns:EliminaVideoYouTube" />
+  </wsdl:message>
+  <wsdl:message name="EliminaVideoYouTubeSoapOut">
+    <wsdl:part name="parameters" element="tns:EliminaVideoYouTubeResponse" />
+  </wsdl:message>
   <wsdl:message name="ScaricaVideoYouTubeSoapIn">
     <wsdl:part name="parameters" element="tns:ScaricaVideoYouTube" />
   </wsdl:message>
@@ -163,13 +188,24 @@
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
   <wsdl:message name="RitornaYouTubeHttpGetIn">
-    <wsdl:part name="idBrano" type="s:string" />
+    <wsdl:part name="nomeArtista" type="s:string" />
+    <wsdl:part name="nomeBrano" type="s:string" />
+    <wsdl:part name="refresh" type="s:string" />
   </wsdl:message>
   <wsdl:message name="RitornaYouTubeHttpGetOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
-  <wsdl:message name="ScaricaVideoYouTubeHttpGetIn">
+  <wsdl:message name="EliminaVideoYouTubeHttpGetIn">
     <wsdl:part name="link" type="s:string" />
+    <wsdl:part name="estensione" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaVideoYouTubeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpGetIn">
+    <wsdl:part name="prefisso" type="s:string" />
+    <wsdl:part name="link" type="s:string" />
+    <wsdl:part name="estensione" type="s:string" />
   </wsdl:message>
   <wsdl:message name="ScaricaVideoYouTubeHttpGetOut">
     <wsdl:part name="Body" element="tns:string" />
@@ -208,13 +244,24 @@
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
   <wsdl:message name="RitornaYouTubeHttpPostIn">
-    <wsdl:part name="idBrano" type="s:string" />
+    <wsdl:part name="nomeArtista" type="s:string" />
+    <wsdl:part name="nomeBrano" type="s:string" />
+    <wsdl:part name="refresh" type="s:string" />
   </wsdl:message>
   <wsdl:message name="RitornaYouTubeHttpPostOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
-  <wsdl:message name="ScaricaVideoYouTubeHttpPostIn">
+  <wsdl:message name="EliminaVideoYouTubeHttpPostIn">
     <wsdl:part name="link" type="s:string" />
+    <wsdl:part name="estensione" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EliminaVideoYouTubeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ScaricaVideoYouTubeHttpPostIn">
+    <wsdl:part name="prefisso" type="s:string" />
+    <wsdl:part name="link" type="s:string" />
+    <wsdl:part name="estensione" type="s:string" />
   </wsdl:message>
   <wsdl:message name="ScaricaVideoYouTubeHttpPostOut">
     <wsdl:part name="Body" element="tns:string" />
@@ -257,6 +304,10 @@
       <wsdl:input message="tns:RitornaYouTubeSoapIn" />
       <wsdl:output message="tns:RitornaYouTubeSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <wsdl:input message="tns:EliminaVideoYouTubeSoapIn" />
+      <wsdl:output message="tns:EliminaVideoYouTubeSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="ScaricaVideoYouTube">
       <wsdl:input message="tns:ScaricaVideoYouTubeSoapIn" />
       <wsdl:output message="tns:ScaricaVideoYouTubeSoapOut" />
@@ -291,6 +342,10 @@
       <wsdl:input message="tns:RitornaYouTubeHttpGetIn" />
       <wsdl:output message="tns:RitornaYouTubeHttpGetOut" />
     </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <wsdl:input message="tns:EliminaVideoYouTubeHttpGetIn" />
+      <wsdl:output message="tns:EliminaVideoYouTubeHttpGetOut" />
+    </wsdl:operation>
     <wsdl:operation name="ScaricaVideoYouTube">
       <wsdl:input message="tns:ScaricaVideoYouTubeHttpGetIn" />
       <wsdl:output message="tns:ScaricaVideoYouTubeHttpGetOut" />
@@ -324,6 +379,10 @@
     <wsdl:operation name="RitornaYouTube">
       <wsdl:input message="tns:RitornaYouTubeHttpPostIn" />
       <wsdl:output message="tns:RitornaYouTubeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <wsdl:input message="tns:EliminaVideoYouTubeHttpPostIn" />
+      <wsdl:output message="tns:EliminaVideoYouTubeHttpPostOut" />
     </wsdl:operation>
     <wsdl:operation name="ScaricaVideoYouTube">
       <wsdl:input message="tns:ScaricaVideoYouTubeHttpPostIn" />
@@ -363,6 +422,15 @@
     </wsdl:operation>
     <wsdl:operation name="RitornaYouTube">
       <soap:operation soapAction="http://wsLWP2.org/RitornaYouTube" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <soap:operation soapAction="http://wsLWP2.org/EliminaVideoYouTube" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -445,6 +513,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <soap12:operation soapAction="http://wsLWP2.org/EliminaVideoYouTube" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ScaricaVideoYouTube">
       <soap12:operation soapAction="http://wsLWP2.org/ScaricaVideoYouTube" style="document" />
       <wsdl:input>
@@ -520,6 +597,15 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <http:operation location="/EliminaVideoYouTube" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ScaricaVideoYouTube">
       <http:operation location="/ScaricaVideoYouTube" />
       <wsdl:input>
@@ -588,6 +674,15 @@
     </wsdl:operation>
     <wsdl:operation name="RitornaYouTube">
       <http:operation location="/RitornaYouTube" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaVideoYouTube">
+      <http:operation location="/EliminaVideoYouTube" />
       <wsdl:input>
         <mime:content type="application/x-www-form-urlencoded" />
       </wsdl:input>
