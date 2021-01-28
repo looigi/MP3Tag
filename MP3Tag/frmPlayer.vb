@@ -1851,6 +1851,7 @@ Public Class frmPlayer
 
     Private Sub AcquisizioneYouTube()
         frmYouTube.ImpostaStaSuonando(StaSuonando())
+        frmYouTube.ImpostaVideo("")
         frmYouTube.RitornaVideo()
     End Sub
 

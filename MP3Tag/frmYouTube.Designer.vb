@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmYouTube
 	Inherits System.Windows.Forms.Form
 
 	'Form esegue l'override del metodo Dispose per pulire l'elenco dei componenti.
-	<System.Diagnostics.DebuggerNonUserCode()> _
+	<System.Diagnostics.DebuggerNonUserCode()>
 	Protected Overrides Sub Dispose(ByVal disposing As Boolean)
 		Try
 			If disposing AndAlso components IsNot Nothing Then
@@ -20,21 +20,20 @@ Partial Class frmYouTube
 	'NOTA: la procedura che segue è richiesta da Progettazione Windows Form
 	'Può essere modificata in Progettazione Windows Form.  
 	'Non modificarla mediante l'editor del codice.
-	<System.Diagnostics.DebuggerStepThrough()> _
+	<System.Diagnostics.DebuggerStepThrough()>
 	Private Sub InitializeComponent()
 		Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmYouTube))
 		Me.pnlGestione = New System.Windows.Forms.Panel()
+		Me.cmdRefresh = New System.Windows.Forms.Button()
+		Me.cmdElimina = New System.Windows.Forms.Button()
 		Me.btnApriChiudi = New System.Windows.Forms.Button()
 		Me.lstVideoCompleto = New System.Windows.Forms.ListBox()
 		Me.lstVideo = New System.Windows.Forms.ListBox()
 		Me.Label1 = New System.Windows.Forms.Label()
-		Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
 		Me.pnlCaricamento = New System.Windows.Forms.Panel()
 		Me.Label2 = New System.Windows.Forms.Label()
-		Me.cmdElimina = New System.Windows.Forms.Button()
-		Me.cmdRefresh = New System.Windows.Forms.Button()
+		Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
 		Me.pnlGestione.SuspendLayout()
-		CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.pnlCaricamento.SuspendLayout()
 		Me.SuspendLayout()
 		'
@@ -53,6 +52,24 @@ Partial Class frmYouTube
 		Me.pnlGestione.Name = "pnlGestione"
 		Me.pnlGestione.Size = New System.Drawing.Size(200, 410)
 		Me.pnlGestione.TabIndex = 1
+		'
+		'cmdRefresh
+		'
+		Me.cmdRefresh.Location = New System.Drawing.Point(120, 201)
+		Me.cmdRefresh.Name = "cmdRefresh"
+		Me.cmdRefresh.Size = New System.Drawing.Size(75, 23)
+		Me.cmdRefresh.TabIndex = 6
+		Me.cmdRefresh.Text = "Refresh"
+		Me.cmdRefresh.UseVisualStyleBackColor = True
+		'
+		'cmdElimina
+		'
+		Me.cmdElimina.Location = New System.Drawing.Point(4, 202)
+		Me.cmdElimina.Name = "cmdElimina"
+		Me.cmdElimina.Size = New System.Drawing.Size(75, 23)
+		Me.cmdElimina.TabIndex = 4
+		Me.cmdElimina.Text = "Elimina"
+		Me.cmdElimina.UseVisualStyleBackColor = True
 		'
 		'btnApriChiudi
 		'
@@ -98,18 +115,6 @@ Partial Class frmYouTube
 		Me.Label1.Text = "Lista Video"
 		Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
-		'AxWindowsMediaPlayer1
-		'
-		Me.AxWindowsMediaPlayer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-			Or System.Windows.Forms.AnchorStyles.Left) _
-			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.AxWindowsMediaPlayer1.Enabled = True
-		Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(5, 4)
-		Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
-		Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
-		Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(453, 410)
-		Me.AxWindowsMediaPlayer1.TabIndex = 2
-		'
 		'pnlCaricamento
 		'
 		Me.pnlCaricamento.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
@@ -130,23 +135,16 @@ Partial Class frmYouTube
 		Me.Label2.Text = "Caricamento in corso"
 		Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 		'
-		'cmdElimina
+		'WebBrowser1
 		'
-		Me.cmdElimina.Location = New System.Drawing.Point(4, 202)
-		Me.cmdElimina.Name = "cmdElimina"
-		Me.cmdElimina.Size = New System.Drawing.Size(75, 23)
-		Me.cmdElimina.TabIndex = 4
-		Me.cmdElimina.Text = "Elimina"
-		Me.cmdElimina.UseVisualStyleBackColor = True
-		'
-		'cmdRefresh
-		'
-		Me.cmdRefresh.Location = New System.Drawing.Point(120, 201)
-		Me.cmdRefresh.Name = "cmdRefresh"
-		Me.cmdRefresh.Size = New System.Drawing.Size(75, 23)
-		Me.cmdRefresh.TabIndex = 6
-		Me.cmdRefresh.Text = "Refresh"
-		Me.cmdRefresh.UseVisualStyleBackColor = True
+		Me.WebBrowser1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+			Or System.Windows.Forms.AnchorStyles.Left) _
+			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.WebBrowser1.Location = New System.Drawing.Point(0, 0)
+		Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
+		Me.WebBrowser1.Name = "WebBrowser1"
+		Me.WebBrowser1.Size = New System.Drawing.Size(456, 410)
+		Me.WebBrowser1.TabIndex = 6
 		'
 		'frmYouTube
 		'
@@ -155,14 +153,13 @@ Partial Class frmYouTube
 		Me.ClientSize = New System.Drawing.Size(456, 412)
 		Me.Controls.Add(Me.pnlCaricamento)
 		Me.Controls.Add(Me.pnlGestione)
-		Me.Controls.Add(Me.AxWindowsMediaPlayer1)
+		Me.Controls.Add(Me.WebBrowser1)
 		Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
 		Me.MinimizeBox = False
 		Me.Name = "frmYouTube"
 		Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
 		Me.Text = "YoutTube"
 		Me.pnlGestione.ResumeLayout(False)
-		CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.pnlCaricamento.ResumeLayout(False)
 		Me.ResumeLayout(False)
 
@@ -171,10 +168,10 @@ Partial Class frmYouTube
 	Friend WithEvents lstVideo As ListBox
 	Friend WithEvents Label1 As Label
 	Friend WithEvents lstVideoCompleto As ListBox
-	Friend WithEvents AxWindowsMediaPlayer1 As AxWMPLib.AxWindowsMediaPlayer
 	Friend WithEvents btnApriChiudi As Button
 	Friend WithEvents pnlCaricamento As Panel
 	Friend WithEvents Label2 As Label
 	Friend WithEvents cmdElimina As Button
 	Friend WithEvents cmdRefresh As Button
+	Friend WithEvents WebBrowser1 As WebBrowser
 End Class

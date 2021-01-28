@@ -20,6 +20,10 @@ Public Class frmYouTube
 	Private staSuonando As Boolean = False
 	Private videoDaCaricare As String = ""
 
+	Private dimeX As Integer = 0
+	Private dimeY As Integer = 0
+	Private codiceVideo As String = ""
+
 	Private Sub AddVideoToList(ByVal str As String)
 		lstVideo.Items.Add(str)
 	End Sub
@@ -33,27 +37,69 @@ Public Class frmYouTube
 		CaricaFisicamenteVideo()
 	End Sub
 
-	Private Sub ImpostaVideo(ByVal str As String)
-		AxWindowsMediaPlayer1.URL = str
-		AxWindowsMediaPlayer1.settings.mute = True
-		If staSuonando Then
-			AxWindowsMediaPlayer1.Ctlcontrols.play()
+	Public Sub ImpostaVideo(ByVal str As String)
+		codiceVideo = str
+
+		If str = "" Then
+			'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+			'AxWindowsMediaPlayer1.currentPlaylist.clear()
 		Else
-			AxWindowsMediaPlayer1.Ctlcontrols.stop()
+			'AxWindowsMediaPlayer1.URL = str
+			'AxWindowsMediaPlayer1.settings.mute = True
+			If staSuonando Then
+				'AxWindowsMediaPlayer1.Ctlcontrols.play()
+				CreaVideoEGestiscilo("S")
+			Else
+				'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+				CreaVideoEGestiscilo("N")
+			End If
 		End If
+
+		'Dim html As String = "<html><head>"
+		'html &= "<meta content='IE=Edge' http-equiv='X-UA-Compatible'/>"
+		'html &= "<iframe id='video' src= '" & str & "' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>"
+		'html &= "</body></html>"
+	End Sub
+
+	Private Sub CreaVideoEGestiscilo(play As String)
+		dimeX = Me.Size.Width - 40
+		dimeY = Me.Size.Height - 60
+
+		Dim html As String = "<html><head>"
+		If codiceVideo = "" Then
+			html &= "</head><body style='width: 90%; height: 90%;'>"
+			html &= "</body></html>"
+		Else
+			Dim autoPlay As String = IIf(play = "S", "1", "0")
+			html &= "<meta content='IE=Edge' http-equiv='X-UA-Compatible'/>"
+			html &= "</head><body style='width: 900%; height: 90%;'>"
+			html &= "<iframe id='video' src= 'https://www.youtube.com/embed/{0}?rel=0&autoplay=" & autoPlay & "' width='" & dimeX & "px' height='" & dimeY & "px' frameborder='0' allowfullscreen volume='0'></iframe>"
+			html &= "</body></html>"
+		End If
+		WebBrowser1.DocumentText = String.Format(html, codiceVideo)
 	End Sub
 
 	Public Sub ImpostaStaSuonando(Suona As Boolean)
 		staSuonando = Suona
 
 		If staSuonando Then
-			If AxWindowsMediaPlayer1.URL <> "" Then
-				AxWindowsMediaPlayer1.Ctlcontrols.play()
+			'If AxWindowsMediaPlayer1.URL <> "" Then
+			' AxWindowsMediaPlayer1.Ctlcontrols.play()
+			If lstVideoCompleto.Items.Count > 0 Then
+				Dim videoCompleto() As String = lstVideoCompleto.Items(0).Split("§")
+				videoCompleto(0) = Mid(videoCompleto(0), videoCompleto(0).IndexOf("=") + 2, videoCompleto(0).Length)
+				codiceVideo = videoCompleto(0)
+			Else
+				codiceVideo = ""
 			End If
+
+			CreaVideoEGestiscilo("S")
+			'End If
 		Else
-			If AxWindowsMediaPlayer1.URL <> "" Then
-				AxWindowsMediaPlayer1.Ctlcontrols.pause()
-			End If
+			'If AxWindowsMediaPlayer1.URL <> "" Then
+			' AxWindowsMediaPlayer1.Ctlcontrols.pause()
+			CreaVideoEGestiscilo("N")
+			'End If
 		End If
 	End Sub
 
@@ -67,9 +113,12 @@ Public Class frmYouTube
 		pnlCaricamento.Visible = s
 
 		If s Then
-			AxWindowsMediaPlayer1.Ctlcontrols.stop()
-			AxWindowsMediaPlayer1.close()
-			AxWindowsMediaPlayer1.URL = ""
+			'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+			'AxWindowsMediaPlayer1.close()
+			'AxWindowsMediaPlayer1.URL = ""
+			codiceVideo = ""
+			CreaVideoEGestiscilo("")
+
 			pnlGestione.Enabled = False
 		Else
 			pnlGestione.Enabled = True
@@ -104,9 +153,11 @@ Public Class frmYouTube
 		lstVideoCompleto.Items.Clear()
 		pnlCaricamento.Visible = True
 
-		AxWindowsMediaPlayer1.Ctlcontrols.stop()
-		AxWindowsMediaPlayer1.close()
-		AxWindowsMediaPlayer1.URL = ""
+		'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+		'AxWindowsMediaPlayer1.close()
+		'AxWindowsMediaPlayer1.URL = ""
+		codiceVideo = ""
+		CreaVideoEGestiscilo("")
 
 		If Not trdYT Is Nothing Then
 			trdYT.Abort()
@@ -151,13 +202,17 @@ Public Class frmYouTube
 
 		RiempieListaVideo(videos)
 
-		If videoEsistente <> "" Then
+		'If videoEsistente <> "" Then
+		Dim v() As String = videos.Split("§")
+		If v.Length > 0 Then
+			videoEsistente = v(0)
 			If Me.InvokeRequired Then
 				Me.Invoke(MethodDelegatePlayVideo, videoEsistente)
 			Else
 				PlayVideo(videoEsistente)
 			End If
 		End If
+		'End If
 
 		If Me.InvokeRequired Then
 			Me.Invoke(MethodDelegateImpostaVisibilitaPannello, "False")
@@ -220,21 +275,22 @@ Public Class frmYouTube
 
 	Private Sub CaricaFisicamenteVideo2()
 		Dim videoCompleto() As String = videoDaCaricare.Split("§")
-		Dim ws As New wsLooWebPlayerII.wsLWPSoapClient
+		'Dim ws As New wsLooWebPlayerII.wsLWPSoapClient
 		videoCompleto(0) = Mid(videoCompleto(0), videoCompleto(0).IndexOf("=") + 2, videoCompleto(0).Length)
-		Dim ritorno As String = ws.ScaricaVideoYouTube(videoCompleto(3), videoCompleto(0), videoCompleto(2))
-		If ritorno = "*" Then
-			Dim primaLettera As String = Mid(videoCompleto(0).Trim, 1, 1).ToUpper
-			Dim pathUrl As String = "http://192.168.0.227:97/YouTube/" & primaLettera & "/" & videoCompleto(0) & videoCompleto(2)
+		'Dim ritorno As String = ws.ScaricaVideoYouTube(videoCompleto(3), videoCompleto(0), videoCompleto(2))
+		'If ritorno = "*" Then
+		'Dim primaLettera As String = Mid(videoCompleto(0).Trim, 1, 1).ToUpper
+		' Dim pathUrl As String = "http://192.168.0.227:97/YouTube/" & primaLettera & "/" & videoCompleto(0) & videoCompleto(2)
+		Dim pathUrl As String = videoCompleto(0)
 
-			If Me.InvokeRequired Then
+		If Me.InvokeRequired Then
 				Me.Invoke(MethodDelegateImpostaVideo, pathUrl)
 			Else
 				ImpostaVideo(pathUrl)
 			End If
-		Else
-			MsgBox(ritorno)
-		End If
+		'Else
+		'	MsgBox(ritorno)
+		'End If
 	End Sub
 
 	Private Sub btnApriChiudi_Click(sender As Object, e As EventArgs) Handles btnApriChiudi.Click
@@ -263,9 +319,11 @@ Public Class frmYouTube
 				Dim videoCompleto() As String = v.Split("§")
 				videoCompleto(0) = Mid(videoCompleto(0), videoCompleto(0).IndexOf("=") + 2, videoCompleto(0).Length)
 
-				AxWindowsMediaPlayer1.Ctlcontrols.stop()
-				AxWindowsMediaPlayer1.close()
-				AxWindowsMediaPlayer1.URL = ""
+				'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+				'AxWindowsMediaPlayer1.close()
+				'AxWindowsMediaPlayer1.URL = ""
+				codiceVideo = ""
+				CreaVideoEGestiscilo("")
 
 				pnlCaricamento.Visible = True
 				Application.DoEvents()
@@ -302,6 +360,7 @@ Public Class frmYouTube
 				Application.DoEvents()
 
 				videoDaCaricare = v
+				' https://www.youtube.com/watch?v=-5-CwpSfyRE§Moonsun The lake 1§.mp4§v
 				CaricaFisicamenteVideo()
 
 				pnlCaricamento.Visible = False
@@ -309,4 +368,5 @@ Public Class frmYouTube
 			End If
 		Next
 	End Sub
+
 End Class
