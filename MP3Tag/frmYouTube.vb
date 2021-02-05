@@ -222,40 +222,44 @@ Public Class frmYouTube
 	End Sub
 
 	Private Sub RiempieListaVideo(Lista As String)
-		If Lista <> "" And Not Lista.Contains("ERROR:") Then
-			Dim Video() As String = Lista.Split("§")
-			videoEsistente = ""
+		Try
+			If Lista <> "" And Not Lista.Contains("ERROR:") Then
+				Dim Video() As String = Lista.Split("§")
+				videoEsistente = ""
 
-			For Each v As String In Video
-				If v <> "" Then
-					Dim vvv() As String = v.Split(";")
-					Dim vv As String = vvv(1)
-					Dim prefisso As String = vvv(3)
-					Dim esiste As String = vvv(4)
-					Dim sEsiste As String = ""
+				For Each v As String In Video
+					If v <> "" Then
+						Dim vvv() As String = v.Split(";")
+						Dim vv As String = vvv(1)
+						Dim prefisso As String = vvv(3)
+						Dim esiste As String = vvv(4)
+						Dim sEsiste As String = ""
 
-					If esiste = "S" Then
-						sEsiste = "* "
+						If esiste = "S" Then
+							sEsiste = "* "
+						End If
+
+						If Me.InvokeRequired Then
+							Me.Invoke(MethodDelegateAddVideoToList, sEsiste & vv)
+						Else
+							Me.lstVideo.Items.Add(sEsiste & vv)
+						End If
+
+						If Me.InvokeRequired Then
+							Me.Invoke(MethodDelegateAddVideoToListHidden, vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso)
+						Else
+							Me.lstVideoCompleto.Items.Add(vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso)
+						End If
+
+						If esiste = "S" And videoEsistente = "" Then
+							videoEsistente = vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso
+						End If
 					End If
+				Next
+			End If
+		Catch ex As Exception
 
-					If Me.InvokeRequired Then
-						Me.Invoke(MethodDelegateAddVideoToList, sEsiste & vv)
-					Else
-						Me.lstVideo.Items.Add(sEsiste & vv)
-					End If
-
-					If Me.InvokeRequired Then
-						Me.Invoke(MethodDelegateAddVideoToListHidden, vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso)
-					Else
-						Me.lstVideoCompleto.Items.Add(vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso)
-					End If
-
-					If esiste = "S" And videoesistente = "" Then
-						videoEsistente = vvv(0) & "§" & vv & "§" & vvv(2) & "§" & prefisso
-					End If
-				End If
-			Next
-		End If
+		End Try
 	End Sub
 
 	Private Sub CaricaFisicamenteVideo()

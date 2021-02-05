@@ -264,6 +264,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service References\wsChartLyrics\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\wsLooWebPlayer\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -332,6 +337,13 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Service References\wsChartLyrics\apiv1.wsdl" />
+    <None Include="Service References\wsChartLyrics\MP3Tag.wsChartLyrics.GetLyricResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\wsChartLyrics\MP3Tag.wsChartLyrics.SearchLyricResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\wsLooWebPlayer\looWPlayer.wsdl" />
     <None Include="Service References\wsLooWebPlayerII\wsLWP.wsdl" />
   </ItemGroup>
@@ -339,6 +351,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\wsChartLyrics\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+    <None Include="Service References\wsChartLyrics\configuration.svcinfo" />
+    <None Include="Service References\wsChartLyrics\configuration91.svcinfo" />
+    <None Include="Service References\wsChartLyrics\apiv1.disco" />
     <None Include="Resources\youtube_flip.png" />
     <None Include="Immagini\youtube1.png" />
     <None Include="Service References\wsLooWebPlayerII\Reference.svcmap">
@@ -422,6 +441,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\wsChartLyrics\" />
     <WCFMetadataStorage Include="Service References\wsLooWebPlayer\" />
     <WCFMetadataStorage Include="Service References\wsLooWebPlayerII\" />
   </ItemGroup>
