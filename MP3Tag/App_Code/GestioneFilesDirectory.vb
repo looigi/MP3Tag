@@ -294,6 +294,24 @@ Public Class GestioneFilesDirectory
         End If
     End Function
 
+    Public Function LeggeFileInteroConACapo(NomeFile As String) As String
+        If File.Exists(NomeFile) Then
+            Dim objReader As StreamReader = New StreamReader(NomeFile)
+            Dim sLine As String = ""
+            Dim Ritorno As String = ""
+
+            Do
+                sLine = objReader.ReadLine()
+                Ritorno += sLine & vbCrLf
+            Loop Until sLine Is Nothing
+            objReader.Close()
+
+            Return Ritorno
+        Else
+            Return ""
+        End If
+    End Function
+
     Public Sub ScansionaDirectorySingola(Percorso As String, Optional Filtro As String = "", Optional lblAggiornamento As Label = Nothing)
         Eliminati = False
 

@@ -53,6 +53,8 @@ Public Class frmMain
 
         EliminaFilesRemoti(False)
 
+        EliminaImmaginiEliminate
+
         If Player = True Then
             Timer1.Enabled = True
         End If
@@ -907,8 +909,23 @@ Public Class frmMain
 		pnlOperazioni.Visible = False
 	End Sub
 
-	Private Sub picUguali2_Click(sender As Object, e As EventArgs) Handles picUguali2.Click
-		frmUguali.Show()
-		Me.Hide()
-	End Sub
+    Private Sub picUguali2_Click(sender As Object, e As EventArgs) Handles picUguali2.Click
+        frmUguali.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub EliminaImmaginiEliminate()
+        Dim gf As New GestioneFilesDirectory
+        Dim path As String = gf.LeggeFileIntero(Application.StartupPath & "\PercorsoFileEliminazioni.txt")
+        Dim tutto As String = gf.LeggeFileInteroConACapo(path).Replace(vbLf, "")
+        Dim righe() As String = tutto.Split(vbCrLf)
+        For Each r As String In righe
+            If r <> "" Then
+                Dim nome As String = lblPathDestinazione.Text & "\" & r.Replace("/", "\")
+                If File.Exists(nome) Then
+                    gf.EliminaFileFisico(nome)
+                End If
+            End If
+        Next
+    End Sub
 End Class
